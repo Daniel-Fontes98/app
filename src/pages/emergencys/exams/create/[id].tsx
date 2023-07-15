@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import useExam from "~/components/Forms/useExam";
-import { useField } from "~/hooks/useField";
 import { api } from "~/utils/api";
+import { convertDateString } from "~/utils/dates";
 
 const CreateExam = () => {
   const { errors, formSchema, handleSubmit, register } = useExam();
@@ -15,6 +14,7 @@ const CreateExam = () => {
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     mutation.mutate({
       ...data,
+      date: convertDateString(data.date),
       emergencyConsultId: emergencyConsultId as string,
     });
     router.push(`/emergencys/consult/${emergencyConsultId}`);

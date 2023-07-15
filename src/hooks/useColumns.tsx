@@ -189,7 +189,7 @@ export default function useColumns() {
 
   const userColumnHelper = createColumnHelper<User>();
   const handleClick = (id: string) => {
-    router.push(`/appointments/view/${id}`);
+    void router.push(`/appointments/view/${id}`);
   };
 
   const userColumns = [

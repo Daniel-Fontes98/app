@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 interface UrgencyConsumablesProps {
   items: MedicalItems[];
   exams: MedicalExams[];
-  emergencyConsultId: String;
+  emergencyConsultId: string;
 }
 
 export function orderByDateAndTime(array: MedicalExams[]) {
@@ -37,7 +37,7 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
           {urgency.exams.length !== 0 ? (
             orderByDateAndTime(urgency.exams).map((exam) => {
               return (
-                <div>
+                <div key={exam.id}>
                   <Popover>
                     <PopoverTrigger>
                       <div className="flex gap-8">
@@ -62,7 +62,7 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
               className=" rounded-xl bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-2 text-white"
               onClick={() =>
                 router.push(
-                  `/emergencys/exams/create/${urgency.emergencyConsultId}`
+                  "/emergencys/exams/create/" + urgency.emergencyConsultId
                 )
               }
             >
@@ -90,7 +90,7 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
               className=" rounded-xl bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-2 text-white"
               onClick={() =>
                 router.push(
-                  `/emergencys/items/create/${urgency.emergencyConsultId}`
+                  "/emergencys/items/create/" + urgency.emergencyConsultId
                 )
               }
             >

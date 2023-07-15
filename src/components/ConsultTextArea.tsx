@@ -1,5 +1,5 @@
-import { MedicalComments, NurseComments } from "@prisma/client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { type MedicalComments, type NurseComments } from "@prisma/client";
+import { type Dispatch, type SetStateAction } from "react";
 import { convertDate } from "~/utils/dates";
 
 interface TextAreaProps {
