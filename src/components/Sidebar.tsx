@@ -1,12 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
+import CentralabLogo from "../../public/centralab.png";
+import RequestIcon from "../../public/request.png";
+import AppointmentIcon from "../../public/appointment.png";
+import EmergencyIcon from "../../public/emergency.png";
 
 export function Sidebar() {
   return (
-    <aside id="logo-sidebar" className="sticky top-0 w-72" aria-label="Sidebar">
-      <div className="h-full overflow-y-auto bg-gray-50 px-3 py-4 shadow-md dark:bg-gray-800">
+    <aside
+      id="logo-sidebar"
+      className="sticky top-0 h-screen w-72"
+      aria-label="Sidebar"
+    >
+      <div className=" h-full overflow-y-auto bg-gray-50 px-3 py-4 shadow-md dark:bg-gray-800">
         <div className="flex flex-col gap-1">
           <Link href="/" className=" flex items-center ">
-            <img src="/centralab.png" className=" w-full " />
+            <Image src={CentralabLogo} alt="Centralab Logo" />
           </Link>
           <div className="flex justify-center text-sm font-semibold text-cyan-800">
             Clínica Drº Hugo Azancot de Menezes
@@ -15,57 +24,52 @@ export function Sidebar() {
 
         <hr className="p-1" />
         <ul className="mt-10 space-y-2 font-medium">
-          <li className="max-h-10 overflow-hidden transition-all duration-300  hover:max-h-32">
-            <button
-              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              type="button"
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-32">
+            <a
+              href="#"
+              className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
-              <img src="/building.png" className="h-6 w-6" />
-              <span className="ml-3  text-sm text-emerald-600">Empresas</span>
-            </button>
-            <button
+              <Image src={RequestIcon} className="h-6 w-6" alt="Request icon" />
+              <span className="ml-3  text-sm text-emerald-600">Requisição</span>
+            </a>
+            <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              type="button"
+              href="#"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Raio-X</span>
+            </Link>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="#"
             >
               <span className="ml-12  text-sm text-emerald-600">
-                Criar empresa
+                Laboratório
               </span>
-            </button>
-            <button
-              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              type="button"
-            >
-              <span className="ml-12  text-sm text-emerald-600">Ver lista</span>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="flex w-full items-center rounded-lg p-2 text-base text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-            >
-              <img src="/user.png" className="h-6 w-6" />
-              <span className="ml-3  text-sm text-emerald-600">Utentes</span>
-            </button>
+            </Link>
           </li>
           <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-32">
             <a
               href="#"
               className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
-              <img src="/appointment.png" className="h-6 w-6" />
-              <span className="ml-3  text-sm text-emerald-600">Consultas</span>
+              <Image
+                src={AppointmentIcon}
+                className="h-6 w-6"
+                alt="appointment icon"
+              />
+              <span className="ml-3  text-sm text-emerald-600">
+                Agendamentos
+              </span>
             </a>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               href="/appointments/create"
             >
-              <span className="ml-12 text-sm  text-emerald-600">
-                Carregar planilha
-              </span>
+              <span className="ml-12 text-sm  text-emerald-600">Criar</span>
             </Link>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/appointments/list"
+              href="/appointments/"
             >
               <span className="ml-12  text-sm text-emerald-600">Ver lista</span>
             </Link>
@@ -75,7 +79,11 @@ export function Sidebar() {
               href="#"
               className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
-              <img src="/emergency.png" className="h-6 w-6" />
+              <Image
+                src={EmergencyIcon}
+                className="h-6 w-6"
+                alt="emergency icon"
+              />
               <span className="ml-3  text-sm text-emerald-600">Urgências</span>
             </a>
             <Link

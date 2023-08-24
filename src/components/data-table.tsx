@@ -15,15 +15,15 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import {
-  ColumnDef,
+  type ColumnDef,
   getCoreRowModel,
   useReactTable,
   flexRender,
   getPaginationRowModel,
-  VisibilityState,
-  ColumnFiltersState,
+  type VisibilityState,
+  type ColumnFiltersState,
   getFilteredRowModel,
-  SortingState,
+  type SortingState,
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useState } from "react";
@@ -159,6 +159,7 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={() => console.log(row.original)}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

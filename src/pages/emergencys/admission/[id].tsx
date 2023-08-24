@@ -1,8 +1,8 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { type SubmitHandler } from "react-hook-form";
 import { type z } from "zod";
-import useAdmission from "~/components/Forms/useAdmission";
+import useAdmission from "~/components/HookForms/useAdmission";
 import { api } from "~/utils/api";
 import { convertDateString } from "~/utils/dates";
 
@@ -10,8 +10,11 @@ const AdmitPatientForm: NextPage = () => {
   const { errors, formSchema, handleSubmit, register } = useAdmission();
   const router = useRouter();
   const id = router.query.id;
-
   const mutation = api.admission.insertOne.useMutation();
+
+  if (!id) {
+    return <div>Ocorreu um erro</div>;
+  }
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     mutation.mutate({
@@ -20,7 +23,7 @@ const AdmitPatientForm: NextPage = () => {
       emergencyConsultId: id as string,
     });
 
-    void router.push("/emergencys/consult/" + id);
+    void router.push(`/emergencys/consult/${id as string}`);
   };
 
   return (
@@ -34,7 +37,7 @@ const AdmitPatientForm: NextPage = () => {
         <div className=" mt-6 grid grid-cols-2 gap-12">
           <div className="w-full">
             <label className="mb-2 block text-lg text-emerald-600">
-              Data de internamento *aa
+              Data de internamento *
             </label>
             <input
               className="w-full rounded-md p-2 shadow-md"

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { EmergencyConsult, EmergencyTriage, User } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { EmergencyConsult, EmergencyTriage, User } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 
 export type Consulta = EmergencyConsult & {
   user: User;

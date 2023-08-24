@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import useMeal from "~/components/Forms/useMeal";
+import type { SubmitHandler } from "react-hook-form";
+import type { z } from "zod";
+import useMeal from "~/components/HookForms/useMeal";
 import { api } from "~/utils/api";
 import { convertDateString } from "~/utils/dates";
 
@@ -11,13 +11,17 @@ const CreateEmergencyMeal = () => {
   const emergencyConsultId = router.query.id;
   const mutation = api.emergencyMeals.insertOne.useMutation();
 
+  if (!emergencyConsultId) {
+    return <div>Ocorreu um erro</div>;
+  }
+
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     mutation.mutate({
       ...data,
       date: convertDateString(data.date),
       emergencyConsultId: emergencyConsultId as string,
     });
-    router.push(`/emergencys/consult/${emergencyConsultId}`);
+    void router.push(`/emergencys/consult/${emergencyConsultId as string}`);
   };
 
   return (

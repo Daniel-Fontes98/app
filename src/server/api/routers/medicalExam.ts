@@ -9,16 +9,19 @@ export const medicalExamRouter = createTRPCRouter({
         hour: z.string(),
         name: z.string(),
         description: z.string(),
+        fileLocation: z.string().optional(),
         emergencyConsultId: z.string(),
       })
     )
     .mutation(async (opts) => {
       const { input } = opts;
-      const company = await opts.ctx.prisma.medicalExams.create({
+
+      const exam = await opts.ctx.prisma.medicalExams.create({
         data: {
           date: input.date,
           hour: input.hour,
           name: input.name,
+          fileLocation: input.fileLocation,
           description: input.description,
           emergencyConsult: {
             connect: {
@@ -27,6 +30,6 @@ export const medicalExamRouter = createTRPCRouter({
           },
         },
       });
-      return company;
+      return exam;
     }),
 });

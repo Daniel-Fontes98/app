@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import type { SubmitHandler } from "react-hook-form";
+import type { z } from "zod";
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import useRelease from "~/components/Forms/useRelease";
+import useRelease from "~/components/HookForms/useRelease";
 import { convertDateString } from "~/utils/dates";
 
 const PatientRelease = () => {
@@ -16,7 +16,7 @@ const PatientRelease = () => {
   const { isLoaded, isSignedIn } = useUser();
   const { register, handleSubmit, errors, formSchema } = useRelease();
 
-  if (!isLoaded || !isSignedIn) return null;
+  if (!isLoaded || !isSignedIn || !id) return null;
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     mutation.mutate({
@@ -24,7 +24,7 @@ const PatientRelease = () => {
       exitDate: convertDateString(data.exitDate),
       emergencyConsultId: id as string,
     });
-    router.push("/emergencys/triage");
+    void router.push(`/emergencys/analytics/${id as string}`);
   };
 
   if (consult) {

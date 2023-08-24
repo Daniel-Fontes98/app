@@ -1,19 +1,10 @@
-import {
-  Company,
-  CompanyAppointment,
-  EmergencyConsult,
-  User,
-} from "@prisma/client";
+import type { Company, CompanyAppointment, User } from "@prisma/client";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useRouter } from "next/router";
-import { OldDataEntry, NewDataEntry } from "~/types/excelTypes";
+import type { OldDataEntry, NewDataEntry } from "~/types/excelTypes";
 
 type userWithIncludes = CompanyAppointment & {
   company: Company;
-  user: User;
-};
-
-type emergencyWithIncludes = EmergencyConsult & {
   user: User;
 };
 

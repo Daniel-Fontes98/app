@@ -1,14 +1,18 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { admissionRouter } from "./routers/admission";
+import { applyTerapeuticRouter } from "./routers/applyTerapeutic";
+import { companyAppointmentrouter } from "./routers/companyAppointment";
 import { emergencyConsultRouter } from "./routers/emergencyConsult";
 import { emergencyMealsRouter } from "./routers/emergencyMeals";
 import { emergencyTransferRouter } from "./routers/emergencyTransfer";
 import { emergencyTriageRouter } from "./routers/emergencyTriage";
-import { medicalCommentsRouter } from "./routers/medicalComments";
 import { medicalExamRouter } from "./routers/medicalExam";
+import { medicalFileRouter } from "./routers/medicalFile";
 import { medicalItemRouter } from "./routers/medicalItem";
-import { nurseCommentsRouter } from "./routers/nurseComments";
+import { nurseFilesRouter } from "./routers/nurseFile";
+import { personalAppointmentrouter } from "./routers/personalAppointment";
 import { releaseRouter } from "./routers/release";
+import { terapeuticRouter } from "./routers/terapeutic";
 import { userRouter } from "./routers/user";
 
 /**
@@ -24,10 +28,14 @@ export const appRouter = createTRPCRouter({
   emergencyMeals: emergencyMealsRouter,
   medicalExams: medicalExamRouter,
   medicalItems: medicalItemRouter,
-  medicalComments: medicalCommentsRouter,
+  medicalFiles: medicalFileRouter,
   release: releaseRouter,
-  nurseComments: nurseCommentsRouter,
+  nurseFiles: nurseFilesRouter,
   admission: admissionRouter,
+  terapeutic: terapeuticRouter,
+  applyTerapeutic: applyTerapeuticRouter,
+  personalAppointment: personalAppointmentrouter,
+  companyAppointment: companyAppointmentrouter,
 });
 
 // export type definition of API

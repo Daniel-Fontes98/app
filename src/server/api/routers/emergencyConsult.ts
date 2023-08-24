@@ -28,6 +28,10 @@ export const emergencyConsultRouter = createTRPCRouter({
           user: {
             connectOrCreate: {
               where: {
+                name_number: {
+                  name: input.name,
+                  number: input.number,
+                },
                 idNumber: input.idNumber,
               },
               create: {
@@ -94,6 +98,11 @@ export const emergencyConsultRouter = createTRPCRouter({
           emergencyTriage: true,
           release: true,
           emergencyTransfer: true,
+          terapeutic: {
+            include: {
+              appliedTerapeutic: true,
+            },
+          },
         },
       });
     }),

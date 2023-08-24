@@ -3,13 +3,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MedicalExams, MedicalItems } from "@prisma/client";
+import type { MedicalExams, MedicalItems } from "@prisma/client";
 import { useRouter } from "next/router";
 
 interface UrgencyConsumablesProps {
-  items: MedicalItems[];
-  exams: MedicalExams[];
+  items?: MedicalItems[];
+  exams?: MedicalExams[];
   emergencyConsultId: string;
+}
+
+function processString(inputString: string) {
+  const baseUrl = "http://192.168.21.92:8080";
+  const splitString = inputString.split("/uploads");
+
+  if (splitString.length > 1 && splitString[1]) {
+    return `${baseUrl}${splitString[1]}`;
+  } else {
+    return baseUrl + inputString;
+  }
 }
 
 export function orderByDateAndTime(array: MedicalExams[]) {
@@ -34,10 +45,10 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
       <div className="">
         <h2 className="text-xl font-bold">Exames realizados:</h2>
         <div className="mt-2 rounded-b-md bg-white p-4 shadow-md">
-          {urgency.exams.length !== 0 ? (
-            orderByDateAndTime(urgency.exams).map((exam) => {
+          {urgency.exams?.length !== 0 ? (
+            orderByDateAndTime(urgency.exams!).map((exam) => {
               return (
-                <div key={exam.id}>
+                <div key={exam.id} className="border-b-2 pb-1">
                   <Popover>
                     <PopoverTrigger>
                       <div className="flex gap-8">
@@ -49,6 +60,18 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
                     </PopoverTrigger>
                     <PopoverContent className="bg-white">
                       {exam.description}
+                      <p className="mt-4">
+                        {exam.fileLocation && (
+                          <a
+                            href={processString(exam.fileLocation)}
+                            className="rounded-xl bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-2 text-white"
+                            target="_blank"
+                            download
+                          >
+                            Download pdf
+                          </a>
+                        )}
+                      </p>
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -61,8 +84,8 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
             <button
               className=" rounded-xl bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-2 text-white"
               onClick={() =>
-                router.push(
-                  "/emergencys/exams/create/" + urgency.emergencyConsultId
+                void router.push(
+                  `/emergencys/exams/create/${urgency.emergencyConsultId}`
                 )
               }
             >
@@ -74,8 +97,8 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
       <div>
         <h2 className="text-xl font-bold">Material utilizado:</h2>
         <div className="mt-2 rounded-b-md bg-white p-4 shadow-md">
-          {urgency.items.length !== 0 ? (
-            urgency.items.map((item) => {
+          {urgency.items?.length !== 0 ? (
+            urgency.items?.map((item) => {
               return (
                 <p key={item.id}>
                   {item.quantity}x {item.name}
@@ -89,8 +112,8 @@ const UrgencyConsumables = (urgency: UrgencyConsumablesProps) => {
             <button
               className=" rounded-xl bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-2 text-white"
               onClick={() =>
-                router.push(
-                  "/emergencys/items/create/" + urgency.emergencyConsultId
+                void router.push(
+                  `/emergencys/items/create/${urgency.emergencyConsultId}`
                 )
               }
             >

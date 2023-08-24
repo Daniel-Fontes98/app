@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import useEmergency from "~/components/Forms/useEmergency";
+import type { SubmitHandler } from "react-hook-form";
+import type { z } from "zod";
+import useEmergency from "~/components/HookForms/useEmergency";
 import { api } from "~/utils/api";
 import { convertDateString } from "~/utils/dates";
 import { insuranceList } from "~/utils/insurancesList";
@@ -18,7 +18,7 @@ const CreateUrgencyForm = () => {
       birthDate: convertDateString(data.birthDate),
       entryDate: convertDateString(data.entryDate),
     });
-    router.push("/emergencys/triage/awaiting");
+    void router.push("/emergencys/triage/awaiting");
   };
 
   return (

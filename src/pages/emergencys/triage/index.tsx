@@ -21,8 +21,8 @@ const WaitingList = () => {
           <div className="border-l-2 border-emerald-600 opacity-20"></div>
           <div className="w-1/6 font-semibold text-emerald-600">TRIAGEM</div>
           <div className="border-l-2 border-emerald-600 opacity-20"></div>
-          <div className="w-1/6 font-semibold text-emerald-600">
-            TEMPO DE ESPERA
+          <div className="w-1/6 whitespace-nowrap font-semibold text-emerald-600">
+            TEMPO DE ESPERA (min)
           </div>
         </div>
         <div className="flex flex-col gap-4 px-10">
@@ -105,17 +105,7 @@ const UserInfo = (props: UserInfoProps) => {
         ></div>
       )}
       <div className="ml-40">
-        {calculateMinutesPassed(props.date, props.time) < 10 ? (
-          <div>&lt;10min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 60 ? (
-          <div>&lt;60min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 120 ? (
-          <div>&lt;120min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 240 ? (
-          <div>&lt;240min</div>
-        ) : (
-          <div>&gt;240min</div>
-        )}
+        <div>{calculateMinutesPassed(props.date, props.time)} </div>
       </div>
     </div>
   );

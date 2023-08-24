@@ -8,11 +8,6 @@ export const convertDate = (date: Date) => {
   );
 };
 
-interface calculateTotalHoursProps {
-  dateString: string;
-  timeString: string;
-}
-
 export function calculateTotalHoursElapsed(
   dateString: string,
   timeString: string
@@ -132,5 +127,17 @@ export function calculateTotalHoursElapsedBetweenDateAndString(
   );
 
   // Return the total hours elapsed
+  return totalHoursElapsed;
+}
+
+export function calculateTotalHoursElapsedDateObjects(
+  startDate: Date,
+  endDate: Date
+): number {
+  const millisecondsPerHour = 1000 * 60 * 60;
+
+  const elapsedMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
+  const totalHoursElapsed = elapsedMilliseconds / millisecondsPerHour;
+
   return totalHoursElapsed;
 }

@@ -11,6 +11,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admission {
+  id          String  @id @default(cuid())
+  entryDate   String
+  entryHour   String
+  bedNumber   String
+  description String?
+
+  emergencyMeals     EmergencyMeals[]
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
+}
+
+model AppliedTerapeutic {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  appliedBy String 
+
+  terapeutic Terapeutic @relation(fields: [terapeuticId], references: [id])
+  terapeuticId String
+}
+
 model Company {
   id           String               @id @default(cuid())
   createdAt    DateTime             @default(now())
@@ -19,17 +40,6 @@ model Company {
   email        String?
   number       String?
   appointments CompanyAppointment[]
-  companyRoles CompanyRoles[]
-}
-
-model CompanyRoles {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  role      String?
-  userId    String
-  companyId String
-  company   Company  @relation(fields: [companyId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
 }
 
 model CompanyAppointment {
@@ -38,31 +48,62 @@ model CompanyAppointment {
   updatedAt DateTime @updatedAt
   date      String
   examType  String
+  companyRole String
   planType  String?
   covid     String?
   local     String?
   location  String
   companyId String
-  userId    String
+  userId    String 
   company   Company  @relation(fields: [companyId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
 }
 
-model User {
-  id               String               @id @default(cuid())
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
-  name             String
-  birthDate        String
-  gender           String?
-  nacionality      String?
-  number           String?
-  idNumber         String?              @unique
-  email            String?
-  address          String?
-  companyRoles     CompanyRoles[]
-  appointments     CompanyAppointment[]
-  emergencyConsult EmergencyConsult[]
+
+
+model EmergencyConsult {
+  id              String           @id @default(cuid())
+  createdAt       DateTime         @default(now())
+  entryDate       String
+  entryTime       String
+  
+  release         Release?
+  emergencyTransfer EmergencyTransfer?
+  nurseFile       NurseFile?
+  emergencyTriage EmergencyTriage?
+  admission       Admission?
+  medicalFile     MedicalFile?
+  medicalItems    MedicalItems[]
+  medicalExams    MedicalExams[]
+  insurance       Insurance?
+  terapeutic      Terapeutic[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model EmergencyMeals {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  date        String
+  time        String
+  typeOfMeal  String
+  description String
+
+  admission   Admission @relation(fields: [admissionId], references: [id])
+  admissionId String
+}
+
+model EmergencyTransfer {
+  id  String @id @default(cuid())
+  createdAt DateTime @default(now())
+  transportType String 
+  whereTo String
+  reason String
+  orderBy String
+
+  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String @unique
 }
 
 model EmergencyTriage {
@@ -82,44 +123,38 @@ model EmergencyTriage {
   emergencyConsultId String           @unique
 }
 
-model EmergencyConsult {
-  id              String           @id @default(cuid())
-  createdAt       DateTime         @default(now())
-  entryDate       String
-  entryTime       String
-  
-  release         Release?
-  emergencyTransfer EmergencyTransfer?
-  medicalFile     MedicalComments[] 
-  nurseFile       NurseComments[]
-  emergencyTriage EmergencyTriage?
-  admission       Admission?
-  medicalItems    MedicalItems[]
-  medicalExams    MedicalExams[]
-  insurance       Insurance?
+model Insurance {
+  id       String  @id @default(cuid())
+  name     String
+  idNumber String?
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
 }
 
-model MedicalComments {
-  id  String @id @default(cuid())
-  createdAt DateTime @default(now())
-  createdBy String
-  comment String
+model MedicalExams {
+  id          String  @id @default(cuid())
+  date        String
+  hour        String
+  name        String
+  description String?
+  fileLocation String?
 
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
   emergencyConsultId String
 }
 
-model NurseComments {
-  id  String @id @default(cuid())
-  createdAt DateTime @default(now())  
-  createdBy String
-  comment String 
+model MedicalFile {
+  id String @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  app String? //Antecedentes Patologicos Pessoais
+  apf String? //Antecedentes Patologicos Familiares
+  hda String? //Historia Doença Atual
+  hd String? //Hipotese Diagnostica
+  treatment String? //Tratamento
 
   emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String
+  emergencyConsultId String @unique
 }
 
 model MedicalItems {
@@ -131,39 +166,25 @@ model MedicalItems {
   emergencyConsultId String?
 }
 
-model MedicalExams {
-  id          String  @id @default(cuid())
-  date        String
-  hour        String
-  name        String
-  description String?
 
-  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String
+
+model NurseFile {
+  id  String @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  text String?
+
+  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String @unique
 }
 
-model EmergencyMeals {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  date        String
-  time        String
-  typeOfMeal  String
-  description String
+model PersonalAppointment {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  appointmentDate DateTime
+  consultType String
 
-  admission   Admission @relation(fields: [admissionId], references: [id])
-  admissionId String
-}
-
-model Admission {
-  id          String  @id @default(cuid())
-  entryDate   String
-  entryHour   String
-  bedNumber   String
-  description String?
-
-  emergencyMeals     EmergencyMeals[]
-  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String           @unique
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Release {
@@ -177,23 +198,35 @@ model Release {
   emergencyConsultId String @unique
 }
 
-model Insurance {
-  id       String  @id @default(cuid())
-  name     String
-  idNumber String?
-
-  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String           @unique
-}
-
-model EmergencyTransfer {
-  id  String @id @default(cuid())
+model Terapeutic {
+  id String @id @default(cuid())
   createdAt DateTime @default(now())
-  transportType String 
-  whereTo String
-  reason String
-  orderBy String
+  description String 
+  active Boolean @default(true)
 
+  appliedTerapeutic AppliedTerapeutic[]
   emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String @unique
+  emergencyConsultId String 
 }
+
+model User {
+  id               String               @id @default(cuid())
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  name             String
+  birthDate        String?
+  gender           String?
+  nacionality      String?
+  number           String?
+  idNumber         String?              @unique
+  email            String?
+  address          String?
+
+  personalAppointment PersonalAppointment[]
+  companyAppointments     CompanyAppointment[]
+  emergencyConsult EmergencyConsult[]
+
+  @@unique([name, number])
+}
+
+

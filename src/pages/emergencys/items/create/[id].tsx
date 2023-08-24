@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import useItems from "~/components/Forms/useItem";
+import type { SubmitHandler } from "react-hook-form";
+import type { z } from "zod";
+import useItems from "~/components/HookForms/useItem";
 import { api } from "~/utils/api";
 
 const CreateItem = () => {
@@ -15,7 +15,7 @@ const CreateItem = () => {
       ...data,
       emergencyConsultId: emergencyConsultId as string,
     });
-    router.push(`/emergencys/consult/${emergencyConsultId}`);
+    void router.push(`/emergencys/consult/${emergencyConsultId as string}`);
   };
 
   return (

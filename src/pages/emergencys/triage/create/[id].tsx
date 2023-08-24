@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import useTriage from "~/components/Forms/useTriage";
+import type { SubmitHandler } from "react-hook-form";
+import type { z } from "zod";
+import useTriage from "~/components/HookForms/useTriage";
 import { api } from "~/utils/api";
 import { getColourCode } from "~/utils/manchesterTriage";
 import { sintoms } from "~/utils/sintoms";
@@ -22,7 +22,7 @@ const CreateEmergencyTriage = () => {
       sintoms: data.sintoms.join(","),
     });
 
-    router.push("/emergencys/triage");
+    void router.push("/emergencys/triage");
   };
 
   return (

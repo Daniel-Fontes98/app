@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
@@ -33,9 +33,6 @@ const PatientTransfer = () => {
     id: id as string,
   }).data;
   const { isLoaded, isSignedIn, user } = useUser();
-
-  if (!isLoaded || !isSignedIn) return null;
-
   const {
     register,
     handleSubmit,
@@ -48,13 +45,16 @@ const PatientTransfer = () => {
     },
   });
 
+  if (!isLoaded || !isSignedIn) return null;
+
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     mutation.mutate({
       emergencyConsultId: id as string,
       ...data,
+      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       orderBy: user.fullName!,
     });
-    router.push("/emergencys/triage");
+    void router.push("/emergencys/triage");
   };
 
   if (consult) {

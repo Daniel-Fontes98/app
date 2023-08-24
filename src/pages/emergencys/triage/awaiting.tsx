@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 
 const WaitingForTriageList = () => {
-  const data = api.emergencyConsults.getAllAwaitingTriage.useQuery().data;
+  const awaitingTriageQuery =
+    api.emergencyConsults.getAllAwaitingTriage.useQuery();
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -24,8 +25,8 @@ const WaitingForTriageList = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4 px-10">
-          {data ? (
-            data.map((consulta) => (
+          {awaitingTriageQuery.data ? (
+            awaitingTriageQuery.data.map((consulta) => (
               <UserInfo
                 key={consulta.id}
                 name={consulta.user.name}
@@ -84,17 +85,7 @@ const UserInfo = (props: UserInfoProps) => {
         </span>
       </div>
       <div className="ml-10">
-        {calculateMinutesPassed(props.date, props.time) < 10 ? (
-          <div>&lt;10min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 60 ? (
-          <div>&lt;60min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 120 ? (
-          <div>&lt;120min</div>
-        ) : calculateMinutesPassed(props.date, props.time) < 240 ? (
-          <div>&lt;240min</div>
-        ) : (
-          <div>&gt;240min</div>
-        )}
+        <div>{calculateMinutesPassed(props.date, props.time)}</div>
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ const TotalConsumed = () => {
                     <h2 className="text-lg font-semibold">Material</h2>
                     <h2 className="text-lg font-semibold">Quantidade</h2>
                   </div>
-                  <div className="mt-4 flex w-full flex-col gap-2 border-b-2 pb-4">
+                  <div className="mt-4 flex flex-col gap-2 border-b-2 pb-4">
                     {consult.medicalItems.map((item) => (
                       <div key={item.id} className="grid grid-cols-2">
                         <div>{item.name}</div>
@@ -62,7 +62,7 @@ const TotalConsumed = () => {
               )}
               {/*If admitted */}
               {consult.admission && (
-                <div className="mt-2 grid grid-cols-2 gap-2">
+                <div className="mt-2 grid grid-cols-2 gap-2 border-b-2 pb-4">
                   <h3>Pequenos almoços consumidos: </h3>
                   <div>
                     {consult.admission?.emergencyMeals.reduce(
@@ -97,6 +97,23 @@ const TotalConsumed = () => {
                   </div>
                 </div>
               )}
+              <div>
+                <div className="mt-4 grid grid-cols-2">
+                  <h2 className="text-lg font-semibold">Receitas</h2>
+                  <h2 className="text-lg font-semibold">
+                    Quantidade Consumida
+                  </h2>
+                </div>
+                <div className="mt-4 flex w-full flex-col gap-2 border-b-2 pb-4">
+                  {consult.terapeutic?.map((terapeutic) => (
+                    <div key={terapeutic.id} className="grid grid-cols-2">
+                      <div>{terapeutic.description}</div>
+                      <div>{terapeutic.appliedTerapeutic.length}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/*If admitted and released */}
               {consult.admission && consult.release && (
                 <div>
@@ -132,6 +149,25 @@ const TotalConsumed = () => {
                   </div>
                 </div>
               )}
+              {/*If admitted but not yet transfered or released*/}
+              {consult.admission &&
+                !consult.emergencyTransfer &&
+                !consult.release && (
+                  <div>
+                    <div className="mt-4 grid grid-cols-2">
+                      <h2 className="text-lg font-semibold">
+                        Total de horas internado:{" "}
+                      </h2>
+                      <div>
+                        {calculateTotalHoursElapsedBetweenDateAndString(
+                          consult.admission.entryDate,
+                          consult.admission.entryHour,
+                          new Date()
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         </div>

@@ -4,8 +4,8 @@ import {
   useReactTable,
   flexRender,
   getCoreRowModel,
-  ColumnDef,
-  SortingState,
+  type ColumnDef,
+  type SortingState,
   getSortedRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
@@ -46,7 +46,6 @@ export function DataTable<Data extends object>({
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                  const meta = header.column.columnDef.meta;
                   return (
                     <Th
                       key={header.id}
@@ -76,8 +75,6 @@ export function DataTable<Data extends object>({
             {table.getRowModel().rows.map((row) => (
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
-                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                  const meta = cell.column.columnDef.meta;
                   return (
                     <Td key={cell.id}>
                       {flexRender(
