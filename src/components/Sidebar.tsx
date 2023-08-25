@@ -74,7 +74,7 @@ export function Sidebar() {
               <span className="ml-12  text-sm text-emerald-600">Ver lista</span>
             </Link>
           </li>
-          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-48">
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-80">
             <a
               href="#"
               className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -112,9 +112,9 @@ export function Sidebar() {
             </Link>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/emergencys/history"
+              href="/emergencys/payment"
             >
-              <span className="ml-12 text-sm text-emerald-600">Histórico</span>
+              <span className="ml-12  text-sm text-emerald-600">Por Pagar</span>
             </Link>
           </li>
         </ul>

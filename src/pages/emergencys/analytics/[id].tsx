@@ -1,4 +1,6 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
 import { api } from "~/utils/api";
 import {
   calculateTotalHoursElapsedBetweenDateAndString,
@@ -7,15 +9,33 @@ import {
 
 const TotalConsumed = () => {
   const router = useRouter();
-  const emergencyConsultId = router.query.id;
+  const [isLoading, setIsLoading] = useState(false);
+  const emergencyConsultId = router.query.id as string;
   const consult = api.emergencyConsults.getById.useQuery({
-    id: emergencyConsultId as string,
+    id: emergencyConsultId,
   }).data;
+  const payMutation = api.emergencyConsults.payDebt.useMutation();
+
+  const handleButtonClick = () => {
+    setIsLoading(true);
+    const result = payMutation.mutateAsync({
+      id: emergencyConsultId,
+    });
+
+    result
+      .then(() => {
+        router.push("/emergencys/payment");
+      })
+      .catch((err) => {
+        toast("Ocorreu um erro =(");
+      });
+  };
 
   if (consult) {
     return (
       <>
         <div className="min-h-screen bg-slate-100">
+          <Toaster />
           <div className="flex items-center justify-center ">
             <h1 className=" rounded-b-2xl bg-emerald-600 px-6 py-2 text-white ">
               Total de gastos
@@ -113,7 +133,6 @@ const TotalConsumed = () => {
                   ))}
                 </div>
               </div>
-
               {/*If admitted and released */}
               {consult.admission && consult.release && (
                 <div>
@@ -169,6 +188,15 @@ const TotalConsumed = () => {
                   </div>
                 )}
             </div>
+          </div>
+          <div>
+            <button
+              className="float-right mr-4 mt-8 h-3/4 rounded-xl bg-amber-600 px-4 py-2  text-white shadow-sm hover:bg-amber-800"
+              onClick={() => handleButtonClick()}
+              disabled={isLoading}
+            >
+              Arquivar & Pagar
+            </button>
           </div>
         </div>
       </>

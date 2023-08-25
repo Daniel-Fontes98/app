@@ -135,4 +135,31 @@ export const emergencyConsultRouter = createTRPCRouter({
       },
     });
   }),
+  getAllNotPayed: publicProcedure.query(async (opts) => {
+    return await opts.ctx.prisma.emergencyConsult.findMany({
+      where: {
+        isPaid: false,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }),
+  payDebt: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.emergencyConsult.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isPaid: true,
+        },
+      });
+    }),
 });
