@@ -14,6 +14,8 @@ import { personalAppointmentrouter } from "./routers/personalAppointment";
 import { releaseRouter } from "./routers/release";
 import { terapeuticRouter } from "./routers/terapeutic";
 import { userRouter } from "./routers/user";
+import { xRayObjectRouter } from "./routers/xRayObject";
+import { xRayRequisitionRouter } from "./routers/xRayRequisition";
 
 /**
  * This is the primary router for your server.
@@ -36,6 +38,8 @@ export const appRouter = createTRPCRouter({
   applyTerapeutic: applyTerapeuticRouter,
   personalAppointment: personalAppointmentrouter,
   companyAppointment: companyAppointmentrouter,
+  xRayRequisition: xRayRequisitionRouter,
+  xRayObject: xRayObjectRouter,
 });
 
 // export type definition of API

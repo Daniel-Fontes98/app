@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import CentralabLogo from "../../public/centralab.png";
 import RequestIcon from "../../public/request.png";
+import DoctorIcon from "../../public/doctor.png";
 import AppointmentIcon from "../../public/appointment.png";
 import EmergencyIcon from "../../public/emergency.png";
+import XrayIcon from "../../public/x-ray.png";
+import LabIcon from "../../public/lab.png";
 
 export function Sidebar() {
   return (
@@ -24,27 +27,92 @@ export function Sidebar() {
 
         <hr className="p-1" />
         <ul className="mt-10 space-y-2 font-medium">
-          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-32">
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">
             <a
               href="#"
               className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
-              <Image src={RequestIcon} className="h-6 w-6" alt="Request icon" />
+              <Image src={RequestIcon} className="h-6 w-6" alt="X Ray Icon" />
               <span className="ml-3  text-sm text-emerald-600">Requisição</span>
             </a>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="#"
+              href="/requisition/xray"
             >
               <span className="ml-12 text-sm  text-emerald-600">Raio-X</span>
             </Link>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="#"
+              href="/requisition/lab"
             >
-              <span className="ml-12  text-sm text-emerald-600">
+              <span className="ml-12 text-sm  text-emerald-600">
                 Laboratório
               </span>
+            </Link>
+          </li>
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">
+            <a
+              href="#"
+              className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            >
+              <Image src={DoctorIcon} className="h-6 w-6" alt="X Ray Icon" />
+              <span className="ml-3  text-sm text-emerald-600">Médicos</span>
+            </a>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="/requisition/xray"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Criar</span>
+            </Link>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="/requisition/xray_list"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Lista</span>
+            </Link>
+          </li>
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">
+            <a
+              href="#"
+              className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            >
+              <Image src={XrayIcon} className="h-6 w-6" alt="X Ray Icon" />
+              <span className="ml-3  text-sm text-emerald-600">Raio-X</span>
+            </a>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="#"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Feitos</span>
+            </Link>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="/requisition/xray_list"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Pendentes</span>
+            </Link>
+          </li>
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">
+            <a
+              href="#"
+              className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            >
+              <Image src={LabIcon} className="h-6 w-6" alt="Request icon" />
+              <span className="ml-3  text-sm text-emerald-600">
+                Laboratório
+              </span>
+            </a>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="#"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Feitos</span>
+            </Link>
+            <Link
+              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              href="/requisition/lab_list"
+            >
+              <span className="ml-12 text-sm  text-emerald-600">Pendentes</span>
             </Link>
           </li>
           <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-32">

@@ -32,7 +32,6 @@ export const emergencyConsultRouter = createTRPCRouter({
                   name: input.name,
                   number: input.number,
                 },
-                idNumber: input.idNumber,
               },
               create: {
                 name: input.name,

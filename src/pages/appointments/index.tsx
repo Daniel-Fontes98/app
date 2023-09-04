@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 import {
@@ -12,18 +13,57 @@ const Calendar = () => {
   const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthIndex());
   const [selectedYear, setSelectedYear] = useState(getCurrentYear());
   const personalAppointmentsQuery = api.personalAppointment.getAll.useQuery();
+  const companyAppointmentsQuery = api.companyAppointment.getAll.useQuery();
+  const router = useRouter();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const totalAppointmentsPerDay: number[] = Array(31).fill(0);
   personalAppointmentsQuery.data?.map((personalAppointment) => {
-    if (personalAppointment.appointmentDate.getMonth() === selectedMonth)
+    if (
+      personalAppointment.appointmentDate.getMonth() === selectedMonth &&
+      personalAppointment.appointmentDate.getFullYear() === selectedYear
+    )
       totalAppointmentsPerDay[
         personalAppointment.appointmentDate.getDate() - 1
       ] += 1;
   });
 
+  companyAppointmentsQuery.data?.map((companyAppointment) => {
+    if (
+      companyAppointment.date.getMonth() === selectedMonth &&
+      companyAppointment.date.getFullYear() === selectedYear
+    )
+      totalAppointmentsPerDay[companyAppointment.date.getDate() - 1] += 1;
+  });
+
+  const CalendarDay = ({ dayNumber, totalAppointments }: CalendarDayProps) => {
+    if (dayNumber === -1) {
+      return <div className="h-20 w-28"></div>;
+    } else {
+      return (
+        <div
+          className="h-20 w-28 rounded-tl-xl border border-slate-300 bg-white shadow-sm hover:cursor-pointer"
+          onClick={() =>
+            router.push(
+              `/appointments/view/${dayNumber + 1}-${
+                selectedMonth + 1
+              }-${selectedYear}`
+            )
+          }
+        >
+          <span className="ml-1 text-xs">{dayNumber + 1}</span>
+          {totalAppointments !== 0 && (
+            <div className="flex items-center justify-center text-emerald-600">
+              {totalAppointments}
+            </div>
+          )}
+        </div>
+      );
+    }
+  };
+
   return (
-    <div className="flex min-h-screen w-full flex-col gap-12 bg-slate-100">
+    <div className="flex min-h-screen w-full flex-col gap-8 bg-slate-100">
       <div className="flex  items-center justify-center">
         <div className="rounded-b-2xl bg-emerald-600 px-6 py-2 text-white">
           Calendário de Agendamentos
@@ -108,22 +148,5 @@ interface CalendarDayProps {
   dayNumber: number;
   totalAppointments?: number;
 }
-
-const CalendarDay = ({ dayNumber, totalAppointments }: CalendarDayProps) => {
-  if (dayNumber === -1) {
-    return <div className="h-20 w-28"></div>;
-  } else {
-    return (
-      <div className="h-20 w-28 rounded-tl-xl border border-slate-300 bg-white shadow-sm hover:cursor-pointer">
-        <span className="ml-1 text-xs">{dayNumber + 1}</span>
-        {totalAppointments !== 0 && (
-          <div className="flex items-center justify-center text-emerald-600">
-            {totalAppointments}
-          </div>
-        )}
-      </div>
-    );
-  }
-};
 
 export default Calendar;

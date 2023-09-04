@@ -6,11 +6,14 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { inferAsyncReturnType, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
+import { IncomingMessage } from "http";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
+import ws from "ws";
 
 /**
  * 1. CONTEXT
@@ -44,7 +47,11 @@ const createInnerTRPCContext = (_opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (_opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (
+  _opts:
+    | CreateNextContextOptions
+    | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
+) => {
   return createInnerTRPCContext({});
 };
 

@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import { type ChangeEvent, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import type { z } from "zod";
 import useExam from "~/components/HookForms/useExam";
+import useFileUploader from "~/components/Hooks/useFileUploader";
 import { api } from "~/utils/api";
 
 const CreateExam = () => {
@@ -10,75 +10,11 @@ const CreateExam = () => {
   const router = useRouter();
   const emergencyConsultId = router.query.id;
   const mutation = api.medicalExams.insertOne.useMutation();
-  const [file, setFile] = useState<File | null>(null);
+  const { onUploadFile, onFileUploadChange } = useFileUploader();
 
   if (!emergencyConsultId) {
     return <div>Ocorreu um erro </div>;
   }
-
-  const onFileUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const fileInput = e.target;
-
-    if (!fileInput.files) {
-      alert("No file was chosen");
-      return;
-    }
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      alert("Files list is empty");
-      return;
-    }
-
-    const file = fileInput.files[0];
-
-    if (!file) {
-      return;
-    }
-
-    /** File validation */
-    if (!file.type.startsWith("application/pdf")) {
-      alert("Por favor seleciona um ficheiro pdf");
-      return;
-    }
-
-    /** Setting file state */
-    setFile(file); // we will use the file state, to send it later to the server
-  };
-
-  const onUploadFile = async () => {
-    if (!file) {
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("media", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const {
-        data,
-        error,
-      }: {
-        data: {
-          url: string | string[];
-        } | null;
-        error: string | null;
-      } = await res.json();
-
-      if (error || !data) {
-        alert(error || "Sorry! something went wrong.");
-        return;
-      }
-      return data.url;
-    } catch (error) {
-      console.error(error);
-      alert("Sorry! Something went wrong");
-    }
-  };
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const url = await onUploadFile();

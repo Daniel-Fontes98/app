@@ -32,6 +32,7 @@
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
+    "@types/xlsx": "^0.0.36",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
@@ -51,6 +52,7 @@
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
     "ws": "^8.13.0",
+    "wss": "^3.3.4",
     "xlsx": "^0.18.5",
     "zod": "^3.21.4"
   },

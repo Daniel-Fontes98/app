@@ -1,58 +1,130 @@
 import { type FormEvent, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import * as XLSX from "xlsx";
+import { api } from "~/utils/api";
 
 const excelAppointmentsColumns = [
-  "date",
+  "consultDate",
   "name",
   "gender",
   "nacionality",
   "birthDate",
   "idNumber",
   "phoneNumber",
-  "role",
+  "companyRole",
   "companyName",
   "companyIndustry",
-  "companyService",
-  "typeOfExam",
-  "placeOfExam",
+  "companyLocation",
+  "examType",
   "planType",
   "addInfo",
 ];
 
+type jsonExtracted = {
+  name: string;
+  birthDate: Date;
+  examType: string;
+  companyRole: string;
+  planType: string;
+  consultDate: Date;
+  phoneNumber: string;
+  companyName: string;
+  companyIndustry: string;
+  companyLocation: string;
+  gender?: string;
+  nacionality?: string;
+  idNumber?: string;
+  addInfo?: string;
+};
+
+export function formatDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+  const year = date.getFullYear().toString();
+
+  return `${day}/${month}/${year}`;
+}
+
 const CreateCompanyAppointment = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const createAppointmentMutation =
+    api.companyAppointment.insertOne.useMutation();
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setSelectedFile(file);
   };
 
+  async function processChunk(chunk: jsonExtracted[]) {
+    const promises = chunk.map(async (data) => {
+      try {
+        await createAppointmentMutation.mutateAsync({
+          ...data,
+          consultDate: new Date(
+            data.consultDate.setDate(data.consultDate.getDate() + 1)
+          ),
+          birthDate: formatDate(data.birthDate),
+          phoneNumber: data.phoneNumber.toString(),
+          idNumber: data.idNumber?.toString(),
+        });
+      } catch (error) {
+        console.error("Error processing chunk:", error);
+        // You might want to handle the error here or continue with the rest of the chunk
+      }
+    });
+
+    await Promise.all(promises);
+  }
+
   const handleFileUpload = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     if (!selectedFile) return;
-
+    const chunkSize = 1;
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const data = event.target?.result;
       if (data) {
         const workbook = XLSX.read(data, { type: "binary", cellDates: true });
         const firstSheetName = workbook.SheetNames[0];
         if (!firstSheetName) {
           toast("Erro ao carregar planilha");
+          setIsLoading(false);
           return;
         }
         const worksheet = workbook.Sheets[firstSheetName];
         if (!worksheet) {
           toast("Erro ao carregar planilha");
+          setIsLoading(false);
           return;
         }
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        const jsonData = XLSX.utils.sheet_to_json<jsonExtracted>(worksheet, {
           range: 3,
           header: excelAppointmentsColumns,
           defval: "",
         });
-        console.log(jsonData);
+
+        const chunkedData: jsonExtracted[][] = [];
+        for (let i = 0; i < jsonData.length; i += chunkSize) {
+          chunkedData.push(jsonData.slice(i, i + chunkSize));
+        }
+
+        async function processChunks() {
+          for (const chunk of chunkedData) {
+            await processChunk(chunk);
+          }
+          setIsLoading(false);
+        }
+
+        processChunks()
+          .then(() => {
+            toast("Planilha carregada com sucesso !!!");
+          })
+          .catch((error) => {
+            toast("Erro ao carregar planilha =(");
+          });
       }
     };
     reader.readAsBinaryString(selectedFile);
@@ -76,6 +148,7 @@ const CreateCompanyAppointment = () => {
         <button
           className="focus:shadow-outline w-full rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
           type="submit"
+          disabled={isLoading}
         >
           Submeter
         </button>

@@ -24,11 +24,11 @@ model Admission {
 }
 
 model AppliedTerapeutic {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  appliedBy String 
+  appliedBy String
 
-  terapeutic Terapeutic @relation(fields: [terapeuticId], references: [id])
+  terapeutic   Terapeutic @relation(fields: [terapeuticId], references: [id])
   terapeuticId String
 }
 
@@ -40,44 +40,48 @@ model Company {
   email        String?
   number       String?
   appointments CompanyAppointment[]
+
+  @@index([name])
 }
 
 model CompanyAppointment {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  date      String
-  examType  String
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  date        DateTime
+  examType    String
   companyRole String
-  planType  String?
-  covid     String?
-  local     String?
-  location  String
-  companyId String
-  userId    String 
-  company   Company  @relation(fields: [companyId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  planType    String?
+  covid       String?
+  local       String?
+  location    String
+  addInfo     String?
+  
+  companyId   String
+  userId      String
+  company     Company  @relation(fields: [companyId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([date])
 }
 
-
-
 model EmergencyConsult {
-  id              String           @id @default(cuid())
-  createdAt       DateTime         @default(now())
-  entryDate       String
-  entryTime       String
-  isPaid          Boolean          @default(false)
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  entryDate String
+  entryTime String
+  isPaid    Boolean  @default(false)
 
-  release         Release?
+  release           Release?
   emergencyTransfer EmergencyTransfer?
-  nurseFile       NurseFile?
-  emergencyTriage EmergencyTriage?
-  admission       Admission?
-  medicalFile     MedicalFile?
-  medicalItems    MedicalItems[]
-  medicalExams    MedicalExams[]
-  insurance       Insurance?
-  terapeutic      Terapeutic[]
+  nurseFile         NurseFile?
+  emergencyTriage   EmergencyTriage?
+  admission         Admission?
+  medicalFile       MedicalFile?
+  medicalItems      MedicalItems[]
+  medicalExams      MedicalExams[]
+  insurance         Insurance?
+  terapeutic        Terapeutic[]
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -96,15 +100,15 @@ model EmergencyMeals {
 }
 
 model EmergencyTransfer {
-  id  String @id @default(cuid())
-  createdAt DateTime @default(now())
-  transportType String 
-  whereTo String
-  reason String
-  orderBy String
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  transportType String
+  whereTo       String
+  reason        String
+  orderBy       String
 
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String @unique
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
 }
 
 model EmergencyTriage {
@@ -134,11 +138,11 @@ model Insurance {
 }
 
 model MedicalExams {
-  id          String  @id @default(cuid())
-  date        String
-  hour        String
-  name        String
-  description String?
+  id           String  @id @default(cuid())
+  date         String
+  hour         String
+  name         String
+  description  String?
   fileLocation String?
 
   emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
@@ -146,16 +150,16 @@ model MedicalExams {
 }
 
 model MedicalFile {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
   updatedAt DateTime @updatedAt
-  app String? //Antecedentes Patologicos Pessoais
-  apf String? //Antecedentes Patologicos Familiares
-  hda String? //Historia Doença Atual
-  hd String? //Hipotese Diagnostica
+  app       String? //Antecedentes Patologicos Pessoais
+  apf       String? //Antecedentes Patologicos Familiares
+  hda       String? //Historia Doença Atual
+  hd        String? //Hipotese Diagnostica
   treatment String? //Tratamento
 
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String @unique
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
 }
 
 model MedicalItems {
@@ -167,67 +171,89 @@ model MedicalItems {
   emergencyConsultId String?
 }
 
-
-
 model NurseFile {
-  id  String @id @default(cuid())
+  id        String   @id @default(cuid())
   updatedAt DateTime @updatedAt
-  text String?
+  text      String?
 
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String @unique
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
 }
 
 model PersonalAppointment {
-  id String @id @default(cuid())
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
   appointmentDate DateTime
-  consultType String
+  consultType     String
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 }
 
 model Release {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  exitDate String
-  exitTime String
-  addInfo String?
+  exitDate  String
+  exitTime  String
+  addInfo   String?
 
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String @unique
+  emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String           @unique
 }
 
 model Terapeutic {
-  id String @id @default(cuid())
-  createdAt DateTime @default(now())
-  description String 
-  active Boolean @default(true)
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  description String
+  active      Boolean  @default(true)
 
-  appliedTerapeutic AppliedTerapeutic[]
-  emergencyConsult EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
-  emergencyConsultId String 
+  appliedTerapeutic  AppliedTerapeutic[]
+  emergencyConsult   EmergencyConsult    @relation(fields: [emergencyConsultId], references: [id])
+  emergencyConsultId String
 }
 
 model User {
-  id               String               @id @default(cuid())
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
-  name             String
-  birthDate        String?
-  gender           String?
-  nacionality      String?
-  number           String?
-  idNumber         String?              @unique
-  email            String?
-  address          String?
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  birthDate   String?
+  gender      String?
+  nacionality String?
+  number      String?
+  idNumber    String?  @unique
+  email       String?
+  address     String?
 
+  xRayRequisition XRayRequisition[]
   personalAppointment PersonalAppointment[]
-  companyAppointments     CompanyAppointment[]
-  emergencyConsult EmergencyConsult[]
+  companyAppointments CompanyAppointment[]
+  emergencyConsult    EmergencyConsult[]
 
   @@unique([name, number])
+  @@index([name, number, idNumber])
 }
 
+model XRayRequisition {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  examDescription String
+  isPrinted Boolean
+  company String?
 
+  userId  String
+  user  User  @relation(fields: [userId], references: [id])
+  xRayObject XRayObject[]
+}
+
+model XRayObject {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  fileLocation String
+  addInfo String?
+  
+  xRayRequisitionId String
+  xRayRequisition XRayRequisition @relation(fields: [xRayRequisitionId], references: [id])
+}
