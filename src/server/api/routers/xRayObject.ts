@@ -28,6 +28,17 @@ export const xRayObjectRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.xRayObject.findMany();
   }),
+  getAllIncludeUserAndRequisition: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.xRayObject.findMany({
+      include: {
+        xRayRequisition: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+  }),
   getAllById: publicProcedure
     .input(
       z.object({

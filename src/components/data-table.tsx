@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="container max-w-screen-lg">
+    <div className="container overflow-scroll">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filtrar nomes"
@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
       <div className="max-w-screen-lg overflow-x-scroll rounded-md border">
-        <Table className="">
+        <Table className="overflow-scroll">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

@@ -37,7 +37,7 @@ const UploadXRayFile = () => {
         })
         .then(() => {
           toast("Raio-X carregado com sucesso!");
-          void router.push("/requisition/xray_list");
+          void router.push("/xray/completed");
         })
         .catch((err) => {
           toast("Ocorreu um erro a inserir na base de dados =(");

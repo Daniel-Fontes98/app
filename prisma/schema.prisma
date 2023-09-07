@@ -56,13 +56,20 @@ model CompanyAppointment {
   local       String?
   location    String
   addInfo     String?
+
+  wasPresent  Boolean @default(false)
+  presentAt   DateTime?
+  areNurseryExamsDone  Boolean @default(false)
+  areLabExamsDone Boolean @default(false)
   
   companyId   String
   userId      String
   company     Company  @relation(fields: [companyId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
+  nurseryExams NurseryExam[]
+  labExams LabExams[]
 
-  @@index([date])
+  @@index([date, areNurseryExamsDone, areLabExamsDone, wasPresent])
 }
 
 model EmergencyConsult {
@@ -137,6 +144,18 @@ model Insurance {
   emergencyConsultId String           @unique
 }
 
+model LabExams {
+  id  String @id @default(cuid())
+  createdAt DateTime @default(now())
+  examName String
+  addInfo String?
+  fileLocation  String
+
+  companyAppointmentId String
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+
+}
+
 model MedicalExams {
   id           String  @id @default(cuid())
   date         String
@@ -178,6 +197,17 @@ model NurseFile {
 
   emergencyConsult   EmergencyConsult @relation(fields: [emergencyConsultId], references: [id])
   emergencyConsultId String           @unique
+}
+
+model NurseryExam {
+  id  String @id @default(cuid())
+  createdAt DateTime @default(now())
+  examName String
+  addInfo String?
+  fileLocation  String
+
+  companyAppointmentId String
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
 model PersonalAppointment {

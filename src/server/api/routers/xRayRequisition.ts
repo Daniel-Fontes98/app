@@ -40,6 +40,7 @@ export const xRayRequisitionRouter = createTRPCRouter({
     return ctx.prisma.xRayRequisition.findMany({
       include: {
         user: true,
+        xRayObject: true,
       },
     });
   }),

@@ -76,7 +76,7 @@ export const companyAppointmentrouter = createTRPCRouter({
     )
     .query(async (opts) => {
       const { input } = opts;
-      return opts.ctx.prisma.companyAppointment.findMany({
+      return await opts.ctx.prisma.companyAppointment.findMany({
         where: {
           AND: [
             {
@@ -102,6 +102,110 @@ export const companyAppointmentrouter = createTRPCRouter({
         include: {
           company: true,
           user: true,
+        },
+      });
+    }),
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          company: true,
+          user: true,
+        },
+      });
+    }),
+  updateByIdAndMarkPresent: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        nacionality: z.string(),
+        birthDate: z.string(),
+        idNumber: z.string(),
+        number: z.string(),
+        companyRole: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          companyRole: input.companyRole,
+          wasPresent: true,
+          presentAt: new Date(),
+          user: {
+            update: {
+              name: input.name,
+              nacionality: input.nacionality,
+              birthDate: input.birthDate,
+              idNumber: input.idNumber,
+              number: input.number,
+            },
+          },
+        },
+      });
+    }),
+  getAllAwaitingNursery: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.companyAppointment.findMany({
+      where: {
+        wasPresent: true,
+        areNurseryExamsDone: false,
+      },
+      include: {
+        user: true,
+        company: true,
+        nurseryExams: true,
+      },
+    });
+  }),
+  getAllAwaitingLab: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.companyAppointment.findMany({
+      where: {
+        wasPresent: true,
+        areLabExamsDone: false,
+      },
+      include: {
+        user: true,
+        company: true,
+        labExams: true,
+      },
+    });
+  }),
+  setNurseryExamsToDone: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          areNurseryExamsDone: true,
+        },
+      });
+    }),
+  setLabExamsToDone: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          areLabExamsDone: true,
         },
       });
     }),

@@ -12,8 +12,8 @@ interface UrgencyConsumablesProps {
   emergencyConsultId: string;
 }
 
-function processString(inputString: string) {
-  const baseUrl = "http://192.168.21.92:8080";
+export function processString(inputString: string) {
+  const baseUrl = "http://192.168.21.58:8080";
   const splitString = inputString.split("/uploads");
 
   if (splitString.length > 1 && splitString[1]) {

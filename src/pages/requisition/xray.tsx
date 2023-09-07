@@ -51,7 +51,7 @@ const XRay = () => {
         toast("Requisição de raio-x adicionada com sucesso");
         setIsButtonDisabled(false);
         router
-          .push("/requisition/xray_list")
+          .push("/xray/pending")
           .then()
           .catch((err) => toast("Ocorreu um erro ao mudar de página"));
       })

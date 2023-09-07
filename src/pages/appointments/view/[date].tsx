@@ -69,6 +69,7 @@ const ViewAllByDate = () => {
               {companyAppointmentsQuery.data?.map((appointment) => (
                 <ViewCompanyAppointment
                   key={appointment.id}
+                  id={appointment.id}
                   name={appointment.user.name}
                   company={appointment.company.name}
                   planType={appointment.planType}

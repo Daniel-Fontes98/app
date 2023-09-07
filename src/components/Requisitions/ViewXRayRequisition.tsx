@@ -22,7 +22,7 @@ export const ViewXRayRequisition = ({
   return (
     <div
       className="mt-1 flex h-10 w-full items-center rounded-lg bg-white shadow-md hover:cursor-pointer"
-      onClick={() => router.push(`/requisition/xray/${id}`)}
+      onClick={() => router.push(`/xray/pending/${id}`)}
     >
       <div className="ml-4 w-1/12">
         <span>{formatDate(date)}</span>
