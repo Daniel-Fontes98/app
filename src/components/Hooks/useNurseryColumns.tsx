@@ -7,6 +7,7 @@ import type {
 import { ColumnDef } from "@tanstack/react-table";
 import PlusIcon from "~/../public/plus.png";
 import CheckIcon from "~/../public/check.png";
+import ScaleIcon from "~/../public/scale.png";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
@@ -74,6 +75,15 @@ const useNurseryColumns = (
       cell: ({ cell }) => {
         return (
           <div className="flex gap-4">
+            <button
+              onClick={() =>
+                router.push(
+                  `/nursery/addTriage/${cell.renderValue() as string}`
+                )
+              }
+            >
+              <Image src={ScaleIcon} alt="Triage button" className="h-4 w-4" />
+            </button>
             <button
               onClick={() =>
                 router.push(`/nursery/addExam/${cell.renderValue() as string}`)

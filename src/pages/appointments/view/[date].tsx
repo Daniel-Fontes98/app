@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ViewCompanyAppointment } from "~/components/Appointments/ViewCompanyAppointment";
 import { ViewPersonalAppointment } from "~/components/Appointments/ViewPersonalAppointments";
 import { api } from "~/utils/api";
@@ -57,6 +57,8 @@ const ViewAllByDate = () => {
         {tableFilter === "company" ? (
           <div>
             <div className="mt-2 flex gap-4 pl-14">
+              <div className="w-1/12 font-semibold text-emerald-600">ORDEM</div>
+              <div className=" border-l-2 border-emerald-600 opacity-20"></div>
               <div className="w-2/6 font-semibold text-emerald-600">NOME</div>
               <div className=" border-l-2 border-emerald-600 opacity-20"></div>
               <div className="w-1/6 font-semibold text-emerald-600">
@@ -64,6 +66,10 @@ const ViewAllByDate = () => {
               </div>
               <div className="border-l-2 border-emerald-600 opacity-20"></div>
               <div className="w-1/6 font-semibold text-emerald-600">PLANO</div>
+              <div className="border-l-2 border-emerald-600 opacity-20"></div>
+              <div className="w-1/6 font-semibold text-emerald-600">
+                PRESENTE
+              </div>
             </div>
             <div className="mt-4 flex flex-col gap-4 px-10">
               {companyAppointmentsQuery.data?.map((appointment) => (
@@ -73,6 +79,8 @@ const ViewAllByDate = () => {
                   name={appointment.user.name}
                   company={appointment.company.name}
                   planType={appointment.planType}
+                  wasPresent={appointment.wasPresent}
+                  orderOfPresence={appointment.orderOfPresence}
                 />
               ))}
             </div>

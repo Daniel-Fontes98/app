@@ -117,15 +117,17 @@ export function Sidebar() {
             </a>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="#"
+              href="/doctors/awaiting"
             >
-              <span className="ml-12 text-sm  text-emerald-600">Criar</span>
+              <span className="ml-12 text-sm  text-emerald-600">
+                A Aguardar
+              </span>
             </Link>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               href="#"
             >
-              <span className="ml-12 text-sm  text-emerald-600">Lista</span>
+              <span className="ml-12 text-sm  text-emerald-600">Histórico</span>
             </Link>
           </li>
           <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">

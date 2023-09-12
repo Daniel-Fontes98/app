@@ -2,6 +2,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { admissionRouter } from "./routers/admission";
 import { applyTerapeuticRouter } from "./routers/applyTerapeutic";
 import { companyAppointmentrouter } from "./routers/companyAppointment";
+import { companyAppointmentMedicalFileRouter } from "./routers/companyAppointmentMedicalFile";
 import { emergencyConsultRouter } from "./routers/emergencyConsult";
 import { emergencyMealsRouter } from "./routers/emergencyMeals";
 import { emergencyTransferRouter } from "./routers/emergencyTransfer";
@@ -15,6 +16,7 @@ import { nurseryExamRouter } from "./routers/nurseryExam";
 import { personalAppointmentrouter } from "./routers/personalAppointment";
 import { releaseRouter } from "./routers/release";
 import { terapeuticRouter } from "./routers/terapeutic";
+import { triageRouter } from "./routers/triage";
 import { userRouter } from "./routers/user";
 import { xRayObjectRouter } from "./routers/xRayObject";
 import { xRayRequisitionRouter } from "./routers/xRayRequisition";
@@ -26,6 +28,7 @@ import { xRayRequisitionRouter } from "./routers/xRayRequisition";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  companyAppointmentMedicalFile: companyAppointmentMedicalFileRouter,
   emergencyConsults: emergencyConsultRouter,
   emergencyTriage: emergencyTriageRouter,
   emergencyTransfer: emergencyTransferRouter,
@@ -39,6 +42,7 @@ export const appRouter = createTRPCRouter({
   nurseryExams: nurseryExamRouter,
   admission: admissionRouter,
   terapeutic: terapeuticRouter,
+  triage: triageRouter,
   applyTerapeutic: applyTerapeuticRouter,
   personalAppointment: personalAppointmentrouter,
   companyAppointment: companyAppointmentrouter,

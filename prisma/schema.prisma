@@ -57,19 +57,40 @@ model CompanyAppointment {
   location    String
   addInfo     String?
 
+  orderOfPresence  Int? 
   wasPresent  Boolean @default(false)
   presentAt   DateTime?
   areNurseryExamsDone  Boolean @default(false)
   areLabExamsDone Boolean @default(false)
+  isArquived  Boolean @default(false)
   
   companyId   String
   userId      String
+  triage  Triage?
+  medicalFile CompanyAppointmentMedicalFile?
   company     Company  @relation(fields: [companyId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
   nurseryExams NurseryExam[]
   labExams LabExams[]
 
   @@index([date, areNurseryExamsDone, areLabExamsDone, wasPresent])
+}
+
+model CompanyAppointmentMedicalFile {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  app String?
+  apf String?
+  etilicHabits String?
+  tobaccoHabits String?
+  surgerys String?
+  allergys String?
+  admissions String?
+  epis String?
+
+  companyAppointmentId String @unique
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+
 }
 
 model EmergencyConsult {
@@ -240,6 +261,19 @@ model Terapeutic {
   appliedTerapeutic  AppliedTerapeutic[]
   emergencyConsult   EmergencyConsult    @relation(fields: [emergencyConsultId], references: [id])
   emergencyConsultId String
+}
+
+model Triage {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  arterialTension String
+  pulse String
+  weight String
+  height String
+  temperature String
+
+  companyAppointment  CompanyAppointment @relation(fields: [companyAppointmentId], references: [id]) 
+  companyAppointmentId  String @unique
 }
 
 model User {

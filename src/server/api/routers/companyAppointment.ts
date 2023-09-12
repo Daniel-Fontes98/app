@@ -120,6 +120,10 @@ export const companyAppointmentrouter = createTRPCRouter({
         include: {
           company: true,
           user: true,
+          triage: true,
+          labExams: true,
+          nurseryExams: true,
+          medicalFile: true,
         },
       });
     }),
@@ -137,6 +141,11 @@ export const companyAppointmentrouter = createTRPCRouter({
     )
     .mutation(async (opts) => {
       const { input } = opts;
+      const lastArrivedPerson = await opts.ctx.prisma.companyAppointment.count({
+        where: {
+          wasPresent: true,
+        },
+      });
       return await opts.ctx.prisma.companyAppointment.update({
         where: {
           id: input.id,
@@ -145,6 +154,7 @@ export const companyAppointmentrouter = createTRPCRouter({
           companyRole: input.companyRole,
           wasPresent: true,
           presentAt: new Date(),
+          orderOfPresence: lastArrivedPerson + 1,
           user: {
             update: {
               name: input.name,
@@ -183,6 +193,21 @@ export const companyAppointmentrouter = createTRPCRouter({
       },
     });
   }),
+  getAllAwaitingDoctor: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.companyAppointment.findMany({
+      where: {
+        areLabExamsDone: true,
+        areNurseryExamsDone: true,
+        isArquived: false,
+      },
+      include: {
+        user: true,
+        company: true,
+        labExams: true,
+        nurseryExams: true,
+      },
+    });
+  }),
   setNurseryExamsToDone: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async (opts) => {
@@ -206,6 +231,19 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
         data: {
           areLabExamsDone: true,
+        },
+      });
+    }),
+  setIsArquived: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isArquived: true,
         },
       });
     }),

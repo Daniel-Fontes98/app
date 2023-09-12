@@ -57,7 +57,7 @@ const useLabColumns = (
       accessorKey: "labExams.length",
       header: () => (
         <div className="flex  whitespace-nowrap  text-emerald-600">
-          Nº exames
+          Nº análises
         </div>
       ),
     },
