@@ -26,6 +26,7 @@ const useFileUploader = () => {
       !file.type.startsWith("application/pdf") &&
       !file.type.startsWith("image/jpeg")
     ) {
+      e.target.value = "";
       alert("Por favor seleciona um ficheiro pdf ou jpeg");
       return;
     }

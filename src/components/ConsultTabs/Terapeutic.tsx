@@ -28,53 +28,56 @@ const TerapeuticTab = ({ emergencyConsultId }: TerapeuticProps) => {
   }
 
   const handleApplyTerapeutic = (id: string) => {
-    const result = applyTerapeutic.mutateAsync({
-      terapeuticId: id,
-      appliedBy: user.username!,
-    });
-
-    result
-      .then(async () => {
-        await getTerapeutics.refetch();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    toast("Aplicado com sucesso!");
+    toast
+      .promise(
+        applyTerapeutic.mutateAsync({
+          terapeuticId: id,
+          appliedBy: user.username!,
+        }),
+        {
+          loading: "A carregar...",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "Aplicado com sucesso!",
+        }
+      )
+      .then(async () => await getTerapeutics.refetch())
+      .catch((err) => console.log(err));
   };
 
   const handleRetireTerapeutic = (id: string) => {
-    const result = deleteTerapeutic.mutateAsync({
-      id: id,
-    });
-
-    result
-      .then(async () => {
-        await getTerapeutics.refetch();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    toast("Removido com sucesso!");
+    toast
+      .promise(
+        deleteTerapeutic.mutateAsync({
+          id: id,
+        }),
+        {
+          loading: "A carregar...",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "Removido com sucesso!",
+        }
+      )
+      .then(async () => await getTerapeutics.refetch())
+      .catch((err) => console.log(err));
   };
 
   const handleAddTerapeutic = () => {
     if (medicine.length < 4) {
-      toast("Mínimo de 5 caracteres");
+      toast.error("Mínimo de 5 caracteres", { duration: 2000 });
     } else {
-      const result = insertTerapeutic.mutateAsync({
-        description: medicine,
-        emergencyConsultId: emergencyConsultId,
-      });
-      result
-        .then(async () => {
-          await getTerapeutics.refetch();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      toast
+        .promise(
+          insertTerapeutic.mutateAsync({
+            description: medicine,
+            emergencyConsultId: emergencyConsultId,
+          }),
+          {
+            loading: "A carregar...",
+            error: (err) => `Ocorreu um erro: ${err}`,
+            success: "Adicionado com sucesso !",
+          }
+        )
+        .then(async () => await getTerapeutics.refetch())
+        .catch((err) => console.log(err));
     }
   };
 

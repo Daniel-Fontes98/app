@@ -29,6 +29,8 @@ const UploadXRayFile = () => {
     toast("A carregar ficheiro...");
     const url = await onUploadFile();
     if (typeof url === "object") {
+      console.log(url);
+      console.log("Hello");
       mutation
         .mutateAsync({
           fileLocation: url[0]!,

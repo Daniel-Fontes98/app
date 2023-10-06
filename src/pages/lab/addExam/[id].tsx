@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
+import Input from "~/components/Forms/Input";
 import useFileUploader from "~/components/Hooks/useFileUploader";
 import { api } from "~/utils/api";
 
@@ -18,9 +19,11 @@ const AddExam = () => {
   const { onFileUploadChange, onUploadFile } = useFileUploader();
 
   const formSchema = z.object({
-    examName: z.string({
-      required_error: "É necessário fornecer um nome para o exame",
-    }),
+    examName: z
+      .string({
+        required_error: "É necessário fornecer um nome para o exame",
+      })
+      .min(2, "Minimo de caracteres não atingido"),
     addInfo: z.string().optional(),
   });
 
@@ -55,6 +58,11 @@ const AddExam = () => {
         .catch((err) => {
           console.error(err);
         });
+    } else {
+      toast("Ficheiro inválido, por favor inserir outro ficheiro", {
+        duration: 4000,
+      });
+      setIsButtonDisabled(false);
     }
   };
 
@@ -79,39 +87,19 @@ const AddExam = () => {
                 Anexar Análise
               </h1>
               <div className="mb-4">
-                <label
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                  htmlFor="examName"
-                >
-                  Nome da análise
-                </label>
-
-                <input
-                  className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                  id="examName"
+                <Input
+                  error={errors.examName}
+                  registerReturn={register("examName")}
+                  name="Nome da análise"
                   type="text"
-                  {...register("examName")}
                 />
-                {errors.examName && (
-                  <p className="mt-2 text-xs italic text-red-500">
-                    {" "}
-                    {errors.examName?.message}
-                  </p>
-                )}
               </div>
               <div className="mb-4">
-                <label
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                  htmlFor="addInfo"
-                >
-                  Informação Adicional
-                </label>
-
-                <input
-                  className="focus:shadow-outline h-16 w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                  id="addInfo"
+                <Input
+                  error={errors.addInfo}
+                  registerReturn={register("addInfo")}
+                  name="Informação Adicional"
                   type="text"
-                  {...register("addInfo")}
                 />
               </div>
               <div className="mt-4">

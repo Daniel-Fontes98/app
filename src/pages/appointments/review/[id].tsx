@@ -66,6 +66,7 @@ const ReviewCompanyAppointment = () => {
       .promise(
         mutateAsync({
           id: appointmentId,
+          date: companyAppointmentQuery.data?.date!,
           ...data,
         }),
         {
@@ -162,7 +163,7 @@ const ReviewCompanyAppointment = () => {
                   htmlFor="nacionality"
                   className="mb-2 block text-sm font-bold text-gray-700"
                 >
-                  Nacionality
+                  Nacionalidade
                 </label>
                 <input
                   id="nacionality"

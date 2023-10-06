@@ -6,6 +6,27 @@ interface userInfoProps {
   emergencyTriage?: EmergencyTriage | null;
 }
 
+export function calculateAgeFormatYYYY(birthdate: string): string {
+  const today: Date = new Date();
+  const parts: string[] = birthdate.split("-");
+
+  const birthYear: number = parseInt(parts[0] as string);
+  const birthMonth: number = parseInt(parts[1] as string);
+  const birthDay: number = parseInt(parts[2] as string);
+  let ageYears: number = today.getFullYear() - birthYear;
+  const ageMonths: number = today.getMonth() + 1 - birthMonth;
+  const ageDays: number = today.getDate() - birthDay;
+
+  // Adjust age based on current month and day
+  if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
+    ageYears--;
+  }
+
+  const age: string = ageYears.toString();
+
+  return age;
+}
+
 export function calculateAge(birthdate: string): string {
   const today: Date = new Date();
   const parts: string[] = birthdate.split("/");

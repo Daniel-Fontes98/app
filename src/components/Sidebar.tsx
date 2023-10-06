@@ -18,7 +18,7 @@ export function Sidebar() {
     >
       <div className=" h-full overflow-y-auto bg-gray-50 px-3 py-4 shadow-md dark:bg-gray-800">
         <div className="flex flex-col gap-1">
-          <Link href="/" className=" flex items-center ">
+          <Link href="/" className=" flex items-center">
             <Image src={CentralabLogo} alt="Centralab Logo" />
           </Link>
           <div className="flex justify-center text-sm font-semibold text-cyan-800">
@@ -125,7 +125,7 @@ export function Sidebar() {
             </Link>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="#"
+              href="/doctors/history"
             >
               <span className="ml-12 text-sm  text-emerald-600">Histórico</span>
             </Link>

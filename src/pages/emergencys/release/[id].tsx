@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import useRelease from "~/components/HookForms/useRelease";
 import { convertDateString } from "~/utils/dates";
+import Input from "~/components/Forms/Input";
 
 const PatientRelease = () => {
   const router = useRouter();
@@ -45,66 +46,29 @@ const PatientRelease = () => {
             </h1>
             <div className="mb-4 md:flex md:justify-between">
               <div className="mb-4 md:mb-0 md:mr-2">
-                <label
-                  htmlFor="exitDate"
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                >
-                  Data de saída
-                </label>
-                <input
-                  id="exitDate"
+                <Input
+                  error={errors.exitDate}
+                  name="Data de saída"
+                  registerReturn={register("exitDate")}
                   type="date"
-                  className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-                  {...register("exitDate")}
                 />
-                {errors.exitDate && (
-                  <p className="mt-2 text-xs italic text-red-500">
-                    {" "}
-                    {errors.exitDate?.message}
-                  </p>
-                )}
               </div>
               <div className="md:ml-2">
-                <label
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                  htmlFor="exitTime"
-                >
-                  Hora de saída
-                </label>
-                <input
-                  className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                  id="exitTime"
+                <Input
+                  error={errors.exitTime}
+                  name="Hora de saída"
+                  registerReturn={register("exitTime")}
                   type="time"
-                  placeholder="Hospital..."
-                  {...register("exitTime")}
                 />
-                {errors.exitTime && (
-                  <p className="mt-2 text-xs italic text-red-500">
-                    {" "}
-                    {errors.exitTime?.message}
-                  </p>
-                )}
               </div>
             </div>
             <div className="mb-4">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="addInfo"
-              >
-                Informação Adicional
-              </label>
-              <input
-                className="focus:shadow-outline h-16 w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                id="addInfo"
+              <Input
+                error={errors.addInfo}
+                name="Informação Adicional"
+                registerReturn={register("addInfo")}
                 type="text"
-                {...register("addInfo")}
               />
-              {errors.addInfo && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {" "}
-                  {errors.addInfo?.message}
-                </p>
-              )}
             </div>
             <div className="mb-16 mt-8 text-center">
               <button

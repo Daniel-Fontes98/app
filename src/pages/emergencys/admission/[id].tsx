@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { type SubmitHandler } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
 import { type z } from "zod";
+import Input from "~/components/Forms/Input";
 import useAdmission from "~/components/HookForms/useAdmission";
 import { api } from "~/utils/api";
 import { convertDateString } from "~/utils/dates";
@@ -17,17 +19,26 @@ const AdmitPatientForm: NextPage = () => {
   }
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    mutation.mutate({
-      ...data,
-      entryDate: convertDateString(data.entryDate),
-      emergencyConsultId: id as string,
-    });
-
-    void router.push(`/emergencys/consult/${id as string}`);
+    toast
+      .promise(
+        mutation.mutateAsync({
+          ...data,
+          entryDate: convertDateString(data.entryDate),
+          emergencyConsultId: id as string,
+        }),
+        {
+          loading: "A carregar",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "",
+        }
+      )
+      .then(() => void router.push(`/emergencys/consult/${id as string}`))
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="min-h-screen items-center justify-center bg-slate-100 px-12 pb-32">
+      <Toaster />
       <div className="mb-10 flex items-center justify-center">
         <div className="w-56 rounded-b-2xl bg-emerald-600 py-2 text-center text-white">
           Internamento
@@ -35,74 +46,34 @@ const AdmitPatientForm: NextPage = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className=" mt-6 grid grid-cols-2 gap-12">
-          <div className="w-full">
-            <label className="mb-2 block text-lg text-emerald-600">
-              Data de internamento *
-            </label>
-            <input
-              className="w-full rounded-md p-2 shadow-md"
-              type="date"
-              {...register("entryDate")}
-              required
-            />
-            {errors.entryDate && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {" "}
-                {errors.entryDate?.message}
-              </p>
-            )}
-          </div>
-          <div className="w-full">
-            <label className="mb-2 block text-lg text-emerald-600">
-              Hora de internamento *
-            </label>
-            <input
-              className="w-full rounded-md p-2 shadow-md"
-              type="time"
-              {...register("entryTime")}
-              required
-            />
-            {errors.entryTime && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {" "}
-                {errors.entryTime?.message}
-              </p>
-            )}
-          </div>
+          <Input
+            error={errors.entryDate}
+            name="Data de internamento"
+            registerReturn={register("entryDate")}
+            type="date"
+          />
+          <Input
+            error={errors.entryDate}
+            name="Hora de internamento"
+            registerReturn={register("entryTime")}
+            type="time"
+          />
         </div>
         <div className="mt-8">
-          <label className="text-lg text-emerald-600">Cama número*</label>
-          <input
-            className="ml-2 rounded-md p-2 shadow-md"
+          <Input
+            error={errors.bedNumber}
+            name="Cama número"
+            registerReturn={register("bedNumber")}
             type="number"
-            {...register("bedNumber")}
-            required
           />
-          {errors.bedNumber && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.bedNumber?.message}
-            </p>
-          )}
         </div>
         <div className="mt-8">
-          <label
-            className="mb'2 block text-lg text-emerald-600"
-            htmlFor="description"
-          >
-            Razão de internamento
-          </label>
-          <textarea
-            id="description"
-            className="h-40 w-full rounded-md p-2 shadow-md"
-            {...register("description")}
+          <Input
+            error={errors.description}
+            name="Razão de internamento"
+            registerReturn={register("description")}
+            type="text"
           />
-          {errors.description && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.description?.message}
-            </p>
-          )}
         </div>
         <div className="float-right mt-4 py-4">
           <button

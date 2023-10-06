@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { formatDate } from "../Forms/CreateCompanyAppointment";
+import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
 interface ViewXRayRequisitionProps {
   date: Date;

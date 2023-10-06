@@ -20,6 +20,11 @@ import { triageRouter } from "./routers/triage";
 import { userRouter } from "./routers/user";
 import { xRayObjectRouter } from "./routers/xRayObject";
 import { xRayRequisitionRouter } from "./routers/xRayRequisition";
+import { userHistoryRouter } from "./routers/userHistory";
+import { userHistoryFieldsRouter } from "./routers/userHistoryFields";
+import { riskFactorsRouter } from "./routers/riskFactors";
+import { riskFactorsFieldsRouter } from "./routers/riskFactorsFields";
+import { certificateRouter } from "./routers/certificate";
 
 /**
  * This is the primary router for your server.
@@ -29,6 +34,7 @@ import { xRayRequisitionRouter } from "./routers/xRayRequisition";
 export const appRouter = createTRPCRouter({
   user: userRouter,
   companyAppointmentMedicalFile: companyAppointmentMedicalFileRouter,
+  certificate: certificateRouter,
   emergencyConsults: emergencyConsultRouter,
   emergencyTriage: emergencyTriageRouter,
   emergencyTransfer: emergencyTransferRouter,
@@ -48,6 +54,10 @@ export const appRouter = createTRPCRouter({
   companyAppointment: companyAppointmentrouter,
   xRayRequisition: xRayRequisitionRouter,
   xRayObject: xRayObjectRouter,
+  riskFactors: riskFactorsRouter,
+  riskFactorsFields: riskFactorsFieldsRouter,
+  userHistory: userHistoryRouter,
+  userHistoryFields: userHistoryFieldsRouter,
 });
 
 // export type definition of API

@@ -4,6 +4,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import Select from "~/components/Forms/Select";
+import Input from "~/components/Forms/Input";
+import { toast, Toaster } from "react-hot-toast";
 
 const formSchema = z.object({
   transportType: z.string({
@@ -48,18 +51,26 @@ const PatientTransfer = () => {
   if (!isLoaded || !isSignedIn) return null;
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    mutation.mutate({
-      emergencyConsultId: id as string,
-      ...data,
-      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      orderBy: user.fullName!,
-    });
+    toast.promise(
+      mutation.mutateAsync({
+        ...data,
+        emergencyConsultId: id as string,
+        orderBy: user.fullName!,
+      }),
+      {
+        loading: "A carregar...",
+        error: (err) => `Ocorreu um erro: ${err}`,
+        success: "Submetido com sucesso !",
+      }
+    );
+
     void router.push("/emergencys/triage");
   };
 
   if (consult) {
     return (
       <div className=" min-h-screen items-center justify-center bg-slate-100 px-12 ">
+        <Toaster />
         <div className="mb-32 flex items-center justify-center">
           <div className="w-56 rounded-b-2xl bg-emerald-600 py-2 text-center text-white">
             Transferir - {consult.user.name}
@@ -73,70 +84,35 @@ const PatientTransfer = () => {
             <h1 className="mb-8 text-center text-3xl font-bold">
               Formulário de Transferência
             </h1>
-            <div className="mb-4 md:flex md:justify-between">
-              <div className="mb-4 md:mb-0 md:mr-2">
-                <label
-                  htmlFor="transportType"
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                >
-                  Transporte
-                </label>
-                <select
-                  id="transporteType"
-                  className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-                  {...register("transportType")}
-                >
-                  <option value="Ambulancia">Ambulância</option>
-                  <option value="Proprio">Proprio</option>
-                </select>
-                {errors.transportType && (
-                  <p className="mt-2 text-xs italic text-red-500">
-                    {" "}
-                    {errors.transportType?.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:ml-2">
-                <label
-                  className="mb-2 block text-sm font-bold text-gray-700"
-                  htmlFor="whereTo"
-                >
-                  Destino
-                </label>
-                <input
-                  className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                  id="whereTo"
-                  type="text"
-                  placeholder="Hospital..."
-                  {...register("whereTo")}
+            <div className="mb-4 flex gap-4">
+              <div className="w-1/2">
+                <Select
+                  error={errors.transportType}
+                  name="Transporte"
+                  registerReturn={register("transportType")}
+                  options={[
+                    { label: "Ambulância", value: "Ambulancia" },
+                    { label: "Próprio", value: "Proprio" },
+                  ]}
                 />
-                {errors.whereTo && (
-                  <p className="mt-2 text-xs italic text-red-500">
-                    {" "}
-                    {errors.whereTo?.message}
-                  </p>
-                )}
+              </div>
+
+              <div className="w-1/2">
+                <Input
+                  error={errors.whereTo}
+                  name="Destino"
+                  registerReturn={register("whereTo")}
+                  type="text"
+                />
               </div>
             </div>
             <div className="mb-4">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="adicionalInfo"
-              >
-                Informação Adicional
-              </label>
-              <input
-                className="focus:shadow-outline h-16 w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                id="adicionalInfo"
+              <Input
+                error={errors.reason}
+                name="Informação Adicional"
+                registerReturn={register("reason")}
                 type="text"
-                {...register("reason")}
               />
-              {errors.reason && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {" "}
-                  {errors.reason?.message}
-                </p>
-              )}
             </div>
             <div className="mb-16 mt-8 text-center">
               <button

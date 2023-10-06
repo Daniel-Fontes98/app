@@ -119,7 +119,7 @@ const Calendar = () => {
           <div className="grid grid-cols-7 gap-4">
             {[
               ...Array(
-                obterDiaSemanaInicioMes(selectedMonth, selectedYear)
+                obterDiaSemanaInicioMes(selectedMonth + 1, selectedYear)
               ).keys(),
             ].map((day) => (
               <div key={day}>

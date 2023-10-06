@@ -2,6 +2,17 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const companyAppointmentrouter = createTRPCRouter({
+  getAllArchived: publicProcedure.query(async (opts) => {
+    return await opts.ctx.prisma.companyAppointment.findMany({
+      where: {
+        isArquived: true,
+      },
+      include: {
+        user: true,
+        company: true,
+      },
+    });
+  }),
   insertOne: publicProcedure
     .input(
       z.object({
@@ -137,6 +148,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         idNumber: z.string(),
         number: z.string(),
         companyRole: z.string(),
+        date: z.date(),
       })
     )
     .mutation(async (opts) => {
@@ -144,6 +156,7 @@ export const companyAppointmentrouter = createTRPCRouter({
       const lastArrivedPerson = await opts.ctx.prisma.companyAppointment.count({
         where: {
           wasPresent: true,
+          date: input.date,
         },
       });
       return await opts.ctx.prisma.companyAppointment.update({
@@ -244,6 +257,64 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
         data: {
           isArquived: true,
+        },
+      });
+    }),
+  updateByIdCertificateForm: publicProcedure
+    .input(
+      z.object({
+        companyAppointmentId: z.string(),
+        name: z.string(),
+        birthDate: z.string(),
+        gender: z.string(),
+        weight: z.string(),
+        height: z.string(),
+        companyName: z.string(),
+        role: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          user: {
+            update: {
+              name: input.name,
+              birthDate: input.birthDate,
+              gender: input.gender,
+            },
+          },
+          triage: {
+            update: {
+              height: input.height,
+              weight: input.weight,
+            },
+          },
+          companyRole: input.role,
+          company: {
+            update: {
+              name: input.companyName,
+            },
+          },
+          userHistory: {
+            connectOrCreate: {
+              create: {},
+              where: {
+                companyAppointmentId: input.companyAppointmentId,
+              },
+            },
+          },
+          riskFactors: {
+            connectOrCreate: {
+              create: {},
+              where: {
+                companyAppointmentId: input.companyAppointmentId,
+              },
+            },
+          },
+        },
+        where: {
+          id: input.companyAppointmentId,
         },
       });
     }),

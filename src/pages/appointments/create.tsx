@@ -1,6 +1,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import CreateCompanyAppointment from "~/components/Forms/CreateCompanyAppointment";
+import CreateCompanyAppointmentExcel from "~/components/Forms/CreateCompanyAppointmentExcel";
 import CreatePersonalAppointment from "~/components/Forms/CreatePersonalAppointment";
 
 const CreateAppointment = () => {
@@ -35,12 +36,15 @@ const CreateAppointment = () => {
                 onChange={(e) => setAppointmentType(e.target.value)}
               >
                 <option value="Particular">Particular</option>
-                <option value="Empresa">Empresa</option>
+                <option value="EmpresaP">Empresa Planilha</option>
+                <option value="EmpresaS">Empresa Único</option>
               </select>
             </div>
           </div>
           {appointmentType === "Particular" ? (
             <CreatePersonalAppointment />
+          ) : appointmentType === "EmpresaP" ? (
+            <CreateCompanyAppointmentExcel />
           ) : (
             <CreateCompanyAppointment />
           )}

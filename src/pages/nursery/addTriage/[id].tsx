@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
+import Input from "~/components/Forms/Input";
 import { api } from "~/utils/api";
 
 const AddTriage = () => {
@@ -84,110 +85,40 @@ const AddTriage = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               <h1 className="mb-8 text-center text-3xl font-bold">Triagem</h1>
-              <div className="flex w-full gap-4">
-                <div className="mb-4 w-full">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="arterialTension"
-                  >
-                    Tensão Arterial
-                  </label>
-                  <input
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                    id="arterialTension"
-                    type="text"
-                    {...register("arterialTension")}
-                  />
-                  {errors.arterialTension && (
-                    <p className="mt-2 text-xs italic text-red-500">
-                      {" "}
-                      {errors.arterialTension?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="mb-4 w-full">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="pulse"
-                  >
-                    Pulso
-                  </label>
-                  <input
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                    id="pulse"
-                    type="text"
-                    {...register("pulse")}
-                  />
-                  {errors.pulse && (
-                    <p className="mt-2 text-xs italic text-red-500">
-                      {" "}
-                      {errors.pulse?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="mb-4 w-full">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="weight"
-                  >
-                    Peso
-                  </label>
-                  <input
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                    id="weight"
-                    type="text"
-                    {...register("weight")}
-                  />
-                  {errors.weight && (
-                    <p className="mt-2 text-xs italic text-red-500">
-                      {" "}
-                      {errors.weight?.message}
-                    </p>
-                  )}
-                </div>
+              <div className="mb-4  flex gap-4">
+                <Input
+                  name="Tensão Arterial"
+                  error={errors.arterialTension}
+                  registerReturn={register("arterialTension")}
+                  type="text"
+                />
+                <Input
+                  name="Pulso"
+                  error={errors.pulse}
+                  registerReturn={register("pulse")}
+                  type="text"
+                />
+                <Input
+                  name="Peso"
+                  error={errors.weight}
+                  registerReturn={register("weight")}
+                  type="text"
+                />
               </div>
               <div className="flex gap-4">
-                <div className="mb-4 w-1/3">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="height"
-                  >
-                    Altura
-                  </label>
-                  <input
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                    id="height"
-                    type="text"
-                    {...register("height")}
-                  />
-                  {errors.height && (
-                    <p className="mt-2 text-xs italic text-red-500">
-                      {" "}
-                      {errors.height?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="mb-4 w-1/3">
-                  <label
-                    className="mb-2 block text-sm font-bold text-gray-700"
-                    htmlFor="temperature"
-                  >
-                    Temperatura
-                  </label>
-
-                  <input
-                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                    id="temperature"
-                    type="text"
-                    {...register("temperature")}
-                  />
-                  {errors.temperature && (
-                    <p className="mt-2 text-xs italic text-red-500">
-                      {" "}
-                      {errors.temperature?.message}
-                    </p>
-                  )}
-                </div>
+                <Input
+                  name="Altura"
+                  error={errors.height}
+                  registerReturn={register("height")}
+                  type="text"
+                />
+                <Input
+                  name="Temperatura"
+                  error={errors.temperature}
+                  registerReturn={register("temperature")}
+                  type="text"
+                />
+                <div className="w-full"></div>
               </div>
               <div className="mb-16 mt-8 text-center">
                 <button

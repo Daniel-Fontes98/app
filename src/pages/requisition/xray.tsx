@@ -5,20 +5,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { api } from "~/utils/api";
+import Input from "~/components/Forms/Input";
 
 const formSchema = z.object({
-  name: z.string({
-    required_error: "É necessário indicar um nome",
-  }),
-  idNumber: z.string({
-    required_error: "É necessário indicar o número do BI",
-  }),
+  name: z
+    .string({
+      required_error: "É necessário indicar um nome",
+    })
+    .min(2, {
+      message: "Tamanho minimo não atingido",
+    }),
+  idNumber: z
+    .string({
+      required_error: "É necessário indicar o número do BI",
+    })
+    .min(2, {
+      message: "Tamanho minimo não atingido",
+    }),
   birthDate: z.string({
     required_error: "É necessário indicar uma data de nascimento",
   }),
-  requestedExam: z.string({
-    required_error: "É necessário indicar o exame pedido",
-  }),
+  requestedExam: z
+    .string({
+      required_error: "É necessário indicar o exame pedido",
+    })
+    .min(2, {
+      message: "Tamanho minimo não atingido",
+    }),
   isPrinted: z.boolean(),
   companyName: z.string().optional(),
 });
@@ -80,64 +93,28 @@ const XRay = () => {
           </h1>
           <div className="mb-4 flex gap-4">
             <div className="w-2/4 ">
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-bold text-gray-700"
-              >
-                Nome Completo
-              </label>
-              <input
-                id="name"
-                className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-                {...register("name")}
-              />
-              {errors.name && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {" "}
-                  {errors.name?.message}
-                </p>
-              )}
-            </div>
-            <div className="w-1/4">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="idNumber"
-              >
-                Numero Bi
-              </label>
-              <input
-                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                id="idNumber"
+              <Input
+                name="Nome Completo"
+                error={errors.name}
+                registerReturn={register("name")}
                 type="text"
-                {...register("idNumber")}
               />
-              {errors.idNumber && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {" "}
-                  {errors.idNumber?.message}
-                </p>
-              )}
             </div>
             <div className="w-1/4">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="birthDate"
-              >
-                Data de Nascimento
-              </label>
-              <input
-                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-                id="birthDate"
-                type="date"
-                placeholder="dd/mm/yyyy"
-                {...register("birthDate")}
+              <Input
+                name="Número Bi"
+                error={errors.idNumber}
+                registerReturn={register("idNumber")}
+                type="text"
               />
-              {errors.birthDate && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {" "}
-                  {errors.birthDate?.message}
-                </p>
-              )}
+            </div>
+            <div className="w-1/4">
+              <Input
+                name="Data de Nascimento"
+                error={errors.birthDate}
+                registerReturn={register("birthDate")}
+                type="date"
+              />
             </div>
           </div>
           <div className="mb-4 flex items-center justify-center">
@@ -178,24 +155,12 @@ const XRay = () => {
             </label>
           </div>
           <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="requestedExam"
-            >
-              Exame Pedido
-            </label>
-            <input
-              className="focus:shadow-outline h-16 w-full appearance-none rounded border px-3 py-2 text-sm leading-tight text-gray-700 focus:outline-none"
-              id="requestedExam"
+            <Input
+              name="Exame Pedido"
+              error={errors.requestedExam}
+              registerReturn={register("requestedExam")}
               type="text"
-              {...register("requestedExam")}
             />
-            {errors.requestedExam && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {" "}
-                {errors.requestedExam?.message}
-              </p>
-            )}
           </div>
           <div className="mb-16 mt-8 text-center">
             <button

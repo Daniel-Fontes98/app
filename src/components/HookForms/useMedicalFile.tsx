@@ -15,11 +15,12 @@ const useMedicalFile = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  return { register, handleSubmit, errors, formSchema };
+  return { register, handleSubmit, errors, formSchema, setValue };
 };
 
 export default useMedicalFile;

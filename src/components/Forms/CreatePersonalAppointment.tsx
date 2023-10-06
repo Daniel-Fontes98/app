@@ -4,6 +4,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { api } from "~/utils/api";
+import Input from "./Input";
 
 const CreatePersonalAppointment = () => {
   const createPersonalAppointment =
@@ -31,14 +32,22 @@ const CreatePersonalAppointment = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    createPersonalAppointment.mutate({
-      appointmentDate: data.consultDate,
-      consultType: data.consultType,
-      name: data.name,
-      number: data.number,
-    });
-    toast("Adicionado com sucesso");
-    void router.push("/appointments");
+    toast
+      .promise(
+        createPersonalAppointment.mutateAsync({
+          appointmentDate: data.consultDate,
+          consultType: data.consultType,
+          name: data.name,
+          number: data.number,
+        }),
+        {
+          loading: "A carregar...",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "Adicionado com sucesso!",
+        }
+      )
+      .then(() => router.push("/appointments"))
+      .catch((err) => console.log(err));
   };
 
   const {
@@ -52,83 +61,36 @@ const CreatePersonalAppointment = () => {
   return (
     <form className=" flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
       <Toaster />
-      <div>
-        <label
-          htmlFor="name"
-          className="mb-2 block text-sm font-bold text-gray-700"
-        >
-          Nome
-        </label>
-        <input
-          id="name"
-          className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-          {...register("name")}
-        />
-        {errors.name && (
-          <p className="mt-2 text-xs italic text-red-500">
-            {" "}
-            {errors.name?.message}
-          </p>
-        )}
-      </div>
+      <Input
+        name="Nome"
+        error={errors.name}
+        registerReturn={register("name")}
+        type="text"
+      />
       <div className="flex w-full justify-center gap-6 ">
         <div className="flex-grow">
-          <label
-            htmlFor="date"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Data da Consulta
-          </label>
-          <input
-            id="date"
+          <Input
+            name="Data da Consulta"
+            error={errors.consultDate}
+            registerReturn={register("consultDate")}
             type="date"
-            className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-            {...register("consultDate")}
           />
-          {errors.consultDate && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.consultDate?.message}
-            </p>
-          )}
         </div>
         <div className="flex-grow">
-          <label
-            htmlFor="number"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Número
-          </label>
-          <input
-            id="number"
-            className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-            {...register("number")}
+          <Input
+            name="Número"
+            error={errors.number}
+            registerReturn={register("number")}
+            type="text"
           />
-          {errors.number && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.number?.message}
-            </p>
-          )}
         </div>
         <div className="flex-grow">
-          <label
-            htmlFor="consultType"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Especialidade
-          </label>
-          <input
-            id="consultType"
-            className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
-            {...register("consultType")}
+          <Input
+            name="Especialidade"
+            error={errors.consultType}
+            registerReturn={register("consultType")}
+            type="text"
           />
-          {errors.consultType && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.consultType?.message}
-            </p>
-          )}
         </div>
       </div>
       <div className="mb-10 mt-6 text-center">

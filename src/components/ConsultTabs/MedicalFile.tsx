@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
 import type { z } from "zod";
 import { api } from "~/utils/api";
+import TextArea from "../Forms/Textarea";
 import useMedicalFile from "../HookForms/useMedicalFile";
 
 interface MedicalFileProps {
@@ -9,19 +12,40 @@ interface MedicalFileProps {
 }
 
 const MedicalFile = ({ emergencyConsultId }: MedicalFileProps) => {
-  const { data, isLoading } = api.medicalFiles.getAllById.useQuery({
-    emergencyConsultId: emergencyConsultId,
-  });
+  const { data, isLoading, isFetchedAfterMount } =
+    api.medicalFiles.getAllById.useQuery({
+      emergencyConsultId: emergencyConsultId,
+    });
   const mutation = api.medicalFiles.insertOrUpdate.useMutation();
   const router = useRouter();
 
-  const { register, handleSubmit, errors, formSchema } = useMedicalFile();
+  const { register, handleSubmit, errors, formSchema, setValue } =
+    useMedicalFile();
+
+  useEffect(() => {
+    if (data) {
+      setValue("app", data.app ?? "");
+      setValue("apf", data.apf ?? "");
+      setValue("hd", data.hd ?? "");
+      setValue("hda", data.hda ?? "");
+      setValue("treatment", data?.treatment ?? "");
+    }
+  }, [isFetchedAfterMount]);
+
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    mutation.mutate({
-      ...data,
-      emergencyConsultId: emergencyConsultId,
-    });
-    router.reload();
+    toast
+      .promise(
+        mutation.mutateAsync({
+          ...data,
+          emergencyConsultId: emergencyConsultId,
+        }),
+        {
+          loading: "A gravar...",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "Gravado com sucesso !",
+        }
+      )
+      .catch((err) => console.log(err));
   };
 
   if (isLoading)
@@ -29,95 +53,48 @@ const MedicalFile = ({ emergencyConsultId }: MedicalFileProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+      <Toaster />
       <div className="flex gap-4">
         <div className="w-1/2">
-          <label className="mb-2 block text-lg text-emerald-600" htmlFor="app">
-            Antecedentes Patológicos Pessoais
-          </label>
-          <textarea
-            id="app"
+          <TextArea
+            error={errors.app}
+            name="Antecedentes Patológicos Pessoais"
             className="h-20 w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-            defaultValue={!data ? "" : data.app ? data.app : ""}
-            {...register("app")}
+            registerReturn={register("app")}
           />
-          {errors.app && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.app?.message}
-            </p>
-          )}
         </div>
         <div className="w-1/2">
-          <label className="mb-2 block text-lg text-emerald-600" htmlFor="apf">
-            Antecedentes Patológicos Familiares
-          </label>
-          <textarea
-            id="apf"
+          <TextArea
+            error={errors.apf}
+            name="Antecedentes Patológicos Familiares"
             className="h-20 w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-            defaultValue={!data ? "" : data.apf ? data.apf : ""}
-            {...register("apf")}
+            registerReturn={register("apf")}
           />
-          {errors.apf && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.apf?.message}
-            </p>
-          )}
         </div>
       </div>
       <div className="w-full">
-        <label className="mb-2 block text-lg text-emerald-600" htmlFor="hda">
-          História da Doença Actual
-        </label>
-        <textarea
-          id="hda"
+        <TextArea
+          error={errors.hda}
+          name="História da Doença Actual"
           className="h-40 w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-          defaultValue={!data ? "" : data.hda ? data.hda : ""}
-          {...register("hda")}
+          registerReturn={register("hda")}
         />
-        {errors.hda && (
-          <p className="mt-2 text-xs italic text-red-500">
-            {" "}
-            {errors.hda?.message}
-          </p>
-        )}
       </div>
       <div className="w-full">
-        <label className="mb-2 block text-lg text-emerald-600" htmlFor="hd">
-          Hipótese Diagnóstica
-        </label>
-        <textarea
-          id="hd"
+        <TextArea
+          error={errors.hd}
+          name="Hipótese Diagnóstica"
           className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-          defaultValue={!data ? "" : data.hd ? data.hd : ""}
-          {...register("hd")}
+          registerReturn={register("hd")}
         />
-        {errors.hd && (
-          <p className="mt-2 text-xs italic text-red-500">
-            {" "}
-            {errors.hd?.message}
-          </p>
-        )}
       </div>
       <div className="w-full">
-        <label
-          className="mb-2 block text-lg text-emerald-600"
-          htmlFor="tratamento"
-        >
-          Tratamento
-        </label>
-        <textarea
-          id="tratamento"
+        <TextArea
+          error={errors.treatment}
+          name="Tratamento"
           className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-          defaultValue={!data ? "" : data.treatment ? data.treatment : ""}
-          {...register("treatment")}
+          registerReturn={register("treatment")}
         />
-        {errors.treatment && (
-          <p className="mt-2 text-xs italic text-red-500">
-            {" "}
-            {errors.treatment?.message}
-          </p>
-        )}
       </div>
       <div>
         <button

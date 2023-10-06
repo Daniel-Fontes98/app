@@ -67,11 +67,13 @@ model CompanyAppointment {
   companyId   String
   userId      String
   triage  Triage?
+  userHistory UserHistory?
   medicalFile CompanyAppointmentMedicalFile?
   company     Company  @relation(fields: [companyId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
   nurseryExams NurseryExam[]
   labExams LabExams[]
+  riskFactors RiskFactors?
 
   @@index([date, areNurseryExamsDone, areLabExamsDone, wasPresent])
 }
@@ -252,6 +254,40 @@ model Release {
   emergencyConsultId String           @unique
 }
 
+model RiskFactors {
+  id  String @id @default(cuid())
+  pregnantHowMany String?
+  tobaccoAmount String?
+  alcoholAmount String?
+  hospitalizedWhen String?
+  visitedDoctorWhen String?
+  surgeryWhen String?
+  badReactionWhen String?
+  allergicReactionCause String?
+  otherAllergicReactionsWhichOnes String?
+  takeMedicineName String?
+  takeMedicineDose String?
+  takeMedicineAmountDaily String?
+  takeMedicineReason String?
+  clinicExam String?
+
+  riskFactorsFields RiskFactorsFields[]
+  companyAppointmentId String @unique
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+}
+
+model RiskFactorsFields {
+  id String @id @default(cuid())
+  name String
+  isChecked Boolean
+
+  riskFactorsId String
+  riskFactors RiskFactors @relation(fields: [riskFactorsId], references: [id])
+
+  @@unique([name, riskFactorsId])
+  @@index([name, riskFactorsId])
+}
+
 model Terapeutic {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
@@ -293,9 +329,38 @@ model User {
   personalAppointment PersonalAppointment[]
   companyAppointments CompanyAppointment[]
   emergencyConsult    EmergencyConsult[]
+  
+
 
   @@unique([name, number])
   @@index([name, number, idNumber])
+}
+
+model UserHistory {
+  id  String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cancerType String?
+  dateOfCancerDiagnostic String?
+  dateOfEndCancerTreatment String?
+  psychicPatologyType String?
+  otherMedicalHistory String?
+
+  companyAppointmentId String @unique
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+  userHistoryFields UserHistoryFields[]
+
+}
+
+model UserHistoryFields {
+  id String @id @default(cuid())
+  name String 
+  isChecked Boolean
+
+  userHistoryId String
+  userHistory UserHistory @relation(fields: [userHistoryId], references: [id])
+  @@unique([name, userHistoryId])
+  @@index([name, userHistoryId])
 }
 
 model XRayRequisition {

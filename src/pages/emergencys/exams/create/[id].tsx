@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import type { SubmitHandler } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
 import type { z } from "zod";
+import Input from "~/components/Forms/Input";
+import TextArea from "~/components/Forms/Textarea";
 import useExam from "~/components/HookForms/useExam";
 import useFileUploader from "~/components/Hooks/useFileUploader";
 import { api } from "~/utils/api";
@@ -19,22 +22,37 @@ const CreateExam = () => {
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const url = await onUploadFile();
     if (typeof url === "object") {
-      mutation.mutate({
-        ...data,
-        fileLocation: url[0],
-        emergencyConsultId: emergencyConsultId as string,
-      });
+      toast.promise(
+        mutation.mutateAsync({
+          ...data,
+          fileLocation: url[0],
+          emergencyConsultId: emergencyConsultId as string,
+        }),
+        {
+          loading: "A carregar",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "Adicionado com sucesso !",
+        }
+      );
     } else {
-      mutation.mutate({
-        ...data,
-        emergencyConsultId: emergencyConsultId as string,
-      });
+      toast.promise(
+        mutation.mutateAsync({
+          ...data,
+          emergencyConsultId: emergencyConsultId as string,
+        }),
+        {
+          loading: "A carregar",
+          error: (err) => `Ocorreu um erro: ${err}`,
+          success: "",
+        }
+      );
     }
     void router.push(`/emergencys/consult/${emergencyConsultId as string}`);
   };
 
   return (
     <div className="min-h-screen items-center justify-center bg-slate-100 px-12 pb-32">
+      <Toaster />
       <div className="mb-10 flex items-center justify-center">
         <div className="w-56 rounded-b-2xl bg-emerald-600 py-2 text-center text-white">
           Adicionar exame
@@ -43,85 +61,37 @@ const CreateExam = () => {
       <form className="mx-12" onSubmit={handleSubmit(onSubmit)}>
         <div className=" mt-6 grid grid-cols-2 gap-12">
           <div className="w-full">
-            <label
-              className="mb-2 block text-lg text-emerald-600"
-              htmlFor="date"
-            >
-              Data de realização *
-            </label>
-            <input
-              id="date"
-              className="w-full rounded-md p-2 shadow-md"
+            <Input
+              error={errors.date}
+              name="Data de realização"
+              registerReturn={register("date")}
               type="date"
-              {...register("date")}
-              required
             />
-            {errors.date && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {" "}
-                {errors.date?.message}
-              </p>
-            )}
           </div>
           <div className="w-full">
-            <label
-              className="mb-2 block text-lg text-emerald-600"
-              htmlFor="hour"
-            >
-              Hora de realização *
-            </label>
-            <input
-              id="hour"
-              className="w-full rounded-md p-2 shadow-md"
+            <Input
+              error={errors.hour}
+              name="Hora de realização"
+              registerReturn={register("hour")}
               type="time"
-              {...register("hour")}
-              required
             />
-            {errors.hour && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {" "}
-                {errors.hour?.message}
-              </p>
-            )}
           </div>
         </div>
         <div className="mt-4">
-          <label
-            className="mb-2 block text-lg text-emerald-600"
-            htmlFor="examType"
-          >
-            Tipo de Exame
-          </label>
-          <input
-            id="examType"
-            className=" w-full rounded-md p-2 shadow-md"
-            {...register("name")}
+          <Input
+            name="Tipo de Exame"
+            error={errors.name}
+            registerReturn={register("name")}
+            type="name"
           />
-          {errors.name && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.name?.message}
-            </p>
-          )}
         </div>
         <div className="mt-4">
-          <label
-            className="mb-2 block text-lg text-emerald-600"
-            htmlFor="description"
-          >
-            Descrição
-          </label>
-          <textarea
-            id="description"
+          <TextArea
+            error={errors.description}
+            name="Descrição"
+            registerReturn={register("description")}
             className="h-20 w-full rounded-md shadow-md"
-            {...register("description")}
           />
-          {errors.description && (
-            <p className="mt-2 text-xs italic text-red-500">
-              {" "}
-              {errors.description?.message}
-            </p>
-          )}
         </div>
         <div className="mt-4">
           <input type="file" name="file" onChange={onFileUploadChange} />

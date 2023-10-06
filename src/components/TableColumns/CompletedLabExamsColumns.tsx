@@ -1,7 +1,7 @@
 import { Company, CompanyAppointment, LabExams, User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
-import { formatDate } from "../Forms/CreateCompanyAppointment";
+import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
 export type labExamsType = LabExams & {
   companyAppointment: CompanyAppointment & {
