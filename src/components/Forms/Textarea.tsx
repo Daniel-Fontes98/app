@@ -12,7 +12,7 @@ const TextArea = (props: TextAreaProps) => {
     <div className="w-full">
       <label
         htmlFor={props.name}
-        className="mb-2 block text-sm font-bold text-gray-700"
+        className="mb-2 block max-w-5xl text-sm font-bold text-gray-700"
       >
         {props.name}
       </label>

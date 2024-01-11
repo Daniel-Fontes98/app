@@ -13,10 +13,10 @@ export function Sidebar() {
   return (
     <aside
       id="logo-sidebar"
-      className="sticky top-0 h-screen w-72"
+      className="sticky top-0 hidden h-screen w-72 lg:flex lg:flex-col"
       aria-label="Sidebar"
     >
-      <div className=" h-full overflow-y-auto bg-gray-50 px-3 py-4 shadow-md dark:bg-gray-800">
+      <div className=" h-full overflow-y-auto bg-gray-50 px-3 py-4 shadow-md dark:bg-gray-800 ">
         <div className="flex flex-col gap-1">
           <Link href="/" className=" flex items-center">
             <Image src={CentralabLogo} alt="Centralab Logo" />

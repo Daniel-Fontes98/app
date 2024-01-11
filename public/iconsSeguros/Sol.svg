@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 145.21951 65.785835"
+   id="svg704"
+   sodipodi:docname="Sol.svg"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   width="145.21951"
+   height="65.785835"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs708" />
+  <sodipodi:namedview
+     id="namedview706"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="4.205154"
+     inkscape:cx="63.731316"
+     inkscape:cy="40.664385"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="1440"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg704" />
+  <path
+     fill="#000000"
+     d="m 84.61,7.8047991 a 1.46,1.45 23.8 0 0 0.73,1.87 c 4.58,2.1399999 11.85,3.7199999 12.43,9.8099999 1.08,11.45 -12.11,11.3 -19.49,8.64 a 0.88,0.89 19 0 1 -0.54,-1.11 l 1.28,-3.92 a 1.02,1.02 0 0 1 1.38,-0.62 c 2.84,1.24 9.03,2.88 10.82,-0.8 q 1.02,-2.11 -1.14,-3.03 c -4.93,-2.1 -12.85,-4.17 -12.04,-11.3699999 0.93,-8.18999999 11.08,-7.94999999 17.27,-6.46999999 a 0.82,0.82 0 0 1 0.62,0.76999999 l 0.08,3.92 a 0.6,0.6 0 0 1 -0.64,0.62 c -2.97,-0.17 -9.33,-1.79 -10.76,1.69 z"
+     id="path664" />
+  <path
+     fill="#000000"
+     d="m 114.75,0.12479911 c 15.36,1.20999999 14.27,32.64999989 -5.84,29.22999989 -8.39,-1.43 -10.74,-9.62 -9.7,-16.99 Q 101.09,-0.94520089 114.75,0.12479911 Z M 111.5806,24.200999 a 6.12,9.42 3.1 0 0 6.6204,-9.0752 6.12,9.42 3.1 0 0 -5.6016,-9.7371999 6.12,9.42 3.1 0 0 -6.6204,9.0751999 6.12,9.42 3.1 0 0 5.6016,9.7372 z"
+     id="path666" />
+  <path
+     fill="#000000"
+     d="m 135.24,22.594799 h 9.23 a 0.75,0.75 0 0 1 0.73,0.92 l -1.11,4.75 a 0.75,0.75 0 0 1 -0.73,0.58 h -14.87 a 0.75,0.75 0 0 1 -0.75,-0.75 V 1.2947991 a 0.75,0.75 0 0 1 0.77,-0.74999999 l 5.25,0.17 a 0.75,0.75 0 0 1 0.73,0.74999999 V 21.844799 a 0.75,0.75 0 0 0 0.75,0.75 z"
+     id="path668" />
+  <circle
+     fill="#ffdd00"
+     cx="30.15"
+     cy="31.744801"
+     r="30.15"
+     id="circle670" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.26053px;font-family:Damascus;-inkscape-font-specification:'Damascus, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:8.87319;stroke-dasharray:35.4926, 8.87319;stroke-dashoffset:0.0887319"
+     x="89.121414"
+     y="55.539764"
+     id="text881"
+     transform="scale(0.86390685,1.1575322)"><tspan
+       sodipodi:role="line"
+       id="tspan879"
+       x="89.121414"
+       y="55.539764"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.26053px;font-family:Damascus;-inkscape-font-specification:'Damascus, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:8.87319">Seguro para todos nós</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:18.5367px;font-family:Damascus;-inkscape-font-specification:'Damascus, Normal';fill:#000000;fill-opacity:1;stroke-width:6.79621;stroke-dasharray:27.1848, 6.79621;stroke-dashoffset:0.0679621"
+     x="80.896271"
+     y="47.949833"
+     id="text527"
+     transform="scale(0.92998098,1.0752908)"><tspan
+       sodipodi:role="line"
+       id="tspan525"
+       x="80.896271"
+       y="47.949833"
+       style="fill:#000000;fill-opacity:1;stroke-width:6.79621">Seguros</tspan></text>
+</svg>

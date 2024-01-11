@@ -23,8 +23,8 @@ import { xRayRequisitionRouter } from "./routers/xRayRequisition";
 import { userHistoryRouter } from "./routers/userHistory";
 import { userHistoryFieldsRouter } from "./routers/userHistoryFields";
 import { riskFactorsRouter } from "./routers/riskFactors";
-import { riskFactorsFieldsRouter } from "./routers/riskFactorsFields";
 import { certificateRouter } from "./routers/certificate";
+import { allergiesRouter } from "./routers/allergies";
 
 /**
  * This is the primary router for your server.
@@ -33,6 +33,7 @@ import { certificateRouter } from "./routers/certificate";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  allergies: allergiesRouter,
   companyAppointmentMedicalFile: companyAppointmentMedicalFileRouter,
   certificate: certificateRouter,
   emergencyConsults: emergencyConsultRouter,
@@ -55,7 +56,6 @@ export const appRouter = createTRPCRouter({
   xRayRequisition: xRayRequisitionRouter,
   xRayObject: xRayObjectRouter,
   riskFactors: riskFactorsRouter,
-  riskFactorsFields: riskFactorsFieldsRouter,
   userHistory: userHistoryRouter,
   userHistoryFields: userHistoryFieldsRouter,
 });

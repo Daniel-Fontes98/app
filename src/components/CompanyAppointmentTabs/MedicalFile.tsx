@@ -22,7 +22,6 @@ const MedicalFile = (props: MedicalFileProps) => {
   const mutation =
     api.companyAppointmentMedicalFile.insertOrUpdate.useMutation();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const router = useRouter();
 
   const formSchema = z.object({
     app: z.string().optional(),

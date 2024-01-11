@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { type FormEvent, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import * as XLSX from "xlsx";
@@ -48,6 +49,7 @@ export function formatDate(date: Date): string {
 const CreateCompanyAppointmentExcel = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const createAppointmentMutation =
     api.companyAppointment.insertOne.useMutation();
 
@@ -114,15 +116,18 @@ const CreateCompanyAppointmentExcel = () => {
           for (const chunk of chunkedData) {
             await processChunk(chunk);
           }
-          setIsLoading(false);
         }
 
-        processChunks()
-          .then(() => {
-            toast("Planilha carregada com sucesso !!!");
+        toast
+          .promise(processChunks(), {
+            loading: "A carregar...",
+            success: "Planilha carregada com sucesso !!",
+            error: (err) => `Ocorreu um erro: ${err}`,
           })
-          .catch((error) => {
-            toast("Erro ao carregar planilha =(");
+          .then(() => router.push("/appointments"))
+          .catch((err) => {
+            console.log(err);
+            setIsLoading(false);
           });
       }
     };

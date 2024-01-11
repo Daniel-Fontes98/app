@@ -81,9 +81,9 @@ const Calendar = () => {
             </span>
           </button>
           <div className="w-20 text-center">
-            {getCurrentMonthFromIndex(selectedMonth)?.name}
+            {getCurrentMonthFromIndex(selectedMonth, selectedYear)?.name}
           </div>
-          <button onClick={() => setSelectedMonth((selectedMonth + 1) % 11)}>
+          <button onClick={() => setSelectedMonth((selectedMonth + 1) % 12)}>
             <span className="h-2 w-2 text-emerald-600 hover:bg-slate-300 ">
               &gt;
             </span>
@@ -128,7 +128,9 @@ const Calendar = () => {
             ))}
             {[
               //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              ...Array(getCurrentMonthFromIndex(selectedMonth)!.days).keys(),
+              ...Array(
+                getCurrentMonthFromIndex(selectedMonth, selectedYear)!.days
+              ).keys(),
             ].map((day) => (
               <div key={day}>
                 <CalendarDay

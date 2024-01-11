@@ -14,11 +14,17 @@ import Head from "next/head";
 import { Provider } from "react-redux";
 import { store } from "~/utils/store";
 
-const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
+const publicPages = ["/sign-up/[[...index]]"];
+const pagesWithoutSidebar = [
+  "/nursery/certificateForm/[id]",
+  "/sign-in/[[...index]]",
+];
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const { pathname } = useRouter();
   const isPublicPage = publicPages.includes(pathname);
+  const isPageWithoutSidebar = pagesWithoutSidebar.includes(pathname);
+
   return (
     <ClerkProvider {...pageProps}>
       <ChakraProvider>
@@ -28,8 +34,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <meta name="description" content="Daniel Fontes" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          {isPublicPage ? (
-            <Component {...pageProps} />
+          {isPublicPage === true && <Component {...pageProps} />}
+          {isPageWithoutSidebar ? (
+            <div>
+              <Component {...pageProps} />
+            </div>
           ) : (
             <div className="flex">
               <Sidebar />

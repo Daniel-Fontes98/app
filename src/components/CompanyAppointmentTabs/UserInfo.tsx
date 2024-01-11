@@ -1,4 +1,5 @@
 import type { Triage, User } from "@prisma/client";
+import { calculateAgeFormatYYYY } from "../ConsultTabs/UserInfo";
 
 interface userInfoProps {
   user?: User;
@@ -36,9 +37,8 @@ const UserInfo = (props: userInfoProps) => {
             <h2 className="text-xl font-bold">Informação Paciente</h2>
             <div className="mr-4 mt-2 w-full rounded-b-md bg-white p-4 shadow-md">
               <div className="flex flex-col items-start justify-center gap-2">
-                <p>ID: {props.user?.idNumber}</p>
                 <p>Data de Nascimento: {props.user?.birthDate}</p>
-                <p>Idade: {calculateAge(props.user?.birthDate)}</p>
+                <p>Idade: {calculateAgeFormatYYYY(props.user.birthDate)}</p>
                 <p>Gênero: {props.user?.gender}</p>
                 <p>Nacionalidade: {props.user?.nacionality}</p>
                 <p>Telemóvel: {props.user?.number}</p>
@@ -49,11 +49,11 @@ const UserInfo = (props: userInfoProps) => {
             <h2 className="text-xl font-bold">Informação Triagem</h2>
             <div className="mr-4 mt-2 w-full rounded-b-md bg-white p-4 shadow-md">
               <div className="flex flex-col items-start justify-center gap-2">
-                <p>Peso(kg): {props.triage?.weight}</p>
-                <p>Altura(m): {props.triage?.height}</p>
+                <p>Peso (kg): {props.triage?.weight}</p>
+                <p>Altura (m): {props.triage?.height}</p>
                 <p>Temperatura (ºC): {props.triage?.temperature}</p>
-                <p>Tensão Arterial: {props.triage?.arterialTension}</p>
-                <p>Pulso: {props.triage?.pulse}</p>
+                <p>Tensão Arterial (mmHg): {props.triage?.arterialTension}</p>
+                <p>Frequência Cardíaca (bpm): {props.triage?.pulse}</p>
               </div>
             </div>
           </div>

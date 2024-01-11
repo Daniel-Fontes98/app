@@ -32,6 +32,23 @@ model AppliedTerapeutic {
   terapeuticId String
 }
 
+model Certificate {
+  id  String @id @default(cuid())
+  createdAt DateTime @default(now())
+  assistantDoctorName String
+  assistantDoctorNumber String
+  examValidUntil String
+  clinicExam  String?
+  finalState String //apto ou inapto
+  location  String? //onShore ou offShore
+  
+  fileLocation String?
+
+  companyAppointmentId String @unique
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+
+}
+
 model Company {
   id           String               @id @default(cuid())
   createdAt    DateTime             @default(now())
@@ -63,11 +80,17 @@ model CompanyAppointment {
   areNurseryExamsDone  Boolean @default(false)
   areLabExamsDone Boolean @default(false)
   isArquived  Boolean @default(false)
+  isHistoryFilled Boolean @default(false)
+  isTriageFilled Boolean @default(false)
   
+  certificateLocation String?
+  historyLocation String?
+
   companyId   String
   userId      String
   triage  Triage?
   userHistory UserHistory?
+  certificate Certificate?
   medicalFile CompanyAppointmentMedicalFile?
   company     Company  @relation(fields: [companyId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
@@ -256,12 +279,25 @@ model Release {
 
 model RiskFactors {
   id  String @id @default(cuid())
+  //PhaseThree
+  isPregnant  String
+  isSmoking String
+  isDrinking  String
+  doesDrugs String
+  wasHospitalized String
+  wentToDoctor  String
+  didSurgery  String
   pregnantHowMany String?
   tobaccoAmount String?
   alcoholAmount String?
   hospitalizedWhen String?
   visitedDoctorWhen String?
   surgeryWhen String?
+
+  //PhaseFour
+  everHadBadReaction String?
+  everHadAllergicReaction String?
+  isTakingMedicine String?
   badReactionWhen String?
   allergicReactionCause String?
   otherAllergicReactionsWhichOnes String?
@@ -269,14 +305,36 @@ model RiskFactors {
   takeMedicineDose String?
   takeMedicineAmountDaily String?
   takeMedicineReason String?
-  clinicExam String?
 
-  riskFactorsFields RiskFactorsFields[]
+  //PhaseFive
+  isPersistentCoughing String?
+  isNightSweats String?
+  isWeightLoss String?
+  isDonatedBlood String?
+
+  //PhaseSix
+  isLoudWork String?
+  isVibratingMachine String?
+  isWelding String?
+  isConfinedWorkspace String?
+  isHeightWork String?
+  isAirplaneTravelling String?
+  isHelicopterTravelling String?
+  isFastCrewBoat String?
+  isSubmarineDive String?
+  isChemicalSubstances String?
+  isManualElevations String?
+  isOfficeWork String?
+  isHotWork String?
+  isFoodHandler String?
+  isFirstAid String?
+
+  allergies Allergies[]
   companyAppointmentId String @unique
   companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
-model RiskFactorsFields {
+model Allergies {
   id String @id @default(cuid())
   name String
   isChecked Boolean

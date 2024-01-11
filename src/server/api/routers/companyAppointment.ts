@@ -2,6 +2,30 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const companyAppointmentrouter = createTRPCRouter({
+  markTriageFilled: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          isTriageFilled: true,
+        },
+        where: {
+          id: opts.input.id,
+        },
+      });
+    }),
+  markHistoryFilled: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          isHistoryFilled: true,
+        },
+        where: {
+          id: opts.input.id,
+        },
+      });
+    }),
   getAllArchived: publicProcedure.query(async (opts) => {
     return await opts.ctx.prisma.companyAppointment.findMany({
       where: {
@@ -284,12 +308,6 @@ export const companyAppointmentrouter = createTRPCRouter({
               gender: input.gender,
             },
           },
-          triage: {
-            update: {
-              height: input.height,
-              weight: input.weight,
-            },
-          },
           companyRole: input.role,
           company: {
             update: {
@@ -297,14 +315,6 @@ export const companyAppointmentrouter = createTRPCRouter({
             },
           },
           userHistory: {
-            connectOrCreate: {
-              create: {},
-              where: {
-                companyAppointmentId: input.companyAppointmentId,
-              },
-            },
-          },
-          riskFactors: {
             connectOrCreate: {
               create: {},
               where: {

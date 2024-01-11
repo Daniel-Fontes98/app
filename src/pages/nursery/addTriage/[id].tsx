@@ -15,17 +15,23 @@ const AddTriage = () => {
     id: companyAppointmentId,
   });
 
+  const markTriageMutation =
+    api.companyAppointment.markTriageFilled.useMutation();
   const addTriageMutation = api.triage.insertOne.useMutation();
   const triageQuery = api.triage.getByCompanyAppointmentId.useQuery({
     companyAppointmentId,
   });
 
   const formSchema = z.object({
-    arterialTension: z.string(),
-    pulse: z.string(),
-    weight: z.string(),
-    height: z.string(),
-    temperature: z.string(),
+    arterialTension: z
+      .string()
+      .min(1, { message: "Por favor preencher este campo" }),
+    pulse: z.string().min(1, { message: "Por favor preencher este campo" }),
+    weight: z.string().min(1, { message: "Por favor preencher este campo" }),
+    height: z.string().min(1, { message: "Por favor preencher este campo" }),
+    temperature: z
+      .string()
+      .min(1, { message: "Por favor preencher este campo" }),
   });
 
   const {
@@ -47,24 +53,22 @@ const AddTriage = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     setIsButtonDisabled(true);
-    toast
-      .promise(
-        addTriageMutation.mutateAsync({
-          ...data,
-          companyAppointmentId: companyAppointmentId,
-        }),
-        {
-          error: (err) => `Ocorreu um erro: ${err}`,
-          success: "Triagem adicionada com sucesso",
-          loading: "A carregar...",
-        }
-      )
-      .then(() => {
-        router.back();
-      })
-      .catch((err) => {
-        console.error(err);
+
+    try {
+      await addTriageMutation.mutateAsync({
+        ...data,
+        companyAppointmentId: companyAppointmentId,
       });
+      await markTriageMutation.mutateAsync({
+        id: companyAppointmentId,
+      });
+      toast.success("Adicionado com sucesso !");
+      router.back();
+    } catch (err) {
+      toast.error(`Ocorreu um erro, por favor tentar novamente`);
+      console.log(err);
+      setIsButtonDisabled(false);
+    }
   };
 
   if (isLoading) {

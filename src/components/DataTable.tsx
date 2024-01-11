@@ -35,7 +35,7 @@ export function DataTable<Data extends object>({
   });
 
   useEffect(() => {
-    table.setPageSize(5);
+    table.setPageSize(10);
   }, []);
 
   return (
@@ -97,6 +97,7 @@ export function DataTable<Data extends object>({
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              hidden={!table.getCanPreviousPage()}
             >
               Previous
             </Button>
@@ -105,6 +106,7 @@ export function DataTable<Data extends object>({
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              hidden={!table.getCanPreviousPage()}
             >
               Next
             </Button>

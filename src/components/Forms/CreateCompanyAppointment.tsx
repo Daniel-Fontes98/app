@@ -98,8 +98,8 @@ const CreatePersonalAppointment = () => {
           registerReturn={register("gender")}
           name="Gênero"
           options={[
-            { label: "Masculino", value: "masculino" },
-            { label: "Feminino", value: "feminino" },
+            { label: "Masculino", value: "Masculino" },
+            { label: "Feminino", value: "Feminino" },
           ]}
         />
         <Input

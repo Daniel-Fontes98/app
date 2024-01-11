@@ -15,7 +15,7 @@ interface CheckBoxProps {
 const CheckBox = (props: CheckBoxProps) => {
   return (
     <div className="w-full">
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-3">
         {props.options.map(({ label, value }, idx) => (
           <div key={idx}>
             <input

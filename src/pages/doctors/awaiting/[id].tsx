@@ -5,6 +5,8 @@ import UserInfo from "~/components/CompanyAppointmentTabs/UserInfo";
 import MedicalFile from "~/components/CompanyAppointmentTabs/MedicalFile";
 import Exams from "~/components/CompanyAppointmentTabs/Exams";
 import { api } from "~/utils/api";
+import CertificateEmission from "~/components/CompanyAppointmentTabs/CertificateEmission";
+import { processString } from "~/components/ConsultTabs/UrgencyConsumables";
 
 const Index: NextPage = () => {
   const [tab, setTab] = useState(0);
@@ -55,6 +57,54 @@ const Index: NextPage = () => {
                   Exames
                 </section>
               </li>
+              {data?.historyLocation && (
+                <li className="mr-2">
+                  <a
+                    href={processString(data.historyLocation)}
+                    className={unselected}
+                    target="_blank"
+                    download
+                  >
+                    Ver Histórico
+                  </a>
+                </li>
+              )}
+              <li className="mr-2">
+                <section
+                  className={tab === 3 ? selected : unselected}
+                  onClick={() => setTab(3)}
+                >
+                  Emitir Certificado
+                </section>
+              </li>
+              {data?.certificateLocation ? (
+                <>
+                  <li className="mr-2">
+                    <a
+                      href={processString(data.certificateLocation)}
+                      className={unselected}
+                      target="_blank"
+                      download
+                    >
+                      Ver Dossier
+                    </a>
+                  </li>
+                  <li className="mr-2">
+                    <a
+                      href={processString(
+                        data.certificateLocation.replace(".pdf", "Single.pdf")
+                      )}
+                      className={unselected}
+                      target="_blank"
+                      download
+                    >
+                      Ver Certificado
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
           <div>
@@ -69,6 +119,8 @@ const Index: NextPage = () => {
                 labExams={data?.labExams!}
                 nurseExams={data?.nurseryExams!}
               />
+            ) : tab === 3 ? (
+              <CertificateEmission companyAppointmentId={id} />
             ) : (
               <div>Error...</div>
             )}

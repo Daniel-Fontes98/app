@@ -141,3 +141,32 @@ export function calculateTotalHoursElapsedDateObjects(
 
   return totalHoursElapsed;
 }
+
+export function convertDateFormat(inputDate: string): string {
+  // Parse the input date string into a Date object
+  const parts = inputDate.split("-");
+  if (parts.length !== 3) {
+    throw new Error("Invalid date format. Expected yyyy-mm-dd.");
+  }
+
+  if (!parts[0] || !parts[1] || !parts[2]) {
+    throw new Error("Invalid date");
+  }
+
+  const year = parseInt(parts[0]);
+  const month = parseInt(parts[1]) - 1; // Months are 0-based (0 = January)
+  const day = parseInt(parts[2]);
+
+  const originalDate = new Date(year, month, day);
+
+  // Create a new date string in the dd-mm-yyyy format
+  const newDay = originalDate.getDate();
+  const newMonth = originalDate.getMonth() + 1; // Months are 1-based (1 = January)
+  const newYear = originalDate.getFullYear();
+
+  const newDateStr = `${newDay.toString().padStart(2, "0")}-${newMonth
+    .toString()
+    .padStart(2, "0")}-${newYear}`;
+
+  return newDateStr;
+}

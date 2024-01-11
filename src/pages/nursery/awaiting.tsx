@@ -1,7 +1,7 @@
 import { DataTable } from "~/components/DataTable";
 import { api } from "~/utils/api";
 import Modal from "react-modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useNurseryColumns from "~/components/Hooks/useNurseryColumns";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -18,7 +18,10 @@ const ShowWaitingPeopleNursery = () => {
     setIsModalOpen,
     setSelectedCompanyAppointment
   );
-  Modal.setAppElement(document.getElementById("NurseModalElement")!);
+
+  useEffect(() => {
+    Modal.setAppElement(document.getElementById("NurseModalElement")!);
+  }, []);
 
   const customStyles = {
     content: {

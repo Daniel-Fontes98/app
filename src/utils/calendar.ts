@@ -5,9 +5,19 @@ export const getCurrentMonthIndex = (): number => {
 };
 
 export const getCurrentMonthFromIndex = (
-  index: number
+  index: number,
+  selectedYear: number
 ): { id: number; name: string; days: number } | undefined => {
   const month = months.find((m) => m.id === index);
+
+  if (month?.name === "Fevereiro") {
+    if (AnoBissexto(selectedYear)) {
+      month.days = 29;
+    } else {
+      month.days = 28;
+    }
+  }
+
   return month;
 };
 
@@ -26,13 +36,17 @@ export const getCurrentYear = (): number => {
 export const AnoBissexto = (ano: number): boolean => {
   if (ano % 4 !== 0) {
     return false;
-  } else if (ano % 100 !== 0) {
-    return true;
-  } else if (ano % 400 !== 0) {
-    return false;
-  } else {
+  }
+
+  if (ano % 100 !== 0) {
     return true;
   }
+
+  if (ano % 400 !== 0) {
+    return false;
+  }
+
+  return true;
 };
 
 export const months = [
@@ -65,8 +79,8 @@ export const daysOfTheWeek = [
 ];
 
 export const obterDiaSemanaInicioMes = (mes: number, ano: number): number => {
-  if (mes < 0 || mes > 11) {
-    throw new Error("O mês deve estar entre 0 (Janeiro) e 11 (Dezembro).");
+  if (mes < 1 || mes > 12) {
+    throw new Error("O mês deve estar entre 1 (Janeiro) e 12 (Dezembro).");
   }
 
   if (ano < 1) {
@@ -74,9 +88,9 @@ export const obterDiaSemanaInicioMes = (mes: number, ano: number): number => {
   }
 
   // Janeiro e Fevereiro são considerados os meses 13 e 14 do ano anterior.
-  if (mes < 2) {
-    mes += 12;
+  if (mes < 3) {
     ano--;
+    mes = mes + 12;
   }
 
   const k = ano % 100;
