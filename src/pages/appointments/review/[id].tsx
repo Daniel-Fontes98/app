@@ -40,6 +40,14 @@ const ReviewCompanyAppointment = () => {
     companyRole: z.string({
       required_error: "É necessário indicar a função",
     }),
+    planType: z
+      .string({
+        required_error: "É necessário indicar o plano do utente",
+      })
+      .min(2, "É necessário que o plano tenha mais de dois caracteres"),
+    companyName: z.string({
+      required_error: "É necessário indicar o nome da empresa",
+    }),
   });
 
   const {
@@ -59,6 +67,8 @@ const ReviewCompanyAppointment = () => {
     setValue("idNumber", companyAppointmentQuery.data?.user.idNumber!);
     setValue("number", companyAppointmentQuery.data?.user.number!);
     setValue("companyRole", companyAppointmentQuery.data?.companyRole!);
+    setValue("planType", companyAppointmentQuery.data?.planType!);
+    setValue("companyName", companyAppointmentQuery.data?.company.name!);
   }, [companyAppointmentQuery.isFetchedAfterMount]);
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
@@ -177,6 +187,25 @@ const ReviewCompanyAppointment = () => {
                   </p>
                 )}
               </div>
+              <div>
+                <label
+                  htmlFor="planType"
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                >
+                  Tipo de Plano
+                </label>
+                <input
+                  id="planType"
+                  className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
+                  {...register("planType")}
+                />
+                {errors.planType && (
+                  <p className="mt-2 text-xs italic text-red-500">
+                    {" "}
+                    {errors.planType?.message}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="flex gap-4">
               <div>
@@ -233,6 +262,25 @@ const ReviewCompanyAppointment = () => {
                   <p className="mt-2 text-xs italic text-red-500">
                     {" "}
                     {errors.number?.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="companyName"
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                >
+                  Empresa
+                </label>
+                <input
+                  id="companyName"
+                  className="focus:shadow-outline  w-full  appearance-none  rounded border py-2 pl-3 pr-6 text-sm leading-tight text-gray-700 focus:outline-none"
+                  {...register("companyName")}
+                />
+                {errors.companyName && (
+                  <p className="mt-2 text-xs italic text-red-500">
+                    {" "}
+                    {errors.companyName?.message}
                   </p>
                 )}
               </div>

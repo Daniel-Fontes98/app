@@ -1,9 +1,11 @@
-import type { Triage, User } from "@prisma/client";
+import type { Company, Triage, User } from "@prisma/client";
 import { calculateAgeFormatYYYY } from "../ConsultTabs/UserInfo";
 
 interface userInfoProps {
   user?: User;
   triage?: Triage | null;
+  company?: Company;
+  planType?: string | null;
 }
 
 export function calculateAge(birthdate: string): string {
@@ -42,6 +44,8 @@ const UserInfo = (props: userInfoProps) => {
                 <p>Gênero: {props.user?.gender}</p>
                 <p>Nacionalidade: {props.user?.nacionality}</p>
                 <p>Telemóvel: {props.user?.number}</p>
+                <p>Empresa: {props.company?.name}</p>
+                <p>Tipo de plano: {props.planType}</p>
               </div>
             </div>
           </div>

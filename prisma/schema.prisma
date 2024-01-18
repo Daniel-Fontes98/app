@@ -96,8 +96,10 @@ model CompanyAppointment {
   user        User     @relation(fields: [userId], references: [id])
   nurseryExams NurseryExam[]
   labExams LabExams[]
+  complementaryExams ComplementaryExams[]
   riskFactors RiskFactors?
 
+  @@unique([userId, date])
   @@index([date, areNurseryExamsDone, areLabExamsDone, wasPresent])
 }
 
@@ -115,7 +117,15 @@ model CompanyAppointmentMedicalFile {
 
   companyAppointmentId String @unique
   companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+}
 
+model ComplementaryExams {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  name String
+
+  companyAppointmentId String
+  companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
 model EmergencyConsult {
@@ -199,7 +209,6 @@ model LabExams {
 
   companyAppointmentId String
   companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
-
 }
 
 model MedicalExams {

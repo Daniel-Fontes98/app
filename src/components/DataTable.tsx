@@ -15,11 +15,13 @@ import { Button } from "@/components/ui/button";
 export type DataTableProps<Data extends object> = {
   data: Data[];
   columns: ColumnDef<Data, any>[];
+  onRowClick?: (id: any) => void;
 };
 
 export function DataTable<Data extends object>({
   data,
   columns,
+  onRowClick,
 }: DataTableProps<Data>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -74,7 +76,11 @@ export function DataTable<Data extends object>({
           </Thead>
           <Tbody>
             {table.getRowModel().rows.map((row) => (
-              <Tr key={row.id} className=" bg-white shadow-sm">
+              <Tr
+                key={row.id}
+                className=" bg-white shadow-sm"
+                onClick={() => onRowClick && onRowClick(row.original.id)}
+              >
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <Td key={cell.id}>
@@ -90,8 +96,8 @@ export function DataTable<Data extends object>({
           </Tbody>
         </Table>
         <div className="h-10" />
-        <div className="sticky">
-          <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="sticky ">
+          <div className="flex  items-center justify-center space-x-2 py-4">
             <Button
               variant="outline"
               size="sm"
@@ -106,7 +112,7 @@ export function DataTable<Data extends object>({
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              hidden={!table.getCanPreviousPage()}
+              hidden={!table.getCanNextPage()}
             >
               Next
             </Button>

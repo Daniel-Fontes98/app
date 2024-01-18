@@ -11,7 +11,6 @@ import { formatarHora } from "../Hooks/useNurseryColumns";
 import EyeIcon from "../../../public/eye.png";
 import CheckIcon from "../../../public/check.png";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
 import { Dispatch, SetStateAction } from "react";
 
 export type companyAppointmentType = CompanyAppointment & {
@@ -26,8 +25,6 @@ const useDoctorColumns = (
   setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>
 ) => {
   const router = useRouter();
-  const setIsArquivedMutation =
-    api.companyAppointment.setIsArquived.useMutation();
 
   const handleSubmitButton = (companyAppointmentId: string) => {
     setIsModalOpen(true);

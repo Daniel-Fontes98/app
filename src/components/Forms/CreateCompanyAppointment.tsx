@@ -6,6 +6,7 @@ import { z } from "zod";
 import { api } from "~/utils/api";
 import Input from "./Input";
 import Select from "./Select";
+import { format } from "date-fns";
 
 export const createCompanyAppointmentSchema = z.object({
   consultDate: z.coerce.date({
@@ -64,6 +65,7 @@ const CreatePersonalAppointment = () => {
       .promise(
         createAppointmentMutation.mutateAsync({
           ...data,
+          birthDate: format(new Date(data.birthDate), "dd-MM-yyyy"),
         }),
         {
           error: (err) => `Ocorreu um erro: ${err}`,

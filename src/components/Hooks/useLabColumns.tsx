@@ -31,20 +31,9 @@ const useLabColumns = (
 
   const awaitingLabExamsColumns: ColumnDef<CompanyAppointmentType>[] = [
     {
-      accessorKey: "presentAt",
+      accessorKey: "orderOfPresence",
       header: () => (
-        <div className="flex  whitespace-nowrap text-emerald-600">
-          Hora de Chegada
-        </div>
-      ),
-      accessorFn: (props) => {
-        return formatarHora(props.presentAt!);
-      },
-    },
-    {
-      accessorKey: "user.name",
-      header: () => (
-        <div className="flex  whitespace-nowrap  text-emerald-600">Nome</div>
+        <div className="flex  whitespace-nowrap text-emerald-600">Ordem</div>
       ),
     },
     {
@@ -54,10 +43,24 @@ const useLabColumns = (
       ),
     },
     {
-      accessorKey: "labExams.length",
+      accessorKey: "user.name",
+      header: () => (
+        <div className="flex whitespace-nowrap  text-emerald-600">Nome</div>
+      ),
+    },
+    {
+      accessorKey: "user.birthDate",
+      header: () => (
+        <div className="flex whitespace-nowrap text-emerald-600">
+          Data de Nascimento
+        </div>
+      ),
+    },
+    {
+      accessorKey: "planType",
       header: () => (
         <div className="flex  whitespace-nowrap  text-emerald-600">
-          Nº análises
+          Tipo de Plano
         </div>
       ),
     },

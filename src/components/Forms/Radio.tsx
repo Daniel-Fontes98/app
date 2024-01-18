@@ -14,7 +14,7 @@ interface RadioProps {
 
 const Radio = (props: RadioProps) => {
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <span className="block text-sm font-bold text-gray-700">
         {props.name}
       </span>

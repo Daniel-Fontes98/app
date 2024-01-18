@@ -101,7 +101,11 @@ export const companyAppointmentrouter = createTRPCRouter({
       return companyAppointment;
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.companyAppointment.findMany();
+    return ctx.prisma.companyAppointment.findMany({
+      include: {
+        user: true,
+      },
+    });
   }),
   getAllByDate: publicProcedure
     .input(
@@ -172,6 +176,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         idNumber: z.string(),
         number: z.string(),
         companyRole: z.string(),
+        planType: z.string(),
         date: z.date(),
       })
     )
@@ -189,6 +194,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
         data: {
           companyRole: input.companyRole,
+          planType: input.planType,
           wasPresent: true,
           presentAt: new Date(),
           orderOfPresence: lastArrivedPerson + 1,

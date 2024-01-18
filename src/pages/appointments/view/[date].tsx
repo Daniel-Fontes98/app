@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ViewCompanyAppointment } from "~/components/Appointments/ViewCompanyAppointment";
 import { ViewPersonalAppointment } from "~/components/Appointments/ViewPersonalAppointments";
+import { DataTable } from "~/components/DataTable";
+import useAppointmentColumns from "~/components/Hooks/useAppointmentColumns";
 import { api } from "~/utils/api";
 
 const ViewAllByDate = () => {
@@ -15,10 +17,13 @@ const ViewAllByDate = () => {
   const companyAppointmentsQuery = api.companyAppointment.getAllByDate.useQuery(
     { date: selectedDate }
   );
+  const { awaitingAppointmentColumns } = useAppointmentColumns();
 
   const onOptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTableFilter(e.target.value);
   };
+
+  const handleRowClick = () => {};
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -54,36 +59,13 @@ const ViewAllByDate = () => {
             />
           </div>
         </div>
-        {tableFilter === "company" ? (
+        {tableFilter === "company" && !companyAppointmentsQuery.isLoading ? (
           <div>
-            <div className="mt-2 flex gap-4 pl-14">
-              <div className="w-1/12 font-semibold text-emerald-600">ORDEM</div>
-              <div className=" border-l-2 border-emerald-600 opacity-20"></div>
-              <div className="w-2/6 font-semibold text-emerald-600">NOME</div>
-              <div className=" border-l-2 border-emerald-600 opacity-20"></div>
-              <div className="w-1/6 font-semibold text-emerald-600">
-                EMPRESA
-              </div>
-              <div className="border-l-2 border-emerald-600 opacity-20"></div>
-              <div className="w-1/6 font-semibold text-emerald-600">PLANO</div>
-              <div className="border-l-2 border-emerald-600 opacity-20"></div>
-              <div className="w-1/6 font-semibold text-emerald-600">
-                PRESENTE
-              </div>
-            </div>
-            <div className="mt-4 flex flex-col gap-4 px-10">
-              {companyAppointmentsQuery.data?.map((appointment) => (
-                <ViewCompanyAppointment
-                  key={appointment.id}
-                  id={appointment.id}
-                  name={appointment.user.name}
-                  company={appointment.company.name}
-                  planType={appointment.planType}
-                  wasPresent={appointment.wasPresent}
-                  orderOfPresence={appointment.orderOfPresence}
-                />
-              ))}
-            </div>
+            <DataTable
+              columns={awaitingAppointmentColumns}
+              data={companyAppointmentsQuery.data!}
+              onRowClick={(id) => router.push(`/appointments/review/${id}`)}
+            />
           </div>
         ) : (
           <div>

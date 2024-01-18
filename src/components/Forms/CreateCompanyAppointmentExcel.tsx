@@ -52,6 +52,7 @@ const CreateCompanyAppointmentExcel = () => {
   const router = useRouter();
   const createAppointmentMutation =
     api.companyAppointment.insertOne.useMutation();
+  const getAllAppointmentsQuery = api.companyAppointment.getAll.useQuery();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

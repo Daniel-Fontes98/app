@@ -9,6 +9,7 @@ import PhaseTwo from "~/components/CertificatesForm/PhaseTwo";
 
 const CertificateForm = () => {
   const [phaseNumber, setPhaseNumber] = useState(0);
+  const [currentLanguage, setCurrentLanguage] = useState("pt");
 
   return (
     <div>
@@ -24,36 +25,48 @@ const CertificateForm = () => {
             <PhaseOne
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
           {phaseNumber === 1 && (
             <PhaseTwo
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
           {phaseNumber === 2 && (
             <PhaseThree
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
           {phaseNumber === 3 && (
             <PhaseFour
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
           {phaseNumber === 4 && (
             <PhaseFive
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
           {phaseNumber === 5 && (
             <PhaseSix
               phaseNumber={phaseNumber}
               setPhaseNumber={setPhaseNumber}
+              currentLanguage={currentLanguage}
+              setCurrentLanguage={setCurrentLanguage}
             />
           )}
         </div>
