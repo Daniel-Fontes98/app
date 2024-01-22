@@ -9,7 +9,6 @@ import CheckIcon from "~/../public/check.png";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
-import EyeIcon from "../../../public/eye.png";
 
 export function formatarHora(data: Date): string {
   const horas: string = String(data.getHours()).padStart(2, "0");
@@ -61,16 +60,6 @@ const useNurseryColumns = (
       cell: ({ cell }) => {
         return (
           <div className="flex gap-4">
-            <button
-              className="flex items-center justify-center"
-              onClick={() =>
-                router.push(
-                  `/nursery/userPanel/${cell.renderValue() as string}`
-                )
-              }
-            >
-              <Image src={EyeIcon} className="h-5 w-5" alt="Eye icon" />
-            </button>
             <button
               onClick={() => handleSubmitButton(cell.renderValue() as string)}
             >

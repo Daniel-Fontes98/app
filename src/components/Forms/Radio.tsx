@@ -14,11 +14,11 @@ interface RadioProps {
 
 const Radio = (props: RadioProps) => {
   return (
-    <div className="w-full ">
-      <span className="block text-sm font-bold text-gray-700">
-        {props.name}
-      </span>
-      <div className="mt-2 flex gap-4">
+    <div className="mt-2 flex w-full flex-col gap-8">
+      <div>
+        <span className="text-sm font-bold text-gray-700">{props.name}</span>
+      </div>
+      <div className="mt-2 flex items-center justify-end gap-4">
         {props.options.map(({ label, value }, idx) => (
           <label key={idx}>
             <input
@@ -30,13 +30,13 @@ const Radio = (props: RadioProps) => {
             <span className="font-medium text-gray-700">{label}</span>
           </label>
         ))}
-        {props.error && (
-          <p className="mt-2 whitespace-normal text-xs italic text-red-500">
-            {" "}
-            {props.error.message}
-          </p>
-        )}
       </div>
+      {props.error && (
+        <p className="mt-2 whitespace-normal text-xs italic text-red-500">
+          {" "}
+          {props.error.message}
+        </p>
+      )}
     </div>
   );
 };

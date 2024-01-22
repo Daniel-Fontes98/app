@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import useNurseryColumns from "~/components/Hooks/useNurseryColumns";
 import { toast, Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const ShowWaitingPeopleNursery = () => {
   const { isLoading, data, refetch } =
@@ -18,6 +19,7 @@ const ShowWaitingPeopleNursery = () => {
     setIsModalOpen,
     setSelectedCompanyAppointment
   );
+  const router = useRouter();
 
   useEffect(() => {
     Modal.setAppElement(document.getElementById("NurseModalElement")!);
@@ -114,7 +116,11 @@ const ShowWaitingPeopleNursery = () => {
             </div>
           </Modal>
 
-          <DataTable columns={awaitingNurseryColumns} data={data!} />
+          <DataTable
+            columns={awaitingNurseryColumns}
+            data={data!}
+            onRowClick={(id) => router.push(`/nursery/userPanel/${id}`)}
+          />
         </div>
       ) : (
         <div>A carregar dados...</div>

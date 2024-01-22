@@ -20,126 +20,96 @@ const PhaseSix = (props: PhaseSixProps) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const formSchema = z.object({
-    isLoudWork: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isVibratingMachine: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isWelding: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isConfinedWorkspace: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isHeightWork: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isAirplaneTravelling: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isHelicopterTravelling: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isFastCrewBoat: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isSubmarineDive: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isChemicalSubstances: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isManualElevations: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isOfficeWork: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isHotWork: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isFoodHandler: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
-    isFirstAid: z
-      .string()
-      .min(1, {
-        message:
-          props.currentLanguage === "pt"
-            ? "Por favor selecionar uma das opções"
-            : "Please select one of the options",
-      }),
+    isLoudWork: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isVibratingMachine: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isWelding: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isConfinedWorkspace: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isHeightWork: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isAirplaneTravelling: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isHelicopterTravelling: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isFastCrewBoat: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isSubmarineDive: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isChemicalSubstances: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isManualElevations: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isOfficeWork: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isHotWork: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isFoodHandler: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
+    isFirstAid: z.string().min(1, {
+      message:
+        props.currentLanguage === "pt"
+          ? "Por favor selecionar uma das opções"
+          : "Please select one of the options",
+    }),
   });
 
   const { data, isFetchedAfterMount } =
@@ -202,6 +172,26 @@ const PhaseSix = (props: PhaseSixProps) => {
   return (
     <form className="px-10" onSubmit={handleSubmit(onSubmit)}>
       <Toaster />
+      <div className="flex items-center justify-center gap-8">
+        <div className="">
+          <button
+            className="text-blue-500"
+            type="button"
+            onClick={() => props.setCurrentLanguage("en")}
+          >
+            English
+          </button>
+        </div>
+        <div className="">
+          <button
+            className="text-blue-500"
+            type="button"
+            onClick={() => props.setCurrentLanguage("pt")}
+          >
+            Português
+          </button>
+        </div>
+      </div>
       <div className="flex items-center justify-center">
         <h1 className="text-2xl font-extrabold dark:text-white">
           {props.currentLanguage === "pt"
@@ -512,43 +502,23 @@ const PhaseSix = (props: PhaseSixProps) => {
           />
         </div>
       </div>
-      <div className="mt-8 grid w-full grid-cols-4 items-center">
-        <div className="ml-10">
-          <button
-            className="text-blue-500"
-            type="button"
-            onClick={() => props.setCurrentLanguage("en")}
-          >
-            English
-          </button>
-        </div>
-        <div className="col-span-2 flex items-center justify-center gap-6">
-          <button
-            type="button"
-            disabled={isButtonDisabled}
-            onClick={() => props.setPhaseNumber(props.phaseNumber - 1)}
-            className="mb-2 mr-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-          >
-            {props.currentLanguage === "pt" ? "Anterior" : "Previous"}
-          </button>
-          <div>{props.phaseNumber + 1} - 6</div>
-          <button
-            disabled={isButtonDisabled}
-            type="submit"
-            className="mb-2 mr-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-          >
-            {props.currentLanguage === "pt" ? "Submeter" : "Submit"}
-          </button>
-        </div>
-        <div className="ml-9">
-          <button
-            className="text-blue-500"
-            onClick={() => props.setCurrentLanguage("pt")}
-            type="button"
-          >
-            Português
-          </button>
-        </div>
+      <div className="col-span-2 mt-8 flex items-center justify-center gap-6">
+        <button
+          type="button"
+          disabled={isButtonDisabled}
+          onClick={() => props.setPhaseNumber(props.phaseNumber - 1)}
+          className="mb-2 mr-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          {props.currentLanguage === "pt" ? "Anterior" : "Previous"}
+        </button>
+        <div>{props.phaseNumber} - 5</div>
+        <button
+          disabled={isButtonDisabled}
+          type="submit"
+          className="mb-2 mr-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          {props.currentLanguage === "pt" ? "Submeter" : "Submit"}
+        </button>
       </div>
     </form>
   );

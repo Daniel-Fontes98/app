@@ -2,13 +2,12 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import PhaseFive from "~/components/CertificatesForm/PhaseFive";
 import PhaseFour from "~/components/CertificatesForm/PhaseFour";
-import PhaseOne from "~/components/CertificatesForm/PhaseOne";
 import PhaseSix from "~/components/CertificatesForm/PhaseSix";
 import PhaseThree from "~/components/CertificatesForm/PhaseThree";
 import PhaseTwo from "~/components/CertificatesForm/PhaseTwo";
 
 const CertificateForm = () => {
-  const [phaseNumber, setPhaseNumber] = useState(0);
+  const [phaseNumber, setPhaseNumber] = useState(1);
   const [currentLanguage, setCurrentLanguage] = useState("pt");
 
   return (
@@ -20,15 +19,7 @@ const CertificateForm = () => {
             Formulário de Certificado
           </div>
         </div>
-        <div className=" max-w-3xl rounded-2xl bg-white py-8  shadow-2xl">
-          {phaseNumber === 0 && (
-            <PhaseOne
-              phaseNumber={phaseNumber}
-              setPhaseNumber={setPhaseNumber}
-              currentLanguage={currentLanguage}
-              setCurrentLanguage={setCurrentLanguage}
-            />
-          )}
+        <div className=" w-full max-w-3xl rounded-2xl bg-white py-8  shadow-2xl">
           {phaseNumber === 1 && (
             <PhaseTwo
               phaseNumber={phaseNumber}

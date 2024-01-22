@@ -23,8 +23,6 @@ const ViewAllByDate = () => {
     setTableFilter(e.target.value);
   };
 
-  const handleRowClick = () => {};
-
   return (
     <div className="min-h-screen bg-slate-100">
       <div className="flex flex-col gap-6">
