@@ -104,10 +104,15 @@ export const certificateRouter = createTRPCRouter({
       //Add Info From User
       const fieldsForCertificate: Record<string, string> = {};
       fieldsForCertificate.pacientName = companyAppointment.user.name!;
-      fieldsForCertificate.pacientBirthDate = format(
-        new Date(companyAppointment.user.birthDate!),
-        "dd-MM-yyyy"
-      );
+      try {
+        fieldsForCertificate.pacientBirthDate = format(
+          new Date(companyAppointment.user.birthDate!),
+          "dd-MM-yyyy"
+        );
+      } catch (err) {
+        fieldsForCertificate.pacientBirthDate =
+          companyAppointment.user.birthDate!;
+      }
       fieldsForCertificate.pacientGender = companyAppointment.user.gender!;
       fieldsForCertificate.pacientRole = companyAppointment.companyRole!;
       fieldsForCertificate.pacientAge = calculateAgeFormatYYYY(
@@ -247,7 +252,10 @@ export const certificateRouter = createTRPCRouter({
           outputSingle,
           fieldsForCertificate,
           checkBoxesForCertificate,
-          examsLocations
+          examsLocations,
+          fieldsForCertificate["assistantDoctorName"].includes("Faria")
+            ? true
+            : false
         );
         await opts.ctx.prisma.companyAppointment.update({
           data: {

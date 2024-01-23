@@ -23,18 +23,10 @@ export const createCompanyAppointmentSchema = z.object({
   nacionality: z.string({
     required_error: "É necessário indicar uma nacionalidade",
   }),
-  birthDate: z.string({
-    required_error: "É necessário indicar uma data de nascimento",
-  }),
-  idNumber: z.string({
-    required_error: "É necessário indicar uma nacionalidade",
-  }),
-  phoneNumber: z.string({
-    required_error: "É necessário indicar um número de telemóvel",
-  }),
-  companyRole: z.string({
-    required_error: "É necessário indicar uma função",
-  }),
+  birthDate: z.string().optional(),
+  idNumber: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  companyRole: z.string().optional(),
   companyName: z.string({
     required_error: "É necessário indicar o nome da empresa",
   }),
@@ -44,12 +36,8 @@ export const createCompanyAppointmentSchema = z.object({
   companyLocation: z.string({
     required_error: "É necessário indicar uma localização",
   }),
-  examType: z.string({
-    required_error: "É necessário indicar um tipo de exame",
-  }),
-  planType: z.string({
-    required_error: "É necessário indicar um tipo de plano",
-  }),
+  examType: z.string().optional(),
+  planType: z.string().optional(),
   addInfo: z.string().optional(),
 });
 
@@ -65,7 +53,8 @@ const CreatePersonalAppointment = () => {
       .promise(
         createAppointmentMutation.mutateAsync({
           ...data,
-          birthDate: format(new Date(data.birthDate), "dd-MM-yyyy"),
+          birthDate:
+            data.birthDate && format(new Date(data.birthDate), "dd-MM-yyyy"),
         }),
         {
           error: (err) => `Ocorreu um erro: ${err}`,

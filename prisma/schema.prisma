@@ -66,8 +66,8 @@ model CompanyAppointment {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   date        DateTime
-  examType    String
-  companyRole String
+  examType    String?
+  companyRole String?
   planType    String?
   covid       String?
   local       String?

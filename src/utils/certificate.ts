@@ -8,12 +8,53 @@ export async function fillPDFForm(
   outputSingle: string,
   fieldData: Record<string, string>,
   checkboxData: string[],
-  examsLocations: string[]
+  examsLocations: string[],
+  signatureA?: boolean
 ) {
   try {
     const pdfBytes = await fs.readFile(pdfPath);
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
+
+    const signatureImagePath = signatureA
+      ? "/public/DrAngela.png"
+      : "/public/DrPaula.png";
+    const signatureImageFullPath = path.join(process.cwd(), signatureImagePath);
+
+    const sigBytes = await fs.readFile(signatureImageFullPath);
+    const pngImage = await pdfDoc.embedPng(sigBytes);
+
+    const pngDims = pngImage.scale(0.25);
+
+    // Get the first page of the PDF
+    const page_one = pdfDoc.getPages()[0];
+
+    // Calculate the position for the lower right corner
+    const lowerRightX = page_one!.getWidth() - pngDims.width - 40; // Adjust 20 as needed
+    const lowerRightY = 230; // Adjust as needed
+
+    // Draw the PNG image on the first page
+    page_one!.drawImage(pngImage, {
+      x: lowerRightX,
+      y: lowerRightY,
+      width: pngDims.width,
+      height: pngDims.height,
+    });
+
+    // Draw the second signature on the fifth page
+    const pageFive = pdfDoc.getPages()[5]; // Assuming the fifth page is at index 4
+
+    // Calculate the position for the lower right corner of the fifth page
+    const lowerRightXPageFive = pageFive!.getWidth() - pngDims.width - 330;
+    const lowerRightYPageFive = 130;
+
+    // Draw the second signature on the fifth page
+    pageFive!.drawImage(pngImage, {
+      x: lowerRightXPageFive,
+      y: lowerRightYPageFive,
+      width: pngDims.width,
+      height: pngDims.height,
+    });
 
     for (const [fieldName, fieldValue] of Object.entries(fieldData)) {
       try {

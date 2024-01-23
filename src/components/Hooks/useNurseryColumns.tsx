@@ -28,7 +28,11 @@ const useNurseryColumns = (
   setIsModalOpen: Dispatch<SetStateAction<boolean>>,
   setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>
 ) => {
-  const handleSubmitButton = (companyAppointmentId: string) => {
+  const handleSubmitButton = (
+    companyAppointmentId: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
     setIsModalOpen(true);
     setSelectedCompanyAppointment(companyAppointmentId);
   };
@@ -61,7 +65,9 @@ const useNurseryColumns = (
         return (
           <div className="flex gap-4">
             <button
-              onClick={() => handleSubmitButton(cell.renderValue() as string)}
+              onClick={(event) =>
+                handleSubmitButton(cell.renderValue() as string, event)
+              }
             >
               <Image src={CheckIcon} alt="Done button" className="h-4 w-4" />
             </button>
