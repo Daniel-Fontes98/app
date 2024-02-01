@@ -19,9 +19,11 @@ const AddExam = () => {
   const { onFileUploadChange, onUploadFile } = useFileUploader();
 
   const formSchema = z.object({
-    examName: z.string({
-      required_error: "É necessário fornecer um nome para o exame",
-    }),
+    examName: z
+      .string({
+        required_error: "É necessário fornecer um nome para o exame",
+      })
+      .min(1, { message: "O nome do exame tem que ter mais de 1 caracteres" }),
     addInfo: z.string().optional(),
   });
 

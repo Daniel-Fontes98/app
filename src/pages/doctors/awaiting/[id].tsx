@@ -110,7 +110,13 @@ const Index: NextPage = () => {
           <div>
             {tab === 0 && id ? (
               <div>
-                <UserInfo user={data?.user} triage={data?.triage} />
+                <UserInfo
+                  user={data?.user}
+                  triage={data?.triage}
+                  role={data?.companyRole}
+                  company={data?.company}
+                  planType={data?.planType}
+                />
               </div>
             ) : tab === 1 ? (
               <MedicalFile {...data?.medicalFile!} companyAppointmentId={id} />

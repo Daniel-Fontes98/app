@@ -12,6 +12,7 @@ import EyeIcon from "../../../public/eye.png";
 import CheckIcon from "../../../public/check.png";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
+import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
 export type companyAppointmentType = CompanyAppointment & {
   user: User;
@@ -33,14 +34,23 @@ const useDoctorColumns = (
 
   const awaitingDoctorColumns: ColumnDef<companyAppointmentType>[] = [
     {
-      accessorKey: "createdAt",
+      accessorKey: "date",
+      header: () => (
+        <div className="flex  whitespace-nowrap text-emerald-600">Data</div>
+      ),
+      accessorFn: (props) => {
+        return formatDate(props.date);
+      },
+    },
+    {
+      accessorKey: "presentAt",
       header: () => (
         <div className="flex  whitespace-nowrap text-emerald-600">
           Hora de chegada
         </div>
       ),
       accessorFn: (props) => {
-        return formatarHora(props.createdAt);
+        return formatarHora(props.presentAt!);
       },
     },
     {

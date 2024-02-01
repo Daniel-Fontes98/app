@@ -5,6 +5,7 @@ interface userInfoProps {
   user?: User;
   triage?: Triage | null;
   company?: Company;
+  role?: string | null;
   planType?: string | null;
 }
 
@@ -46,6 +47,7 @@ const UserInfo = (props: userInfoProps) => {
                 <p>Telemóvel: {props.user?.number}</p>
                 <p>Empresa: {props.company?.name}</p>
                 <p>Tipo de plano: {props.planType}</p>
+                <p>Função:{props.role}</p>
               </div>
             </div>
           </div>

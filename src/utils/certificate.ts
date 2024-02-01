@@ -16,15 +16,21 @@ export async function fillPDFForm(
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const form = pdfDoc.getForm();
 
+    const carimboImagePath = "/public/Carimbo.png";
     const signatureImagePath = signatureA
       ? "/public/DrAngela.png"
       : "/public/DrPaula.png";
     const signatureImageFullPath = path.join(process.cwd(), signatureImagePath);
+    const carimboImageFullPath = path.join(process.cwd(), carimboImagePath);
+
+    const stampBytes = await fs.readFile(carimboImageFullPath);
+    const stampImage = await pdfDoc.embedPng(stampBytes);
 
     const sigBytes = await fs.readFile(signatureImageFullPath);
     const pngImage = await pdfDoc.embedPng(sigBytes);
 
-    const pngDims = pngImage.scale(0.25);
+    const pngDims = pngImage.scale(0.3);
+    const stampDims = stampImage.scale(0.3);
 
     // Get the first page of the PDF
     const page_one = pdfDoc.getPages()[0];
@@ -33,12 +39,22 @@ export async function fillPDFForm(
     const lowerRightX = page_one!.getWidth() - pngDims.width - 40; // Adjust 20 as needed
     const lowerRightY = 230; // Adjust as needed
 
+    const lowerRightXStamp = page_one!.getWidth() - stampDims.width - 100;
+    const lowerRightYStamp = 150;
+
     // Draw the PNG image on the first page
     page_one!.drawImage(pngImage, {
       x: lowerRightX,
       y: lowerRightY,
       width: pngDims.width,
       height: pngDims.height,
+    });
+
+    page_one!.drawImage(stampImage, {
+      x: lowerRightXStamp,
+      y: lowerRightYStamp,
+      width: stampDims.width,
+      height: stampDims.height,
     });
 
     // Draw the second signature on the fifth page
@@ -54,6 +70,13 @@ export async function fillPDFForm(
       y: lowerRightYPageFive,
       width: pngDims.width,
       height: pngDims.height,
+    });
+
+    pageFive!.drawImage(stampImage, {
+      x: lowerRightXPageFive + 100,
+      y: lowerRightYPageFive - 105,
+      width: stampDims.width,
+      height: stampDims.height,
     });
 
     for (const [fieldName, fieldValue] of Object.entries(fieldData)) {

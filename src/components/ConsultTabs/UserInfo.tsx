@@ -8,11 +8,19 @@ interface userInfoProps {
 
 export function calculateAgeFormatYYYY(birthdate: string): string {
   const today: Date = new Date();
-  const parts: string[] = birthdate.split("/");
+  let parts: string[] = [];
 
-  const birthYear: number = parseInt(parts[2] as string);
-  const birthMonth: number = parseInt(parts[1] as string);
-  const birthDay: number = parseInt(parts[0] as string);
+  if (birthdate.includes("/")) {
+    parts = birthdate.split("/");
+  } else if (birthdate.includes("-")) {
+    parts = birthdate.split("-");
+  } else {
+    throw new Error('Invalid date format. Use "/" or "-" as separators.');
+  }
+
+  const birthYear: number = parseInt(parts[2]!);
+  const birthMonth: number = parseInt(parts[1]!);
+  const birthDay: number = parseInt(parts[0]!);
   let ageYears: number = today.getFullYear() - birthYear;
   const ageMonths: number = today.getMonth() + 1 - birthMonth;
   const ageDays: number = today.getDate() - birthDay;

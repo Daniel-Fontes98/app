@@ -114,6 +114,8 @@ model CompanyAppointmentMedicalFile {
   allergys String?
   admissions String?
   epis String?
+  workTime String?
+  workAcident String?
 
   companyAppointmentId String @unique
   companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])

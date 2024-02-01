@@ -38,6 +38,25 @@ const ShowWaitingPeopleNursery = () => {
 
   const handleButtonSubmit = () => {
     setIsButtonDisabled(true);
+
+    const appointment = data?.find(
+      (element) => element.id === selectedCompanyAppointment
+    );
+
+    if (appointment?.isHistoryFilled === false) {
+      toast.error("Por favor preencher o historico primeiro");
+      setIsModalOpen(false);
+      setIsButtonDisabled(false);
+      return;
+    }
+
+    if (appointment?.isTriageFilled === false) {
+      toast.error("Por favor preencher a triagem primeiro");
+      setIsModalOpen(false);
+      setIsButtonDisabled(false);
+      return;
+    }
+
     toast
       .promise(
         setNurseryExamsDoneMutation.mutateAsync({

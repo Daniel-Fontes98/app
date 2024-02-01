@@ -13,6 +13,8 @@ export const companyAppointmentMedicalFileRouter = createTRPCRouter({
         allergys: z.string().optional(),
         admissions: z.string().optional(),
         epis: z.string().optional(),
+        workAcident: z.string().optional(),
+        workTime: z.string().optional(),
         companyAppointmentId: z.string(),
       })
     )
@@ -29,6 +31,8 @@ export const companyAppointmentMedicalFileRouter = createTRPCRouter({
             allergys: input.allergys,
             admissions: input.admissions,
             epis: input.epis,
+            workAcident: input.workAcident,
+            workTime: input.workTime,
             companyAppointment: {
               connect: {
                 id: input.companyAppointmentId,
@@ -44,6 +48,8 @@ export const companyAppointmentMedicalFileRouter = createTRPCRouter({
             allergys: input.allergys,
             admissions: input.admissions,
             epis: input.epis,
+            workAcident: input.workAcident,
+            workTime: input.workTime,
           },
           where: {
             companyAppointmentId: input.companyAppointmentId,

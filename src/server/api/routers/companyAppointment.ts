@@ -185,7 +185,9 @@ export const companyAppointmentrouter = createTRPCRouter({
       const lastArrivedPerson = await opts.ctx.prisma.companyAppointment.count({
         where: {
           wasPresent: true,
-          date: input.date,
+          date: {
+            equals: input.date,
+          },
         },
       });
       return await opts.ctx.prisma.companyAppointment.update({

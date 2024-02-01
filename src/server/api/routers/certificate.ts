@@ -103,7 +103,8 @@ export const certificateRouter = createTRPCRouter({
 
       //Add Info From User
       const fieldsForCertificate: Record<string, string> = {};
-      fieldsForCertificate.pacientName = companyAppointment.user.name!;
+      fieldsForCertificate.pacientName =
+        companyAppointment.user.name!.toUpperCase();
       try {
         fieldsForCertificate.pacientBirthDate = format(
           new Date(companyAppointment.user.birthDate!),
@@ -114,16 +115,21 @@ export const certificateRouter = createTRPCRouter({
           companyAppointment.user.birthDate!;
       }
       fieldsForCertificate.pacientGender = companyAppointment.user.gender!;
-      fieldsForCertificate.pacientRole = companyAppointment.companyRole!;
+      fieldsForCertificate.pacientRole =
+        companyAppointment.companyRole!.toUpperCase();
       fieldsForCertificate.pacientAge = calculateAgeFormatYYYY(
         companyAppointment.user.birthDate!
       );
       //Add Info From Company
-      fieldsForCertificate.companyName = companyAppointment?.company.name!;
+      fieldsForCertificate.companyName =
+        companyAppointment?.company.name!.toUpperCase();
 
       //Add Info From Triage
       fieldsForCertificate.pacientHeight = companyAppointment?.triage?.height!;
       fieldsForCertificate.pacientWeight = companyAppointment?.triage?.weight!;
+      fieldsForCertificate.pacientPA =
+        companyAppointment?.triage?.arterialTension!;
+      fieldsForCertificate.pacientPulse = companyAppointment?.triage?.pulse!;
 
       //Add Info From UserHistory
       const keysFromUserHistory = [
@@ -223,6 +229,7 @@ export const certificateRouter = createTRPCRouter({
         companyAppointment.certificate.clinicExam ?? "";
 
       const pdfPath = "src/certificateModels/CertificadoNovo.pdf";
+      const offPdfPath = "src/certificateModels/CertificadoOff.pdf";
       const outputFull = `./uploads/certificates/${new Date()
         .getFullYear()
         .toString()}/${companyAppointment.company.name}/${
@@ -247,7 +254,9 @@ export const certificateRouter = createTRPCRouter({
 
       try {
         await fillPDFForm(
-          pdfPath,
+          companyAppointment.certificate.location! === "N/D"
+            ? offPdfPath
+            : pdfPath,
           outputFull,
           outputSingle,
           fieldsForCertificate,

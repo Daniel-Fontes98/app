@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
@@ -15,6 +14,8 @@ interface MedicalFileProps {
   allergys: string | null;
   admissions: string | null;
   epis: string | null;
+  workTime: string | null;
+  workAcident: string | null;
   companyAppointmentId: string;
 }
 
@@ -32,6 +33,8 @@ const MedicalFile = (props: MedicalFileProps) => {
     allergys: z.string().optional(),
     admissions: z.string().optional(),
     epis: z.string().optional(),
+    workTime: z.string().optional(),
+    workAcident: z.string().optional(),
   });
 
   const {
@@ -49,6 +52,8 @@ const MedicalFile = (props: MedicalFileProps) => {
       allergys: props.allergys ?? "",
       admissions: props.admissions ?? "",
       epis: props.epis ?? "",
+      workTime: props.workTime ?? "",
+      workAcident: props.workAcident ?? "",
     },
   });
 
@@ -207,21 +212,61 @@ const MedicalFile = (props: MedicalFileProps) => {
           )}
         </div>
       </div>
-      <div>
-        <label className="mb-2 block text-lg text-emerald-600" htmlFor="EPIs">
-          EPIs
-        </label>
-        <textarea
-          id="EPIs"
-          className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
-          {...register("epis")}
-        />
-        {errors.epis && (
-          <p className="mt-2 text-xs italic text-red-500">
-            {" "}
-            {errors.epis?.message}
-          </p>
-        )}
+      <div className="flex w-full gap-4">
+        <div className="w-1/3">
+          <label className="mb-2 block text-lg text-emerald-600" htmlFor="EPIs">
+            EPIs
+          </label>
+          <textarea
+            id="EPIs"
+            className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
+            {...register("epis")}
+          />
+          {errors.epis && (
+            <p className="mt-2 text-xs italic text-red-500">
+              {" "}
+              {errors.epis?.message}
+            </p>
+          )}
+        </div>
+        <div className="w-1/3">
+          <label
+            className="mb-2 block text-lg text-emerald-600"
+            htmlFor="tempoDeTrabalho"
+          >
+            Tempo de Trabalho
+          </label>
+          <textarea
+            id="tempoDeTrabalho"
+            className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
+            {...register("workTime")}
+          />
+          {errors.workTime && (
+            <p className="mt-2 text-xs italic text-red-500">
+              {" "}
+              {errors.workTime?.message}
+            </p>
+          )}
+        </div>
+        <div className="w-1/3">
+          <label
+            className="mb-2 block text-lg text-emerald-600"
+            htmlFor="Acidente de Trabalho"
+          >
+            Acidente de Trabalho
+          </label>
+          <textarea
+            id="Acidente de Trabalho"
+            className="w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
+            {...register("workAcident")}
+          />
+          {errors.workAcident && (
+            <p className="mt-2 text-xs italic text-red-500">
+              {" "}
+              {errors.workAcident?.message}
+            </p>
+          )}
+        </div>
       </div>
       <div>
         <button

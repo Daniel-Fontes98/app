@@ -144,6 +144,7 @@ const CertificateEmission = ({
                   label: "Offshore",
                   value: "offShoreCheck",
                 },
+                { label: "N/D", value: "N/D" },
               ]}
               error={errors.location}
               registerReturn={register("location")}
