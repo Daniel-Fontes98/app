@@ -25,6 +25,8 @@ import { userHistoryFieldsRouter } from "./routers/userHistoryFields";
 import { riskFactorsRouter } from "./routers/riskFactors";
 import { certificateRouter } from "./routers/certificate";
 import { allergiesRouter } from "./routers/allergies";
+import { tbExamsRouter } from "./routers/tbExam";
+import { tbCertificateRouter } from "./routers/tbCertificate";
 
 /**
  * This is the primary router for your server.
@@ -58,6 +60,8 @@ export const appRouter = createTRPCRouter({
   riskFactors: riskFactorsRouter,
   userHistory: userHistoryRouter,
   userHistoryFields: userHistoryFieldsRouter,
+  tbExams: tbExamsRouter,
+  tbCertificate: tbCertificateRouter,
 });
 
 // export type definition of API

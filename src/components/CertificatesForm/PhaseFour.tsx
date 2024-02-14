@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "~/utils/api";
 import CheckBox from "../Forms/Checkbox";
@@ -107,7 +107,7 @@ const PhaseFour = (props: PhaseFourProps) => {
 
     await addRiskFactors
       .mutateAsync({ ...riskFactors, companyAppointmentId })
-      .catch((err) => toast.error(`Ocorreu um erro: ${err}`));
+      .catch(() => toast.error(`Ocorreu um erro por favor tentar novamente`));
     await addAllergies.mutateAsync({
       riskFactorsId: data.id,
       userCheckedList: allergies,

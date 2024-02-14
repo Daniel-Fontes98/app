@@ -42,9 +42,9 @@ export const companyAppointmentrouter = createTRPCRouter({
       z.object({
         name: z.string(),
         birthDate: z.string(),
-        examType: z.string(),
-        companyRole: z.string(),
-        planType: z.string(),
+        examType: z.string().optional(),
+        companyRole: z.string().optional(),
+        planType: z.string().optional(),
         consultDate: z.date(),
         phoneNumber: z.string(),
         companyName: z.string(),
@@ -178,6 +178,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         companyRole: z.string(),
         planType: z.string(),
         date: z.date(),
+        hasTbCertificate: z.boolean(),
       })
     )
     .mutation(async (opts) => {
@@ -200,6 +201,7 @@ export const companyAppointmentrouter = createTRPCRouter({
           wasPresent: true,
           presentAt: new Date(),
           orderOfPresence: lastArrivedPerson + 1,
+          hasTbCertificate: input.hasTbCertificate,
           user: {
             update: {
               name: input.name,
@@ -235,6 +237,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         user: true,
         company: true,
         labExams: true,
+        tbExams: true,
       },
     });
   }),
@@ -276,6 +279,19 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
         data: {
           areLabExamsDone: true,
+        },
+      });
+    }),
+  setTbExamToAttached: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isTbExamAttached: true,
         },
       });
     }),

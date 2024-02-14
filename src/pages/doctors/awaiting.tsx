@@ -19,6 +19,7 @@ const ShowWaitingForDoctor = () => {
     setIsModalOpen,
     setSelectedCompanyAppointment
   );
+
   Modal.setAppElement(document.getElementById("DoctorModalElement")!);
 
   const customStyles = {
@@ -40,17 +41,17 @@ const ShowWaitingForDoctor = () => {
           id: selectedCompanyAppointment,
         }),
         {
-          error: (err) => `Erro ao arquivar utente: ${err}`,
+          error: `Erro ao arquivar utente por favor tentar novamente`,
           success: () => "Utente arquivado com sucesso !",
           loading: "A arquivar utente...",
         }
       )
       .then(() => {
-        refetch();
+        void refetch();
         setIsModalOpen(false);
         setIsButtonDisabled(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsButtonDisabled(false);
       });
   };
@@ -67,7 +68,7 @@ const ShowWaitingForDoctor = () => {
         </div>
       </div>
       {!isLoading ? (
-        <div className="container mt-16 flex flex-col items-center justify-center">
+        <div className="container flex flex-col items-center justify-center">
           <Modal
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
@@ -131,7 +132,7 @@ const ShowWaitingForDoctor = () => {
                 type="submit"
                 className="absolute bottom-2.5 right-2.5 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
               >
-                Search
+                Procurar
               </button>
             </div>
           </div>

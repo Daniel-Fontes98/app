@@ -30,7 +30,7 @@ export async function fillPDFForm(
     const pngImage = await pdfDoc.embedPng(sigBytes);
 
     const pngDims = pngImage.scale(0.3);
-    const stampDims = stampImage.scale(0.3);
+    const stampDims = stampImage.scale(0.23);
 
     // Get the first page of the PDF
     const page_one = pdfDoc.getPages()[0];
@@ -40,7 +40,7 @@ export async function fillPDFForm(
     const lowerRightY = 230; // Adjust as needed
 
     const lowerRightXStamp = page_one!.getWidth() - stampDims.width - 100;
-    const lowerRightYStamp = 150;
+    const lowerRightYStamp = 175;
 
     // Draw the PNG image on the first page
     page_one!.drawImage(pngImage, {
@@ -64,6 +64,10 @@ export async function fillPDFForm(
     const lowerRightXPageFive = pageFive!.getWidth() - pngDims.width - 330;
     const lowerRightYPageFive = 130;
 
+    const lowerRightXPageFiveStamp =
+      pageFive!.getWidth() - stampDims.width - 390;
+    const lowerRightYPageFiveStamp = 75;
+
     // Draw the second signature on the fifth page
     pageFive!.drawImage(pngImage, {
       x: lowerRightXPageFive,
@@ -73,8 +77,8 @@ export async function fillPDFForm(
     });
 
     pageFive!.drawImage(stampImage, {
-      x: lowerRightXPageFive + 100,
-      y: lowerRightYPageFive - 105,
+      x: lowerRightXPageFiveStamp,
+      y: lowerRightYPageFiveStamp,
       width: stampDims.width,
       height: stampDims.height,
     });

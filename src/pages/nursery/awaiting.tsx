@@ -63,17 +63,18 @@ const ShowWaitingPeopleNursery = () => {
           id: selectedCompanyAppointment,
         }),
         {
-          error: (err) => `Erro ao submeter exames: ${err}`,
+          error: `Erro ao submeter exames por favor tentar novamente`,
           success: () => "Exames submetidos com sucesso !",
           loading: "A submeter exames...",
         }
       )
       .then(() => {
-        refetch();
+        void refetch();
         setIsModalOpen(false);
         setIsButtonDisabled(false);
       })
       .catch((err) => {
+        console.log(err);
         setIsButtonDisabled(false);
       });
   };
@@ -107,7 +108,9 @@ const ShowWaitingPeopleNursery = () => {
                       companyAppointment.id === selectedCompanyAppointment
                   )
                   ?.nurseryExams.map((exam) => (
-                    <div className="ml-2">{exam.examName}</div>
+                    <div key={exam.id} className="ml-2">
+                      {exam.examName}
+                    </div>
                   ))}
               </div>
               <p className="mt-6">
@@ -138,7 +141,7 @@ const ShowWaitingPeopleNursery = () => {
           <DataTable
             columns={awaitingNurseryColumns}
             data={data!}
-            onRowClick={(id) => router.push(`/nursery/userPanel/${id}`)}
+            onRowClick={(id: string) => router.push(`/nursery/userPanel/${id}`)}
           />
         </div>
       ) : (

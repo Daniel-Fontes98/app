@@ -24,9 +24,9 @@ const TotalConsumed = () => {
 
     result
       .then(() => {
-        router.push("/emergencys/payment");
+        void router.push("/emergencys/payment");
       })
-      .catch((err) => {
+      .catch(() => {
         toast("Ocorreu um erro =(");
       });
   };

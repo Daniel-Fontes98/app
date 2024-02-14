@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "~/utils/store";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type phaseOneKeys =
   | "pacientName"

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "~/utils/api";
 import Radio from "../Forms/Radio";
@@ -159,14 +159,23 @@ const PhaseSix = (props: PhaseSixProps) => {
 
     await addRiskFactors
       .mutateAsync({ ...userInput, companyAppointmentId })
-      .catch((err) => toast.error(`Ocorreu um erro: ${err}`));
+      .catch(() => {
+        toast.error(`Ocorreu um erro por favor tentar novamente`);
+        setIsButtonDisabled(false);
+        return;
+      });
 
-    await createHistoryFile.mutateAsync({ companyAppointmentId }).then(() => {
-      toast.success("Submetido com sucesso !");
-      router.push("/nursery/FinalScreen");
-    });
-
-    setIsButtonDisabled(false);
+    await createHistoryFile
+      .mutateAsync({ companyAppointmentId })
+      .then(() => {
+        toast.success("Submetido com sucesso !");
+        void router.push("/nursery/FinalScreen");
+      })
+      .catch(() => {
+        toast.error(`Ocorreu um erro por favor tentar novamente`);
+        setIsButtonDisabled(false);
+        return;
+      });
   };
 
   return (

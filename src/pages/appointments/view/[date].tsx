@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
-import { ViewCompanyAppointment } from "~/components/Appointments/ViewCompanyAppointment";
+import { type ChangeEvent, useState } from "react";
 import { ViewPersonalAppointment } from "~/components/Appointments/ViewPersonalAppointments";
 import { DataTable } from "~/components/DataTable";
 import useAppointmentColumns from "~/components/Hooks/useAppointmentColumns";
@@ -62,7 +61,9 @@ const ViewAllByDate = () => {
             <DataTable
               columns={awaitingAppointmentColumns}
               data={companyAppointmentsQuery.data!}
-              onRowClick={(id) => router.push(`/appointments/review/${id}`)}
+              onRowClick={(id: string) =>
+                router.push(`/appointments/review/${id}`)
+              }
             />
           </div>
         ) : (

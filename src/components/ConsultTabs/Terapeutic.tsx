@@ -36,7 +36,7 @@ const TerapeuticTab = ({ emergencyConsultId }: TerapeuticProps) => {
         }),
         {
           loading: "A carregar...",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Aplicado com sucesso!",
         }
       )
@@ -52,7 +52,7 @@ const TerapeuticTab = ({ emergencyConsultId }: TerapeuticProps) => {
         }),
         {
           loading: "A carregar...",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Removido com sucesso!",
         }
       )
@@ -72,7 +72,7 @@ const TerapeuticTab = ({ emergencyConsultId }: TerapeuticProps) => {
           }),
           {
             loading: "A carregar...",
-            error: (err) => `Ocorreu um erro: ${err}`,
+            error: `Ocorreu um erro por favor tentar novamente`,
             success: "Adicionado com sucesso !",
           }
         )

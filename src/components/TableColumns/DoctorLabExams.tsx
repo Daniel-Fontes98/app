@@ -1,5 +1,5 @@
-import { LabExams } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { LabExams } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
 
 export const doctorLabExams: ColumnDef<LabExams>[] = [

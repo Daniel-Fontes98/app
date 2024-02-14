@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import Image from "next/image";
 import CIcon from "../../../public/C.svg";
 import ADV from "../../../public/iconsSeguros/ADV.svg";

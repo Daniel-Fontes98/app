@@ -28,7 +28,7 @@ const CreateEmergencyMeal = () => {
         }),
         {
           loading: "A carregar...",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Adicionado com sucesso !",
         }
       )

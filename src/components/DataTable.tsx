@@ -16,12 +16,14 @@ export type DataTableProps<Data extends object> = {
   data: Data[];
   columns: ColumnDef<Data, any>[];
   onRowClick?: (id: any) => void;
+  pageSize?: number;
 };
 
 export function DataTable<Data extends object>({
   data,
   columns,
   onRowClick,
+  pageSize,
 }: DataTableProps<Data>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -36,9 +38,23 @@ export function DataTable<Data extends object>({
     },
   });
 
+  function hasIdProperty(obj: any): obj is { id: string } {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return obj && typeof obj === "object" && "id" in obj;
+  }
+
+  function handleRowClick<Data>(
+    onRowClick: ((id: any) => void) | undefined,
+    original: Data
+  ) {
+    if (onRowClick && hasIdProperty(original)) {
+      onRowClick(original.id);
+    }
+  }
+
   useEffect(() => {
-    table.setPageSize(10);
-  }, []);
+    pageSize ? table.setPageSize(pageSize) : table.setPageSize(10);
+  }, [pageSize]);
 
   return (
     <>
@@ -79,7 +95,7 @@ export function DataTable<Data extends object>({
               <Tr
                 key={row.id}
                 className=" bg-white shadow-sm"
-                onClick={() => onRowClick && onRowClick(row.original.id)}
+                onClick={() => handleRowClick(onRowClick, row.original)}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (

@@ -13,7 +13,8 @@ interface UrgencyConsumablesProps {
 }
 
 export function processString(inputString: string) {
-  const baseUrl = "http://192.168.21.68:8080";
+  const baseUrl = `http://192.168.21.199:8080`;
+
   const splitString = inputString.split("/uploads");
 
   if (splitString.length > 1 && splitString[1]) {

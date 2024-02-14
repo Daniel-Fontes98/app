@@ -1,8 +1,7 @@
-import { LabExams, NurseryExam } from "@prisma/client";
+import type { LabExams, NurseryExam } from "@prisma/client";
 import { DataTable } from "../DataTable";
 import { doctorLabExams } from "../TableColumns/DoctorLabExams";
 import { doctorNurseExams } from "../TableColumns/DoctorNurseExams";
-import { useRouter } from "next/router";
 
 interface ExamsProps {
   labExams: LabExams[];
@@ -10,8 +9,6 @@ interface ExamsProps {
 }
 
 const Exams = (props: ExamsProps) => {
-  const router = useRouter();
-
   return (
     <div className="relative">
       <div className="absolute right-0 top-0">

@@ -1,5 +1,5 @@
 import type { User, CompanyAppointment, Company } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import CheckIcon from "../../../public/check.png";
 import Image from "next/image";
 

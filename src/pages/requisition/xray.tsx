@@ -66,7 +66,7 @@ const XRay = () => {
         router
           .push("/xray/pending")
           .then()
-          .catch((err) => toast("Ocorreu um erro ao mudar de página"));
+          .catch(() => toast("Ocorreu um erro ao mudar de página"));
       })
       .catch((err) => {
         toast("Ocorreu um erro =(");

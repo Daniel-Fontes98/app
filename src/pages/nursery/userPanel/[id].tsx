@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import type { NextPage } from "next/types";
 import { useState } from "react";
 import UserInfo from "~/components/CompanyAppointmentTabs/UserInfo";
-import MedicalFile from "~/components/CompanyAppointmentTabs/MedicalFile";
 import { api } from "~/utils/api";
 import NurseryActions from "~/components/CompanyAppointmentTabs/NurseryActions";
 

@@ -52,7 +52,6 @@ const CreateCompanyAppointmentExcel = () => {
   const router = useRouter();
   const createAppointmentMutation =
     api.companyAppointment.insertOne.useMutation();
-  const getAllAppointmentsQuery = api.companyAppointment.getAll.useQuery();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -86,7 +85,7 @@ const CreateCompanyAppointmentExcel = () => {
     if (!selectedFile) return;
     const chunkSize = 1;
     const reader = new FileReader();
-    reader.onload = async (event) => {
+    reader.onload = (event) => {
       const data = event.target?.result;
       if (data) {
         const workbook = XLSX.read(data, { type: "binary", cellDates: true });
@@ -123,7 +122,7 @@ const CreateCompanyAppointmentExcel = () => {
           .promise(processChunks(), {
             loading: "A carregar...",
             success: "Planilha carregada com sucesso !!",
-            error: (err) => `Ocorreu um erro: ${err}`,
+            error: `Ocorreu um erro por favor tentar novamente`,
           })
           .then(() => router.push("/appointments"))
           .catch((err) => {

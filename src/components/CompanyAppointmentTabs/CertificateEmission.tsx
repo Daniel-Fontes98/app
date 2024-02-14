@@ -1,6 +1,6 @@
 import { z } from "zod";
 import Input from "../Forms/Input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextArea from "../Forms/Textarea";
 import { useEffect, useState } from "react";

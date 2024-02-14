@@ -4,27 +4,26 @@ import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
-import Input from "~/components/Forms/Input";
 import useFileUploader from "~/components/Hooks/useFileUploader";
 import { api } from "~/utils/api";
 
-const AddExam = () => {
+const AddTbExam = () => {
   const router = useRouter();
   const companyAppointmentId = router.query.id as string;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const { isLoading, data } = api.companyAppointment.getById.useQuery({
     id: companyAppointmentId,
   });
-  const addExamMutation = api.labExams.insertOne.useMutation();
+  const addExamMutation = api.tbExams.insertOne.useMutation();
   const { onFileUploadChange, onUploadFile } = useFileUploader();
 
   const formSchema = z.object({
-    examName: z
-      .string({
-        required_error: "É necessário fornecer um nome para o exame",
-      })
-      .min(2, "Minimo de caracteres não atingido"),
-    addInfo: z.string().optional(),
+    testResult: z.string({
+      invalid_type_error: "Por favor selecionar uma das opções",
+    }),
+    testType: z.string({
+      invalid_type_error: "Por favor selecionar uma das opções",
+    }),
   });
 
   const {
@@ -34,6 +33,19 @@ const AddExam = () => {
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  const CheckboxesArrayResult = [
+    { label: "Positivo", value: "Positivo" },
+    { label: "Negativo", value: "Negativo" },
+  ];
+
+  const CheckboxesArrayType = [
+    {
+      label: "Teste IGRA para Tuberculose do tipo QuantiFERON-TB Gold (QFT)",
+      value: "Teste IGRA para Tuberculose do tipo QuantiFERON-TB Gold (QFT)",
+    },
+    { label: "Teste TB-Ag", value: "Teste TB-Ag" },
+  ];
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     setIsButtonDisabled(true);
@@ -84,23 +96,59 @@ const AddExam = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               <h1 className="mb-8 text-center text-3xl font-bold">
-                Anexar Análise
+                Anexar Exame Tuberculose
               </h1>
-              <div className="mb-4">
-                <Input
-                  error={errors.examName}
-                  registerReturn={register("examName")}
-                  name="Nome da análise"
-                  type="text"
-                />
+              <div className="mt-2 flex w-full flex-col">
+                <div>
+                  <span className="text-md font-bold text-gray-700">
+                    Tipo de Teste elaborado:
+                  </span>
+                </div>
+                <div className="mt-2 flex flex-col justify-start gap-4">
+                  {CheckboxesArrayType.map(({ label, value }, idx) => (
+                    <label key={idx}>
+                      <input
+                        className="mr-2 rounded-md  accent-emerald-600"
+                        value={value}
+                        type="radio"
+                        {...register("testType")}
+                      />
+                      <span className="font-medium text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.testType && (
+                  <p className="mt-2 whitespace-normal text-xs italic text-red-500">
+                    {" "}
+                    {errors.testType.message}
+                  </p>
+                )}
               </div>
-              <div className="mb-4">
-                <Input
-                  error={errors.addInfo}
-                  registerReturn={register("addInfo")}
-                  name="Informação Adicional"
-                  type="text"
-                />
+              <div className="mt-8 flex w-full flex-col">
+                <div>
+                  <span className="text-md font-bold text-gray-700">
+                    Resultado do Teste:
+                  </span>
+                </div>
+                <div className="mt-2 flex justify-start gap-4">
+                  {CheckboxesArrayResult.map(({ label, value }, idx) => (
+                    <label key={idx}>
+                      <input
+                        className="mr-2 rounded-md  accent-emerald-600"
+                        value={value}
+                        type="radio"
+                        {...register("testResult")}
+                      />
+                      <span className="font-medium text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.testType && (
+                  <p className="mt-2 whitespace-normal text-xs italic text-red-500">
+                    {" "}
+                    {errors.testType.message}
+                  </p>
+                )}
               </div>
               <div className="mt-4">
                 <input type="file" name="file" onChange={onFileUploadChange} />
@@ -122,4 +170,4 @@ const AddExam = () => {
   }
 };
 
-export default AddExam;
+export default AddTbExam;

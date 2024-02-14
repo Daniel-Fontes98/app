@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import Input from "~/components/Forms/Input";
@@ -47,7 +47,7 @@ const AddExam = () => {
             companyAppointmentId: companyAppointmentId,
           }),
           {
-            error: (err) => `Ocorreu um erro: ${err}`,
+            error: `Ocorreu um erro por favor tentar novamente`,
             success: "Exame adicionado com sucesso",
             loading: "A carregar...",
           }

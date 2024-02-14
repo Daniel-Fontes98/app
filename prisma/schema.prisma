@@ -82,6 +82,9 @@ model CompanyAppointment {
   isArquived  Boolean @default(false)
   isHistoryFilled Boolean @default(false)
   isTriageFilled Boolean @default(false)
+
+  hasTbCertificate Boolean @default(false)
+  isTbExamAttached Boolean @default(false)
   
   certificateLocation String?
   historyLocation String?
@@ -97,6 +100,7 @@ model CompanyAppointment {
   nurseryExams NurseryExam[]
   labExams LabExams[]
   complementaryExams ComplementaryExams[]
+  tbExams TbExam?
   riskFactors RiskFactors?
 
   @@unique([userId, date])
@@ -355,6 +359,32 @@ model Allergies {
 
   @@unique([name, riskFactorsId])
   @@index([name, riskFactorsId])
+}
+
+model TbExam {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  testResult String
+  testType String
+  fileLocation String
+  companyAppointmentId String @unique
+
+  tbCertificate TbCertificate?
+  companyAppointment CompanyAppointment? @relation(fields: [companyAppointmentId], references: [id])
+}
+
+model TbCertificate {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  doctorsName String
+  doctorsId String
+  fileLocation String
+
+  tbExamId String @unique
+  tbExam TbExam @relation(fields: [tbExamId], references: [id])
+  
 }
 
 model Terapeutic {

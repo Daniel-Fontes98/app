@@ -3,7 +3,7 @@ import { z } from "zod";
 import { calculateAgeFormatYYYY } from "~/components/ConsultTabs/UserInfo";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fillPDFForm } from "~/utils/certificate";
-import { convertDateFormat } from "~/utils/dates";
+import { convertDateFormat, parseDate } from "~/utils/dates";
 import { fillHistoryForm } from "~/utils/history";
 
 export const certificateRouter = createTRPCRouter({
@@ -100,6 +100,7 @@ export const certificateRouter = createTRPCRouter({
       if (!companyAppointment.riskFactors) return;
       if (!companyAppointment.userHistory) return;
       if (!companyAppointment.certificate) return;
+      if (!companyAppointment.triage) throw new Error("Triagem nao preenchida");
 
       //Add Info From User
       const fieldsForCertificate: Record<string, string> = {};
@@ -107,13 +108,14 @@ export const certificateRouter = createTRPCRouter({
         companyAppointment.user.name!.toUpperCase();
       try {
         fieldsForCertificate.pacientBirthDate = format(
-          new Date(companyAppointment.user.birthDate!),
+          parseDate(companyAppointment.user.birthDate!)!,
           "dd-MM-yyyy"
         );
       } catch (err) {
         fieldsForCertificate.pacientBirthDate =
           companyAppointment.user.birthDate!;
       }
+
       fieldsForCertificate.pacientGender = companyAppointment.user.gender!;
       fieldsForCertificate.pacientRole =
         companyAppointment.companyRole!.toUpperCase();
@@ -125,20 +127,11 @@ export const certificateRouter = createTRPCRouter({
         companyAppointment?.company.name!.toUpperCase();
 
       //Add Info From Triage
-      fieldsForCertificate.pacientHeight = companyAppointment?.triage?.height!;
-      fieldsForCertificate.pacientWeight = companyAppointment?.triage?.weight!;
+      fieldsForCertificate.pacientHeight = companyAppointment?.triage?.height;
+      fieldsForCertificate.pacientWeight = companyAppointment?.triage?.weight;
       fieldsForCertificate.pacientPA =
-        companyAppointment?.triage?.arterialTension!;
-      fieldsForCertificate.pacientPulse = companyAppointment?.triage?.pulse!;
-
-      //Add Info From UserHistory
-      const keysFromUserHistory = [
-        "cancerType",
-        "dateOfCancerDiagnostic",
-        "dateOfEndCancerTreatment",
-        "psychicPatologyType",
-        "otherMedicalHistory",
-      ];
+        companyAppointment?.triage?.arterialTension;
+      fieldsForCertificate.pacientPulse = companyAppointment?.triage?.pulse;
 
       if (companyAppointment.userHistory.dateOfCancerDiagnostic)
         companyAppointment.userHistory.dateOfCancerDiagnostic =
@@ -152,53 +145,65 @@ export const certificateRouter = createTRPCRouter({
             companyAppointment.userHistory.dateOfEndCancerTreatment
           );
 
-      for (const key of keysFromUserHistory) {
-        fieldsForCertificate[key] = (
-          companyAppointment.userHistory as Record<string, any>
-        )[key];
-      }
+      fieldsForCertificate.cancerType =
+        companyAppointment.userHistory.cancerType ?? "";
+      fieldsForCertificate.dateOfCancerDiagnostic =
+        companyAppointment.userHistory.dateOfCancerDiagnostic ?? "";
+      fieldsForCertificate.dateOfEndCancerTreatment =
+        companyAppointment.userHistory.dateOfEndCancerTreatment ?? "";
+      fieldsForCertificate.psychicPatologyType =
+        companyAppointment.userHistory.psychicPatologyType ?? "";
+      fieldsForCertificate.otherMedicalHistory =
+        companyAppointment.userHistory.otherMedicalHistory ?? "";
 
-      //Add Info From RiskFactors
-      const keysFromRiskFactors = [
-        "pregnantHowMany",
-        "tobaccoAmount",
-        "alcoholAmount",
-        "hospitalizedWhen",
-        "visitedDoctorWhen",
-        "badReactionWhen",
-        "surgeryWhen",
-        "allergicReactionCause",
-        "otherAllergicReactionsWhichOnes",
-        "takeMedicineName",
-        "takeMedicineDose",
-        "takeMedicineAmountDaily",
-        "takeMedicineReason",
-      ];
-      for (const key of keysFromRiskFactors) {
-        fieldsForCertificate[key] = (
-          companyAppointment.riskFactors as Record<string, any>
-        )[key];
-      }
+      fieldsForCertificate.pregnantHowMany =
+        companyAppointment.riskFactors.pregnantHowMany ?? "";
+      fieldsForCertificate.tobaccoAmount =
+        companyAppointment.riskFactors.tobaccoAmount ?? "";
+      fieldsForCertificate.alcoholAmount =
+        companyAppointment.riskFactors.alcoholAmount ?? "";
+      fieldsForCertificate.hospitalizedWhen =
+        companyAppointment.riskFactors.hospitalizedWhen ?? "";
+      fieldsForCertificate.visitedDoctorWhen =
+        companyAppointment.riskFactors.visitedDoctorWhen ?? "";
+      fieldsForCertificate.badReactionWhen =
+        companyAppointment.riskFactors.badReactionWhen ?? "";
+      fieldsForCertificate.surgeryWhen =
+        companyAppointment.riskFactors.surgeryWhen ?? "";
+      fieldsForCertificate.allergicReactionCause =
+        companyAppointment.riskFactors.allergicReactionCause ?? "";
+      fieldsForCertificate.otherAllergicReactionsWhichOnes =
+        companyAppointment.riskFactors.otherAllergicReactionsWhichOnes ?? "";
+      fieldsForCertificate.takeMedicineName =
+        companyAppointment.riskFactors.takeMedicineName ?? "";
+      fieldsForCertificate.takeMedicineDose =
+        companyAppointment.riskFactors.takeMedicineDose ?? "";
+      fieldsForCertificate.takeMedicineAmountDaily =
+        companyAppointment.riskFactors.takeMedicineAmountDaily ?? "";
+      fieldsForCertificate.takeMedicineReason =
+        companyAppointment.riskFactors.takeMedicineReason ?? "";
 
-      const keysOfCheckboxes = Object.keys(
-        companyAppointment.riskFactors
-      ).filter(
-        (field) =>
-          !keysFromRiskFactors.includes(field) &&
-          field !== "id" &&
-          field !== "companyAppointmentId"
-      );
+      const { allergies, ...riskFactorsWithoutAllergies } =
+        companyAppointment.riskFactors;
 
-      const checkBoxesFromAllergies = companyAppointment.riskFactors.allergies
+      const checkBoxesFromAllergies = allergies
         .filter((field) => field.isChecked)
         .map((field) => field.name);
 
       const checkBoxesFromRiskFactors: string[] = [];
-      for (const key of keysOfCheckboxes) {
-        checkBoxesFromRiskFactors.push(
-          (companyAppointment.riskFactors as Record<string, any>)[key]
-        );
-      }
+      Object.entries(riskFactorsWithoutAllergies)
+        .filter(
+          (entry) =>
+            !fieldsForCertificate[entry[0]] &&
+            entry[0] !== "id" &&
+            entry[0] !== "companyAppointmentId"
+        )
+        .forEach((entry) => {
+          const value = entry[1];
+          if (typeof value === "string") {
+            checkBoxesFromRiskFactors.push(value);
+          }
+        });
 
       //Add Info From UserHistoryFields
       const checkBoxesFromUserHistoryFields =
@@ -311,9 +316,12 @@ export const certificateRouter = createTRPCRouter({
           },
         });
 
-      if (!companyAppointment) return;
-      if (!companyAppointment.riskFactors) return;
-      if (!companyAppointment.userHistory) return;
+      if (!companyAppointment)
+        throw new Error("Não existe marcação no sistema");
+      if (!companyAppointment.riskFactors)
+        throw new Error("Nao existem factores de risco");
+      if (!companyAppointment.userHistory)
+        throw new Error("Nao existe historico");
 
       //Add Info From User
       const fieldsForCertificate: Record<string, string> = {};
@@ -326,20 +334,13 @@ export const certificateRouter = createTRPCRouter({
         companyAppointment.user.birthDate!
       );
       //Add Info From Company
-      fieldsForCertificate.companyName = companyAppointment?.company.name!;
+      fieldsForCertificate.companyName = companyAppointment.company.name!;
 
       //Add Info From Triage
-      fieldsForCertificate.pacientHeight = companyAppointment?.triage?.height!;
-      fieldsForCertificate.pacientWeight = companyAppointment?.triage?.weight!;
-
-      //Add Info From UserHistory
-      const keysFromUserHistory = [
-        "cancerType",
-        "dateOfCancerDiagnostic",
-        "dateOfEndCancerTreatment",
-        "psychicPatologyType",
-        "otherMedicalHistory",
-      ];
+      if (companyAppointment.triage) {
+        fieldsForCertificate.pacientHeight = companyAppointment.triage.height;
+        fieldsForCertificate.pacientWeight = companyAppointment.triage.weight;
+      }
 
       if (companyAppointment.userHistory.dateOfCancerDiagnostic)
         companyAppointment.userHistory.dateOfCancerDiagnostic =
@@ -353,53 +354,65 @@ export const certificateRouter = createTRPCRouter({
             companyAppointment.userHistory.dateOfEndCancerTreatment
           );
 
-      for (const key of keysFromUserHistory) {
-        fieldsForCertificate[key] = (
-          companyAppointment.userHistory as Record<string, any>
-        )[key];
-      }
+      fieldsForCertificate.cancerType =
+        companyAppointment.userHistory.cancerType ?? "";
+      fieldsForCertificate.dateOfCancerDiagnostic =
+        companyAppointment.userHistory.dateOfCancerDiagnostic ?? "";
+      fieldsForCertificate.dateOfEndCancerTreatment =
+        companyAppointment.userHistory.dateOfEndCancerTreatment ?? "";
+      fieldsForCertificate.psychicPatologyType =
+        companyAppointment.userHistory.psychicPatologyType ?? "";
+      fieldsForCertificate.otherMedicalHistory =
+        companyAppointment.userHistory.otherMedicalHistory ?? "";
 
-      //Add Info From RiskFactors
-      const keysFromRiskFactors = [
-        "pregnantHowMany",
-        "tobaccoAmount",
-        "alcoholAmount",
-        "hospitalizedWhen",
-        "visitedDoctorWhen",
-        "badReactionWhen",
-        "surgeryWhen",
-        "allergicReactionCause",
-        "otherAllergicReactionsWhichOnes",
-        "takeMedicineName",
-        "takeMedicineDose",
-        "takeMedicineAmountDaily",
-        "takeMedicineReason",
-      ];
-      for (const key of keysFromRiskFactors) {
-        fieldsForCertificate[key] = (
-          companyAppointment.riskFactors as Record<string, any>
-        )[key];
-      }
+      fieldsForCertificate.pregnantHowMany =
+        companyAppointment.riskFactors.pregnantHowMany ?? "";
+      fieldsForCertificate.tobaccoAmount =
+        companyAppointment.riskFactors.tobaccoAmount ?? "";
+      fieldsForCertificate.alcoholAmount =
+        companyAppointment.riskFactors.alcoholAmount ?? "";
+      fieldsForCertificate.hospitalizedWhen =
+        companyAppointment.riskFactors.hospitalizedWhen ?? "";
+      fieldsForCertificate.visitedDoctorWhen =
+        companyAppointment.riskFactors.visitedDoctorWhen ?? "";
+      fieldsForCertificate.badReactionWhen =
+        companyAppointment.riskFactors.badReactionWhen ?? "";
+      fieldsForCertificate.surgeryWhen =
+        companyAppointment.riskFactors.surgeryWhen ?? "";
+      fieldsForCertificate.allergicReactionCause =
+        companyAppointment.riskFactors.allergicReactionCause ?? "";
+      fieldsForCertificate.otherAllergicReactionsWhichOnes =
+        companyAppointment.riskFactors.otherAllergicReactionsWhichOnes ?? "";
+      fieldsForCertificate.takeMedicineName =
+        companyAppointment.riskFactors.takeMedicineName ?? "";
+      fieldsForCertificate.takeMedicineDose =
+        companyAppointment.riskFactors.takeMedicineDose ?? "";
+      fieldsForCertificate.takeMedicineAmountDaily =
+        companyAppointment.riskFactors.takeMedicineAmountDaily ?? "";
+      fieldsForCertificate.takeMedicineReason =
+        companyAppointment.riskFactors.takeMedicineReason ?? "";
 
-      const keysOfCheckboxes = Object.keys(
-        companyAppointment.riskFactors
-      ).filter(
-        (field) =>
-          !keysFromRiskFactors.includes(field) &&
-          field !== "id" &&
-          field !== "companyAppointmentId"
-      );
+      const { allergies, ...riskFactorsWithoutAllergies } =
+        companyAppointment.riskFactors;
 
-      const checkBoxesFromAllergies = companyAppointment.riskFactors.allergies
+      const checkBoxesFromAllergies = allergies
         .filter((field) => field.isChecked)
         .map((field) => field.name);
 
       const checkBoxesFromRiskFactors: string[] = [];
-      for (const key of keysOfCheckboxes) {
-        checkBoxesFromRiskFactors.push(
-          (companyAppointment.riskFactors as Record<string, any>)[key]
-        );
-      }
+      Object.entries(riskFactorsWithoutAllergies)
+        .filter(
+          (entry) =>
+            !fieldsForCertificate[entry[0]] &&
+            entry[0] !== "id" &&
+            entry[0] !== "companyAppointmentId"
+        )
+        .forEach((entry) => {
+          const value = entry[1];
+          if (typeof value === "string") {
+            checkBoxesFromRiskFactors.push(value);
+          }
+        });
 
       //Add Info From UserHistoryFields
       const checkBoxesFromUserHistoryFields =

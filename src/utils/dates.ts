@@ -142,6 +142,26 @@ export function calculateTotalHoursElapsedDateObjects(
   return totalHoursElapsed;
 }
 
+export function parseDate(dateString: string): Date | null {
+  const dateParts = dateString.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (!dateParts) {
+    console.error("Invalid date format. Please use dd-mm-yyyy or dd/mm/yyyy.");
+    return null;
+  }
+
+  const day = parseInt(dateParts[1]!, 10);
+  const month = parseInt(dateParts[2]!, 10) - 1; // Months are zero-based in Date object
+  const year = parseInt(dateParts[3]!, 10);
+
+  // Validate month and day
+  if (month < 0 || month > 11 || day < 1 || day > 31) {
+    console.error("Invalid month or day.");
+    return null;
+  }
+
+  return new Date(year, month, day);
+}
+
 export function convertDateFormat(inputDate: string): string {
   // Parse the input date string into a Date object
   const parts = inputDate.split("-");

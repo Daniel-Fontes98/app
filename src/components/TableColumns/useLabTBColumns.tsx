@@ -17,7 +17,7 @@ export type CompanyAppointmentType = CompanyAppointment & {
   labExams: NurseryExam[];
 };
 
-const useLabColumns = (
+const useLabTbColumns = (
   setIsModalOpen: Dispatch<SetStateAction<boolean>>,
   setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>
 ) => {
@@ -28,7 +28,7 @@ const useLabColumns = (
 
   const router = useRouter();
 
-  const awaitingLabExamsColumns: ColumnDef<CompanyAppointmentType>[] = [
+  const awaitingLabTbColumns: ColumnDef<CompanyAppointmentType>[] = [
     {
       accessorKey: "orderOfPresence",
       header: () => (
@@ -71,10 +71,14 @@ const useLabColumns = (
           <div className="flex gap-4">
             <button
               onClick={() =>
-                router.push(`/lab/addExam/${cell.renderValue() as string}`)
+                router.push(`/lab/addTbExam/${cell.renderValue() as string}`)
               }
             >
-              <Image src={PlusIcon} alt="Add exam button" className="h-4 w-4" />
+              <Image
+                src={PlusIcon}
+                alt="Add tb exam button"
+                className="h-4 w-4"
+              />
             </button>
             <button
               onClick={() => handleSubmitButton(cell.renderValue() as string)}
@@ -86,7 +90,7 @@ const useLabColumns = (
       },
     },
   ];
-  return { awaitingLabExamsColumns };
+  return { awaitingLabTbColumns };
 };
 
-export default useLabColumns;
+export default useLabTbColumns;

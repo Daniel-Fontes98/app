@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { api } from "~/utils/api";
@@ -48,6 +48,7 @@ const ReviewCompanyAppointment = () => {
     companyName: z.string({
       required_error: "É necessário indicar o nome da empresa",
     }),
+    hasTbCertificate: z.boolean(),
   });
 
   const {
@@ -60,27 +61,40 @@ const ReviewCompanyAppointment = () => {
   });
 
   useEffect(() => {
-    setValue("name", companyAppointmentQuery.data?.user.name!);
-    setValue("gender", companyAppointmentQuery.data?.user.gender!);
-    setValue("nacionality", companyAppointmentQuery.data?.user.nacionality!);
-    setValue("birthDate", companyAppointmentQuery.data?.user.birthDate!);
-    setValue("idNumber", companyAppointmentQuery.data?.user.idNumber!);
-    setValue("number", companyAppointmentQuery.data?.user.number!);
-    setValue("companyRole", companyAppointmentQuery.data?.companyRole!);
-    setValue("planType", companyAppointmentQuery.data?.planType!);
-    setValue("companyName", companyAppointmentQuery.data?.company.name!);
+    setValue("name", companyAppointmentQuery.data?.user.name ?? "");
+    setValue("gender", companyAppointmentQuery.data?.user.gender ?? "");
+    setValue(
+      "nacionality",
+      companyAppointmentQuery.data?.user.nacionality ?? ""
+    );
+    setValue("birthDate", companyAppointmentQuery.data?.user.birthDate ?? "");
+    setValue("idNumber", companyAppointmentQuery.data?.user.idNumber ?? "");
+    setValue("number", companyAppointmentQuery.data?.user.number ?? "");
+    setValue("companyRole", companyAppointmentQuery.data?.companyRole ?? "");
+    setValue("planType", companyAppointmentQuery.data?.planType ?? "");
+    setValue("companyName", companyAppointmentQuery.data?.company.name ?? "");
+    setValue(
+      "hasTbCertificate",
+      companyAppointmentQuery.data?.hasTbCertificate ?? false
+    );
   }, [companyAppointmentQuery.isFetchedAfterMount]);
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
+    if (!companyAppointmentQuery.data?.date) {
+      toast.error("Ocorreu um erro por favor tentar novamnte");
+      console.log("INVALID DATE");
+      return;
+    }
+
     toast
       .promise(
         mutateAsync({
           id: appointmentId,
-          date: companyAppointmentQuery.data?.date!,
+          date: companyAppointmentQuery.data?.date,
           ...data,
         }),
         {
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Utilizador carregado com sucesso",
           loading: "A carregar...",
         }
@@ -284,6 +298,19 @@ const ReviewCompanyAppointment = () => {
                   </p>
                 )}
               </div>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <input
+                id="hasTbCertificate"
+                type="checkbox"
+                {...register("hasTbCertificate")}
+              />
+              <label
+                className=" block text-sm font-bold text-gray-700"
+                htmlFor="hasTbCertificate"
+              >
+                Exame Tubercolose com Certificado
+              </label>
             </div>
             <div className="mb-10 mt-6 text-center">
               <button

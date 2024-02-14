@@ -1,11 +1,4 @@
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 import { createTw } from "react-pdf-tailwind";
 
 // Create styles

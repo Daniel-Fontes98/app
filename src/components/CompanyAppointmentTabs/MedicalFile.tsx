@@ -1,21 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { api } from "~/utils/api";
 
 interface MedicalFileProps {
-  app: string | null;
-  apf: string | null;
-  etilicHabits: string | null;
-  tobaccoHabits: string | null;
-  surgerys: string | null;
-  allergys: string | null;
-  admissions: string | null;
-  epis: string | null;
-  workTime: string | null;
-  workAcident: string | null;
+  app?: string | null;
+  apf?: string | null;
+  etilicHabits?: string | null;
+  tobaccoHabits?: string | null;
+  surgerys?: string | null;
+  allergys?: string | null;
+  admissions?: string | null;
+  epis?: string | null;
+  workTime?: string | null;
+  workAcident?: string | null;
   companyAppointmentId: string;
 }
 
@@ -57,7 +57,7 @@ const MedicalFile = (props: MedicalFileProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     setIsButtonDisabled(true);
     toast
       .promise(
@@ -66,7 +66,7 @@ const MedicalFile = (props: MedicalFileProps) => {
           companyAppointmentId: props.companyAppointmentId,
         }),
         {
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: () => `Ocorreu um erro por favor tentar novamente`,
           success: "Ficha alterada com sucesso",
           loading: "A carregar...",
         }

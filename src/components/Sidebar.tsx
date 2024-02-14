@@ -4,7 +4,7 @@ import CentralabLogo from "../../public/centralab.png";
 import RequestIcon from "../../public/request.png";
 import DoctorIcon from "../../public/doctor.png";
 import AppointmentIcon from "../../public/appointment.png";
-import EmergencyIcon from "../../public/emergency.png";
+import StatsIcon from "../../public/trend.png";
 import XrayIcon from "../../public/x-ray.png";
 import LabIcon from "../../public/lab.png";
 import NursingIcon from "../../public/nurse.png";
@@ -174,47 +174,21 @@ export function Sidebar() {
               <span className="ml-12 text-sm  text-emerald-600">Raio-X</span>
             </Link>
           </li>
-          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-80">
+          <li className="max-h-10 overflow-hidden transition-all duration-300 hover:max-h-64">
             <a
               href="#"
               className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
-              <Image
-                src={EmergencyIcon}
-                className="h-6 w-6"
-                alt="emergency icon"
-              />
-              <span className="ml-3  text-sm text-emerald-600">Urgências</span>
+              <Image src={StatsIcon} className="h-6 w-6" alt="X Ray Icon" />
+              <span className="ml-3  text-sm text-emerald-600">
+                Estatisticas
+              </span>
             </a>
             <Link
               className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/emergencys/create"
+              href="/stats/presentAt"
             >
-              <span className="ml-12  text-sm text-emerald-600">
-                Criar urgência
-              </span>
-            </Link>
-            <Link
-              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/emergencys/triage/awaiting"
-            >
-              <span className="ml-12  text-sm text-emerald-600">
-                À espera de triagem
-              </span>
-            </Link>
-            <Link
-              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/emergencys/triage"
-            >
-              <span className="ml-12  text-sm text-emerald-600">
-                Lista de espera
-              </span>
-            </Link>
-            <Link
-              className="flex w-full items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              href="/emergencys/payment"
-            >
-              <span className="ml-12  text-sm text-emerald-600">Por Pagar</span>
+              <span className="ml-12 text-sm  text-emerald-600">Tabela</span>
             </Link>
           </li>
         </ul>

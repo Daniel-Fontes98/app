@@ -1,17 +1,17 @@
-import {
+import type {
   Company,
   CompanyAppointment,
   LabExams,
   NurseryExam,
   User,
 } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { formatarHora } from "../Hooks/useNurseryColumns";
 import EyeIcon from "../../../public/eye.png";
 import CheckIcon from "../../../public/check.png";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
 export type companyAppointmentType = CompanyAppointment & {

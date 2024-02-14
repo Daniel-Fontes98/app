@@ -1,4 +1,4 @@
-import { FieldError, Merge, UseFormRegisterReturn } from "react-hook-form";
+import type { FieldError, Merge, UseFormRegisterReturn } from "react-hook-form";
 
 interface RadioProps {
   name: string;

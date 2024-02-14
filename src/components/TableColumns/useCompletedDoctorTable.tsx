@@ -1,5 +1,5 @@
-import { Company, CompanyAppointment, User } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { Company, CompanyAppointment, User } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import EyeIcon from "../../../public/eye.png";

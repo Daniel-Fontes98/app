@@ -1,5 +1,10 @@
-import { Company, CompanyAppointment, NurseryExam, User } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type {
+  Company,
+  CompanyAppointment,
+  NurseryExam,
+  User,
+} from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 

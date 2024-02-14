@@ -27,7 +27,7 @@ const CreateUrgencyForm = () => {
         }),
         {
           loading: "A carregar...",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Submetido com sucesso !",
         }
       )

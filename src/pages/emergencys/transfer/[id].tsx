@@ -51,7 +51,7 @@ const PatientTransfer = () => {
   if (!isLoaded || !isSignedIn) return null;
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    toast.promise(
+    void toast.promise(
       mutation.mutateAsync({
         ...data,
         emergencyConsultId: id as string,
@@ -59,7 +59,7 @@ const PatientTransfer = () => {
       }),
       {
         loading: "A carregar...",
-        error: (err) => `Ocorreu um erro: ${err}`,
+        error: `Ocorreu um erro por favor tentar novamente`,
         success: "Submetido com sucesso !",
       }
     );

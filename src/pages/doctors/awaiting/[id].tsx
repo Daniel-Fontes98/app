@@ -7,6 +7,7 @@ import Exams from "~/components/CompanyAppointmentTabs/Exams";
 import { api } from "~/utils/api";
 import CertificateEmission from "~/components/CompanyAppointmentTabs/CertificateEmission";
 import { processString } from "~/components/ConsultTabs/UrgencyConsumables";
+import TbCertificateEmission from "~/components/CompanyAppointmentTabs/TbCertificateEmission";
 
 const Index: NextPage = () => {
   const [tab, setTab] = useState(0);
@@ -77,6 +78,20 @@ const Index: NextPage = () => {
                   Emitir Certificado
                 </section>
               </li>
+              {data?.isTbExamAttached ? (
+                <>
+                  <li className="mr-2">
+                    <section
+                      className={tab === 4 ? selected : unselected}
+                      onClick={() => setTab(4)}
+                    >
+                      Emitir TB
+                    </section>
+                  </li>
+                </>
+              ) : (
+                <></>
+              )}
               {data?.certificateLocation ? (
                 <>
                   <li className="mr-2">
@@ -119,14 +134,16 @@ const Index: NextPage = () => {
                 />
               </div>
             ) : tab === 1 ? (
-              <MedicalFile {...data?.medicalFile!} companyAppointmentId={id} />
-            ) : tab === 2 ? (
+              <MedicalFile {...data?.medicalFile} companyAppointmentId={id} />
+            ) : tab === 2 && data?.labExams && data?.nurseryExams ? (
               <Exams
-                labExams={data?.labExams!}
-                nurseExams={data?.nurseryExams!}
+                labExams={data?.labExams}
+                nurseExams={data?.nurseryExams}
               />
             ) : tab === 3 ? (
               <CertificateEmission companyAppointmentId={id} />
+            ) : tab === 4 ? (
+              <TbCertificateEmission companyAppointmentId={id} />
             ) : (
               <div>Error...</div>
             )}

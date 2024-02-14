@@ -22,7 +22,7 @@ const CreateExam = () => {
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     const url = await onUploadFile();
     if (typeof url === "object") {
-      toast.promise(
+      void toast.promise(
         mutation.mutateAsync({
           ...data,
           fileLocation: url[0],
@@ -30,19 +30,19 @@ const CreateExam = () => {
         }),
         {
           loading: "A carregar",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Adicionado com sucesso !",
         }
       );
     } else {
-      toast.promise(
+      void toast.promise(
         mutation.mutateAsync({
           ...data,
           emergencyConsultId: emergencyConsultId as string,
         }),
         {
           loading: "A carregar",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "",
         }
       );

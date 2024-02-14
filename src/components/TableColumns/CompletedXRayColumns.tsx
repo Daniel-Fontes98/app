@@ -1,5 +1,5 @@
 import type { XRayRequisition, User, XRayObject } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
@@ -10,7 +10,7 @@ export type xRayObjectType = XRayObject & {
 export const completedXRayColumns: ColumnDef<xRayObjectType>[] = [
   {
     accessorKey: "createdAt",
-    header: ({ column }) => (
+    header: () => (
       <div className="flex  whitespace-nowrap text-emerald-600">Data</div>
     ),
     accessorFn: (props) => {
@@ -19,13 +19,13 @@ export const completedXRayColumns: ColumnDef<xRayObjectType>[] = [
   },
   {
     accessorKey: "xRayRequisition.user.name",
-    header: ({ column }) => (
+    header: () => (
       <div className="flex  whitespace-nowrap  text-emerald-600">Nome</div>
     ),
   },
   {
     accessorKey: "xRayRequisition.user.birthDate",
-    header: ({ column }) => (
+    header: () => (
       <div className="flex  whitespace-nowrap  text-emerald-600">
         Data de Nascimento
       </div>
@@ -33,13 +33,13 @@ export const completedXRayColumns: ColumnDef<xRayObjectType>[] = [
   },
   {
     accessorKey: "xRayRequisition.company",
-    header: ({ column }) => (
+    header: () => (
       <div className="flex  whitespace-nowrap  text-emerald-600">Empresa</div>
     ),
   },
   {
     accessorKey: "addInfo",
-    header: ({ column }) => (
+    header: () => (
       <div className="flex  whitespace-nowrap  text-emerald-600">Exame</div>
     ),
   },

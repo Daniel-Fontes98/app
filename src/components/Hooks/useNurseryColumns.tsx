@@ -4,11 +4,10 @@ import type {
   Company,
   NurseryExam,
 } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import CheckIcon from "~/../public/check.png";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
-import { useRouter } from "next/router";
+import type { Dispatch, SetStateAction } from "react";
 
 export function formatarHora(data: Date): string {
   const horas: string = String(data.getHours()).padStart(2, "0");
@@ -37,14 +36,17 @@ const useNurseryColumns = (
     setSelectedCompanyAppointment(companyAppointmentId);
   };
 
-  const router = useRouter();
-
   const awaitingNurseryColumns: ColumnDef<CompanyAppointmentType>[] = [
     {
-      accessorKey: "orderOfPresence",
+      accessorKey: "presentAt",
       header: () => (
-        <div className="flex  whitespace-nowrap text-emerald-600">Ordem</div>
+        <div className="flex  whitespace-nowrap text-emerald-600">
+          Hora de Chegada
+        </div>
       ),
+      accessorFn: (props) => {
+        return formatarHora(props.presentAt!);
+      },
     },
     {
       accessorKey: "user.name",

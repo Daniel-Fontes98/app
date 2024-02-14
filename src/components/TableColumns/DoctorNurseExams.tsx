@@ -1,5 +1,5 @@
-import { NurseryExam } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+import type { NurseryExam } from "@prisma/client";
+import type { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
 
 export const doctorNurseExams: ColumnDef<NurseryExam>[] = [

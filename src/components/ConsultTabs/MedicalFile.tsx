@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
@@ -17,7 +16,6 @@ const MedicalFile = ({ emergencyConsultId }: MedicalFileProps) => {
       emergencyConsultId: emergencyConsultId,
     });
   const mutation = api.medicalFiles.insertOrUpdate.useMutation();
-  const router = useRouter();
 
   const { register, handleSubmit, errors, formSchema, setValue } =
     useMedicalFile();
@@ -41,7 +39,7 @@ const MedicalFile = ({ emergencyConsultId }: MedicalFileProps) => {
         }),
         {
           loading: "A gravar...",
-          error: (err) => `Ocorreu um erro: ${err}`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Gravado com sucesso !",
         }
       )
