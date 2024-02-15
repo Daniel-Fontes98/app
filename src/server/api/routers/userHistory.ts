@@ -15,7 +15,7 @@ export const userHistoryRouter = createTRPCRouter({
     )
     .mutation(async (opts) => {
       const { input } = opts;
-      return await opts.ctx.prisma.userHistory.upsert({
+      const userHistory = await opts.ctx.prisma.userHistory.upsert({
         create: {
           cancerType: input.cancerType,
           dateOfCancerDiagnostic: input.dateOfCancerDiagnostic,
@@ -39,6 +39,7 @@ export const userHistoryRouter = createTRPCRouter({
           otherMedicalHistory: input.otherMedicalHistory,
         },
       });
+      return userHistory;
     }),
   getById: publicProcedure
     .input(z.object({ companyAppointmentId: z.string() }))

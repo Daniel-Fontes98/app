@@ -337,10 +337,10 @@ export const certificateRouter = createTRPCRouter({
       fieldsForCertificate.companyName = companyAppointment.company.name!;
 
       //Add Info From Triage
-      if (companyAppointment.triage) {
-        fieldsForCertificate.pacientHeight = companyAppointment.triage.height;
-        fieldsForCertificate.pacientWeight = companyAppointment.triage.weight;
-      }
+      fieldsForCertificate.pacientHeight =
+        companyAppointment.triage?.height ?? "";
+      fieldsForCertificate.pacientWeight =
+        companyAppointment.triage?.weight ?? "";
 
       if (companyAppointment.userHistory.dateOfCancerDiagnostic)
         companyAppointment.userHistory.dateOfCancerDiagnostic =

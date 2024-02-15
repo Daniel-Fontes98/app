@@ -10,6 +10,7 @@ import CheckIcon from "~/../public/check.png";
 import Image from "next/image";
 import type { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
+import { customTimeSort, formatarHora } from "~/utils/dates";
 
 export type CompanyAppointmentType = CompanyAppointment & {
   company: Company;
@@ -30,10 +31,17 @@ const useLabColumns = (
 
   const awaitingLabExamsColumns: ColumnDef<CompanyAppointmentType>[] = [
     {
-      accessorKey: "orderOfPresence",
+      accessorKey: "presentAt",
       header: () => (
-        <div className="flex  whitespace-nowrap text-emerald-600">Ordem</div>
+        <div className="flex  whitespace-nowrap text-emerald-600">
+          Hora de Chegada
+        </div>
       ),
+      accessorFn: (props) => {
+        return formatarHora(props.presentAt!);
+      },
+      sortingFn: (a, b) =>
+        customTimeSort(a.original.presentAt!, b.original.presentAt!),
     },
     {
       accessorKey: "company.name",

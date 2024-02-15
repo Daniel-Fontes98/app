@@ -8,14 +8,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import CheckIcon from "~/../public/check.png";
 import Image from "next/image";
 import type { Dispatch, SetStateAction } from "react";
-
-export function formatarHora(data: Date): string {
-  const horas: string = String(data.getHours()).padStart(2, "0");
-  const minutos: string = String(data.getMinutes()).padStart(2, "0");
-  const segundos: string = String(data.getSeconds()).padStart(2, "0");
-
-  return `${horas}:${minutos}:${segundos}`;
-}
+import { customTimeSort, formatarHora } from "~/utils/dates";
 
 export type CompanyAppointmentType = CompanyAppointment & {
   company: Company;
@@ -47,6 +40,8 @@ const useNurseryColumns = (
       accessorFn: (props) => {
         return formatarHora(props.presentAt!);
       },
+      sortingFn: (a, b) =>
+        customTimeSort(a.original.presentAt!, b.original.presentAt!),
     },
     {
       accessorKey: "user.name",

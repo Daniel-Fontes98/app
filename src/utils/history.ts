@@ -26,7 +26,6 @@ export async function fillHistoryForm(
       try {
         const field = form.getCheckBox(name);
         if (field) {
-          console.log(field.getName());
           field.check();
         }
       } catch {}
@@ -45,8 +44,6 @@ export async function fillHistoryForm(
     const pdfBytesWithFields = await pdfDoc.save();
 
     await fs.writeFile(outputPath, pdfBytesWithFields);
-
-    console.log("Filled History saved:", outputPath);
   } catch (error) {
     console.error("Error:", error);
   }

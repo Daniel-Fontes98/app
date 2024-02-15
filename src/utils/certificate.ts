@@ -96,7 +96,6 @@ export async function fillPDFForm(
       try {
         const field = form.getCheckBox(name);
         if (field) {
-          console.log(field.getName());
           field.check();
         }
       } catch {}
@@ -132,9 +131,6 @@ export async function fillPDFForm(
 
     await fs.writeFile(outputPath, pdfBytesWithFields);
     await fs.writeFile(outputSingle, pdfBytesFirstPage);
-
-    console.log("Filled PDF saved:", outputPath);
-    console.log("First page PDF saved:", outputSingle);
   } catch (error) {
     console.error("Error:", error);
   }

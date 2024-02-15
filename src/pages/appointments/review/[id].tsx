@@ -15,6 +15,7 @@ const ReviewCompanyAppointment = () => {
 
   const { mutateAsync, isLoading } =
     api.companyAppointment.updateByIdAndMarkPresent.useMutation();
+  const updateByIdMutation = api.companyAppointment.updateById.useMutation();
 
   const formSchema = z.object({
     name: z.string({
@@ -83,6 +84,28 @@ const ReviewCompanyAppointment = () => {
     if (!companyAppointmentQuery.data?.date) {
       toast.error("Ocorreu um erro por favor tentar novamnte");
       console.log("INVALID DATE");
+      return;
+    }
+
+    if (companyAppointmentQuery.data.wasPresent) {
+      toast
+        .promise(
+          updateByIdMutation.mutateAsync({
+            id: appointmentId,
+            ...data,
+          }),
+          {
+            error: `Ocorreu um erro por favor tentar novamente`,
+            success: "Utilizador actualizado com sucesso",
+            loading: "A carregar...",
+          }
+        )
+        .then(() => {
+          router.back();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       return;
     }
 

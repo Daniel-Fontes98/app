@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
@@ -16,6 +16,8 @@ interface MedicalFileProps {
   epis?: string | null;
   workTime?: string | null;
   workAcident?: string | null;
+  medicalHistory?: string | null;
+  callRefetch: () => void;
   companyAppointmentId: string;
 }
 
@@ -35,38 +37,42 @@ const MedicalFile = (props: MedicalFileProps) => {
     epis: z.string().optional(),
     workTime: z.string().optional(),
     workAcident: z.string().optional(),
+    medicalHistory: z.string().optional(),
   });
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      app: props.app ?? "",
-      apf: props.apf ?? "",
-      etilicHabits: props.etilicHabits ?? "",
-      tobaccoHabits: props.tobaccoHabits ?? "",
-      surgerys: props.surgerys ?? "",
-      allergys: props.allergys ?? "",
-      admissions: props.admissions ?? "",
-      epis: props.epis ?? "",
-      workTime: props.workTime ?? "",
-      workAcident: props.workAcident ?? "",
-    },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
+  useEffect(() => {
+    setValue("app", props.app ?? "");
+    setValue("apf", props.apf ?? "");
+    setValue("etilicHabits", props.etilicHabits ?? "");
+    setValue("tobaccoHabits", props.tobaccoHabits ?? "");
+    setValue("surgerys", props.surgerys ?? "");
+    setValue("allergys", props.allergys ?? "");
+    setValue("admissions", props.admissions ?? "");
+    setValue("epis", props.epis ?? "");
+    setValue("workTime", props.workTime ?? "");
+    setValue("workAcident", props.workAcident ?? "");
+    setValue("medicalHistory", props.medicalHistory ?? "");
+  }, []);
+
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
     setIsButtonDisabled(true);
-    toast
+    await toast
       .promise(
         mutation.mutateAsync({
           ...data,
           companyAppointmentId: props.companyAppointmentId,
         }),
         {
-          error: () => `Ocorreu um erro por favor tentar novamente`,
+          error: `Ocorreu um erro por favor tentar novamente`,
           success: "Ficha alterada com sucesso",
           loading: "A carregar...",
         }
@@ -74,6 +80,7 @@ const MedicalFile = (props: MedicalFileProps) => {
       .then()
       .catch((err) => console.log(err));
     setIsButtonDisabled(false);
+    props.callRefetch();
   };
 
   return (
@@ -267,6 +274,25 @@ const MedicalFile = (props: MedicalFileProps) => {
             </p>
           )}
         </div>
+      </div>
+      <div>
+        <label
+          className="mb-2 block text-lg text-emerald-600"
+          htmlFor="medicalHistory"
+        >
+          Historial Médico
+        </label>
+        <textarea
+          id="medicalHistory"
+          className="h-20 w-full whitespace-pre-line rounded-md p-2 shadow-md focus:outline-0"
+          {...register("medicalHistory")}
+        />
+        {errors.medicalHistory && (
+          <p className="mt-2 text-xs italic text-red-500">
+            {" "}
+            {errors.medicalHistory?.message}
+          </p>
+        )}
       </div>
       <div>
         <button

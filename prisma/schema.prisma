@@ -120,6 +120,7 @@ model CompanyAppointmentMedicalFile {
   epis String?
   workTime String?
   workAcident String?
+  medicalHistory String?
 
   companyAppointmentId String @unique
   companyAppointment CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])

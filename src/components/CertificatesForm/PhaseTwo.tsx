@@ -72,9 +72,10 @@ const PhaseTwo = (props: PhaseTwoProps) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const addHistoryField = api.userHistoryFields.insertOrUpdate.useMutation();
   const addHistory = api.userHistory.insertOrUpdate.useMutation();
-  const { data, isFetchedAfterMount } = api.userHistory.getById.useQuery({
-    companyAppointmentId,
-  });
+  const { data, isFetchedAfterMount, refetch } =
+    api.userHistory.getById.useQuery({
+      companyAppointmentId,
+    });
 
   const {
     setValue,
@@ -169,22 +170,20 @@ const PhaseTwo = (props: PhaseTwoProps) => {
     }
 
     try {
-      await addHistory
-        .mutateAsync({
-          ...userInput,
-          companyAppointmentId: companyAppointmentId,
-        })
-        .then(async () => {
-          if (!data?.id) {
-            toast.error("Ocorreu um erro por favor tentar novamente");
-            throw new Error("Ocorreu um erro com o addHistory");
-          }
+      const addHistoryResult = await addHistory.mutateAsync({
+        ...userInput,
+        companyAppointmentId: companyAppointmentId,
+      });
 
-          await addHistoryField.mutateAsync({
-            userCheckedList: userInput.medicalHistoryArray,
-            userHistoryId: data.id,
-          });
-        });
+      if (!addHistoryResult.id) {
+        toast.error("Ocorreu um erro por favor tentar novamente");
+        throw new Error("Ocorreu um erro com o addHistory");
+      }
+
+      await addHistoryField.mutateAsync({
+        userCheckedList: userInput.medicalHistoryArray,
+        userHistoryId: addHistoryResult.id,
+      });
     } catch (err) {
       console.error(err);
       setIsButtonDisabled(false);

@@ -7,12 +7,12 @@ import type {
 } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { formatarHora } from "../Hooks/useNurseryColumns";
 import EyeIcon from "../../../public/eye.png";
 import CheckIcon from "../../../public/check.png";
 import { useRouter } from "next/router";
 import type { Dispatch, SetStateAction } from "react";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
+import { customDateSort, customTimeSort, formatarHora } from "~/utils/dates";
 
 export type companyAppointmentType = CompanyAppointment & {
   user: User;
@@ -41,6 +41,8 @@ const useDoctorColumns = (
       accessorFn: (props) => {
         return formatDate(props.date);
       },
+      sortingFn: (a, b) => customDateSort(a.original.date, b.original.date),
+      enableMultiSort: true,
     },
     {
       accessorKey: "presentAt",
@@ -52,6 +54,9 @@ const useDoctorColumns = (
       accessorFn: (props) => {
         return formatarHora(props.presentAt!);
       },
+      sortingFn: (a, b) =>
+        customTimeSort(a.original.presentAt!, b.original.presentAt!),
+      enableMultiSort: true,
     },
     {
       accessorKey: "user.name",

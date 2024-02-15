@@ -34,6 +34,7 @@ export const companyAppointmentrouter = createTRPCRouter({
       include: {
         user: true,
         company: true,
+        certificate: true,
       },
     });
   }),
@@ -104,6 +105,8 @@ export const companyAppointmentrouter = createTRPCRouter({
     return ctx.prisma.companyAppointment.findMany({
       include: {
         user: true,
+        company: true,
+        certificate: true,
       },
     });
   }),
@@ -201,6 +204,42 @@ export const companyAppointmentrouter = createTRPCRouter({
           wasPresent: true,
           presentAt: new Date(),
           orderOfPresence: lastArrivedPerson + 1,
+          hasTbCertificate: input.hasTbCertificate,
+          user: {
+            update: {
+              name: input.name,
+              nacionality: input.nacionality,
+              birthDate: input.birthDate,
+              idNumber: input.idNumber,
+              number: input.number,
+            },
+          },
+        },
+      });
+    }),
+  updateById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        nacionality: z.string(),
+        birthDate: z.string(),
+        idNumber: z.string(),
+        number: z.string(),
+        companyRole: z.string(),
+        planType: z.string(),
+        hasTbCertificate: z.boolean(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          companyRole: input.companyRole,
+          planType: input.planType,
           hasTbCertificate: input.hasTbCertificate,
           user: {
             update: {

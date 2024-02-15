@@ -14,9 +14,13 @@ const Index: NextPage = () => {
   const router = useRouter();
 
   const id = router.query.id as string;
-  const { isLoading, data } = api.companyAppointment.getById.useQuery({
+  const { isLoading, data, refetch } = api.companyAppointment.getById.useQuery({
     id: id,
   });
+
+  const callRefetch = async () => {
+    await refetch();
+  };
 
   const unselected =
     "hover:cursor-pointer inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300";
@@ -134,7 +138,11 @@ const Index: NextPage = () => {
                 />
               </div>
             ) : tab === 1 ? (
-              <MedicalFile {...data?.medicalFile} companyAppointmentId={id} />
+              <MedicalFile
+                {...data?.medicalFile}
+                companyAppointmentId={id}
+                callRefetch={callRefetch}
+              />
             ) : tab === 2 && data?.labExams && data?.nurseryExams ? (
               <Exams
                 labExams={data?.labExams}

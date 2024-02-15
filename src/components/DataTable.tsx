@@ -33,6 +33,7 @@ export function DataTable<Data extends object>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableMultiSort: true,
     state: {
       sorting,
     },

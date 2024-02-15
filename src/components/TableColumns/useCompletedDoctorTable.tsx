@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import EyeIcon from "../../../public/eye.png";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
+import { customDateSort } from "~/utils/dates";
 
 export type completedDoctorType = CompanyAppointment & {
   user: User;
@@ -21,6 +22,7 @@ const useCompletedDoctorTable = () => {
       accessorFn: (props) => {
         return formatDate(props.date);
       },
+      sortingFn: (a, b) => customDateSort(a.original.date, b.original.date),
     },
     {
       accessorKey: "user.name",

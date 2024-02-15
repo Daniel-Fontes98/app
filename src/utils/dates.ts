@@ -2,6 +2,45 @@ export const convertDateString = (date: string) => {
   return new Date(date).toLocaleDateString("en-GB");
 };
 
+export function formatarHora(data: Date): string {
+  const horas: string = String(data.getHours()).padStart(2, "0");
+  const minutos: string = String(data.getMinutes()).padStart(2, "0");
+  const segundos: string = String(data.getSeconds()).padStart(2, "0");
+
+  return `${horas}:${minutos}:${segundos}`;
+}
+
+export const customDateSort = (a: Date, b: Date) => {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+};
+
+export const customTimeSort = (a: Date, b: Date) => {
+  const timeA =
+    a.getHours() * 3600000 +
+    a.getMinutes() * 60000 +
+    a.getSeconds() * 1000 +
+    a.getMilliseconds();
+  const timeB =
+    b.getHours() * 3600000 +
+    b.getMinutes() * 60000 +
+    b.getSeconds() * 1000 +
+    b.getMilliseconds();
+
+  if (timeA < timeB) {
+    return -1;
+  }
+  if (timeA > timeB) {
+    return 1;
+  }
+  return 0;
+};
+
 export const convertDate = (date: Date) => {
   return (
     date.toLocaleDateString("en-GB") + " " + date.toLocaleTimeString("en-GB")
