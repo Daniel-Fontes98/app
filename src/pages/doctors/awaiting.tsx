@@ -2,7 +2,7 @@ import { DataTable } from "~/components/DataTable";
 import useDoctorColumns from "~/components/TableColumns/useDoctorColumns";
 import Modal from "react-modal";
 import { api } from "~/utils/api";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const ShowWaitingForDoctor = () => {
@@ -13,6 +13,7 @@ const ShowWaitingForDoctor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [filter, setFilter] = useState("");
+  const [tableFilter, setTableFilter] = useState("awaiting");
   const [selectedCompanyAppointment, setSelectedCompanyAppointment] =
     useState("");
   const { awaitingDoctorColumns } = useDoctorColumns(
@@ -56,6 +57,10 @@ const ShowWaitingForDoctor = () => {
       });
   };
 
+  const onOptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTableFilter(e.target.value);
+  };
+
   return (
     <div
       className="flex min-h-screen w-full flex-col gap-8 bg-slate-100"
@@ -67,8 +72,32 @@ const ShowWaitingForDoctor = () => {
           A aguardar atendimento
         </div>
       </div>
-      {!isLoading ? (
+      {!isLoading && data ? (
         <div className="container flex flex-col items-center justify-center">
+          <div className="mt-2 flex items-center justify-center gap-12">
+            <div className="flex items-center justify-center gap-2">
+              <input
+                name="type"
+                id="awaiting"
+                checked={tableFilter === "awaiting"}
+                value="awaiting"
+                type="radio"
+                onChange={(e) => onOptionChange(e)}
+              />
+              <label htmlFor="awaiting">Em espera</label>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <input
+                name="type"
+                id="pending"
+                checked={tableFilter === "pending"}
+                value="pending"
+                type="radio"
+                onChange={(e) => onOptionChange(e)}
+              />
+              <label htmlFor="pending">Pendente Consulta</label>
+            </div>
+          </div>
           <Modal
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
@@ -140,8 +169,17 @@ const ShowWaitingForDoctor = () => {
             columns={awaitingDoctorColumns}
             data={
               filter === ""
-                ? data!
-                : data!.filter((object) => object.user.name.includes(filter))
+                ? data.filter((object) =>
+                    tableFilter === "awaiting"
+                      ? object.isPendingConsult === false
+                      : object.isPendingConsult === true
+                  )
+                : data.filter((object) =>
+                    object.user.name.includes(filter) &&
+                    tableFilter === "awaiting"
+                      ? object.isPendingConsult === false
+                      : object.isPendingConsult === true
+                  )
             }
           />
         </div>

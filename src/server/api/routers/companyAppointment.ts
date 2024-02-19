@@ -391,4 +391,17 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
       });
     }),
+  markAsPending: publicProcedure
+    .input(z.object({ companyAppointmentId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          isPendingConsult: true,
+        },
+        where: {
+          id: input.companyAppointmentId,
+        },
+      });
+    }),
 });

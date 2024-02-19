@@ -39,4 +39,14 @@ export const labExamsRouter = createTRPCRouter({
       },
     });
   }),
+  removeByCompanyId: publicProcedure
+    .input(z.object({ companyAppointmentId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.labExams.deleteMany({
+        where: {
+          companyAppointmentId: input.companyAppointmentId,
+        },
+      });
+    }),
 });

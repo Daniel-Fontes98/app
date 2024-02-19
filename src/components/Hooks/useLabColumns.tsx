@@ -6,6 +6,7 @@ import type {
 } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import PlusIcon from "~/../public/plus.png";
+import MinusIcon from "~/../public/minus.png";
 import CheckIcon from "~/../public/check.png";
 import Image from "next/image";
 import type { Dispatch, SetStateAction } from "react";
@@ -20,10 +21,16 @@ export type CompanyAppointmentType = CompanyAppointment & {
 
 const useLabColumns = (
   setIsModalOpen: Dispatch<SetStateAction<boolean>>,
-  setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>
+  setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>,
+  setIsRemoveModalOpen: Dispatch<SetStateAction<boolean>>
 ) => {
   const handleSubmitButton = (companyAppointmentId: string) => {
     setIsModalOpen(true);
+    setSelectedCompanyAppointment(companyAppointmentId);
+  };
+
+  const handleRemoveButton = (companyAppointmentId: string) => {
+    setIsRemoveModalOpen(true);
     setSelectedCompanyAppointment(companyAppointmentId);
   };
 
@@ -83,6 +90,15 @@ const useLabColumns = (
               }
             >
               <Image src={PlusIcon} alt="Add exam button" className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => handleRemoveButton(cell.renderValue() as string)}
+            >
+              <Image
+                src={MinusIcon}
+                alt="Remove exam button"
+                className="h-4 w-4"
+              />
             </button>
             <button
               onClick={() => handleSubmitButton(cell.renderValue() as string)}

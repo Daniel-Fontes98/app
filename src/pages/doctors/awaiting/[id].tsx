@@ -147,6 +147,8 @@ const Index: NextPage = () => {
               <Exams
                 labExams={data?.labExams}
                 nurseExams={data?.nurseryExams}
+                id={data.id}
+                isPending={data.isPendingConsult}
               />
             ) : tab === 3 ? (
               <CertificateEmission companyAppointmentId={id} />

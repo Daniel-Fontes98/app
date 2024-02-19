@@ -13,22 +13,29 @@ const ShowWaitingPeopleLab = () => {
     api.companyAppointment.setLabExamsToDone.useMutation();
   const setTbExamToAttached =
     api.companyAppointment.setTbExamToAttached.useMutation();
+  const deleteLabExam = api.labExams.removeByCompanyId.useMutation();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTbModalOpen, setIsTbModalOpen] = useState(false);
+  const [isRemoveExamModalOpen, setIsRemoveModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isRemoveExamButtonDisabled, setIsRemoveExamButtonDisabled] =
+    useState(false);
   const [isTbButtonDisabled, setIsTbButtonDisabled] = useState(false);
+  const [tableFilter, setTableFilter] = useState("occupationalMedicine");
   const [selectedCompanyAppointment, setSelectedCompanyAppointment] =
     useState("");
+
   const { awaitingLabExamsColumns } = useLabColumns(
     setIsModalOpen,
-    setSelectedCompanyAppointment
+    setSelectedCompanyAppointment,
+    setIsRemoveModalOpen
   );
-
   const { awaitingLabTbColumns } = useLabTbColumns(
     setIsTbModalOpen,
     setSelectedCompanyAppointment
   );
-  const [tableFilter, setTableFilter] = useState("occupationalMedicine");
+
   Modal.setAppElement(document.getElementById("NurseModalElement")!);
 
   const onOptionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +97,29 @@ const ShowWaitingPeopleLab = () => {
       .catch(() => {
         setIsTbButtonDisabled(false);
       });
+  };
+
+  const handleRemoveExamButtonSubmit = async () => {
+    setIsRemoveExamButtonDisabled(true);
+    try {
+      await toast.promise(
+        deleteLabExam.mutateAsync({
+          companyAppointmentId: selectedCompanyAppointment,
+        }),
+        {
+          error: `Erro ao apagar exames por favor tentar novamente`,
+          success: () => "Exame apagado com sucesso !",
+          loading: "A apagar exames...",
+        }
+      );
+      void refetch();
+      setIsRemoveModalOpen(false);
+      setIsRemoveExamButtonDisabled(false);
+    } catch (err) {
+      console.log(err);
+      setIsRemoveModalOpen(false);
+      setIsRemoveExamButtonDisabled(false);
+    }
   };
 
   return (
@@ -211,6 +241,39 @@ const ShowWaitingPeopleLab = () => {
                 <button
                   className="mb-2 mr-2 rounded-lg bg-red-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   onClick={() => setIsTbModalOpen(false)}
+                >
+                  Não
+                </button>
+              </div>
+            </div>
+          </Modal>
+          <Modal
+            isOpen={isRemoveExamModalOpen}
+            onRequestClose={() => setIsRemoveModalOpen(false)}
+            style={customStyles}
+          >
+            <div>
+              <div className="flex w-full  flex-col items-center justify-center gap-6">
+                <h2 className="font-bold">Remover exame</h2>
+              </div>
+              <p className="mt-6">
+                Esta acção é irrevertível, após remoção de um ficheiro não será
+                possível recuperá-lo.
+              </p>
+              <p className="mb-6 flex items-center justify-center">
+                Deseja continuar ?
+              </p>
+              <div className="flex items-center justify-center gap-8">
+                <button
+                  className="mb-2 mr-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  disabled={isRemoveExamButtonDisabled}
+                  onClick={() => handleRemoveExamButtonSubmit()}
+                >
+                  Sim
+                </button>
+                <button
+                  className="mb-2 mr-2 rounded-lg bg-red-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                  onClick={() => setIsRemoveModalOpen(false)}
                 >
                   Não
                 </button>
