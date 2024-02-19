@@ -169,6 +169,20 @@ export const companyAppointmentrouter = createTRPCRouter({
         },
       });
     }),
+  getByIdUserHematology: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          user: true,
+          Hematologia: true,
+        },
+      });
+    }),
   updateByIdAndMarkPresent: publicProcedure
     .input(
       z.object({

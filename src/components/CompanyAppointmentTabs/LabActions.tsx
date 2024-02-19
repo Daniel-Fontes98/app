@@ -7,38 +7,42 @@ const LabActions = () => {
     <>
       <div className="grid h-72 grid-cols-2 items-center justify-center gap-x-8 gap-y-2">
         <button
-          onClick={() => router.push(`/lab/addHematologia/${id}`)}
+          onClick={() => router.push(`/lab/analysis/addHematologia/${id}`)}
           className=" float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white disabled:from-slate-600 disabled:to-slate-400"
         >
           Hematologia
         </button>
         <button
           className="float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white disabled:from-slate-600 disabled:to-slate-400"
-          onClick={() => router.push(`/lab/addBioquimica/${id}`)}
+          onClick={() => router.push(`/lab/analysis/addBioquimica/${id}`)}
         >
           Bioquimica
         </button>
         <button
           className=" float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white disabled:from-slate-600 disabled:to-slate-400"
-          onClick={() => router.push(`/lab/addTestesSerologicos/${id}`)}
+          onClick={() =>
+            router.push(`/lab/analysis/addTestesSerologicos/${id}`)
+          }
         >
           Testes Serologicos
         </button>
         <button
           className=" float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white  disabled:from-slate-600 disabled:to-slate-400 "
-          onClick={() => router.push(`/lab/addUrinaFisico/${id}`)}
+          onClick={() => router.push(`/lab/analysis/addUrinaFisico/${id}`)}
         >
           Urina Fisico
         </button>
         <button
           className=" float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white  disabled:from-slate-600 disabled:to-slate-400 "
-          onClick={() => router.push(`/lab/addUrinaBioquimica/${id}`)}
+          onClick={() => router.push(`/lab/analysis/addUrinaBioquimica/${id}`)}
         >
           Urina Bioquimica
         </button>
         <button
           className=" float-right mt-4 rounded-xl  bg-gradient-to-t from-teal-700 to-emerald-500 px-2 py-8 text-white  disabled:from-slate-600 disabled:to-slate-400 "
-          onClick={() => router.push(`/lab/addUrinaExameMicroscopio/${id}`)}
+          onClick={() =>
+            router.push(`/lab/analysis/addUrinaExameMicroscopio/${id}`)
+          }
         >
           Urina Exame Microscopio
         </button>

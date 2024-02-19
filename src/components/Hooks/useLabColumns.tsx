@@ -24,12 +24,28 @@ const useLabColumns = (
   setSelectedCompanyAppointment: Dispatch<SetStateAction<string>>,
   setIsRemoveModalOpen: Dispatch<SetStateAction<boolean>>
 ) => {
-  const handleSubmitButton = (companyAppointmentId: string) => {
+  const handleAddButton = (
+    companyAppointmentId: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    void router.push(`/lab/addExam/${companyAppointmentId}`);
+  };
+
+  const handleSubmitButton = (
+    companyAppointmentId: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
     setIsModalOpen(true);
     setSelectedCompanyAppointment(companyAppointmentId);
   };
 
-  const handleRemoveButton = (companyAppointmentId: string) => {
+  const handleRemoveButton = (
+    companyAppointmentId: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
     setIsRemoveModalOpen(true);
     setSelectedCompanyAppointment(companyAppointmentId);
   };
@@ -85,14 +101,16 @@ const useLabColumns = (
         return (
           <div className="flex gap-4">
             <button
-              onClick={() =>
-                router.push(`/lab/addExam/${cell.renderValue() as string}`)
+              onClick={(event) =>
+                handleAddButton(cell.renderValue() as string, event)
               }
             >
               <Image src={PlusIcon} alt="Add exam button" className="h-4 w-4" />
             </button>
             <button
-              onClick={() => handleRemoveButton(cell.renderValue() as string)}
+              onClick={(event) =>
+                handleRemoveButton(cell.renderValue() as string, event)
+              }
             >
               <Image
                 src={MinusIcon}
@@ -101,7 +119,9 @@ const useLabColumns = (
               />
             </button>
             <button
-              onClick={() => handleSubmitButton(cell.renderValue() as string)}
+              onClick={(event) =>
+                handleSubmitButton(cell.renderValue() as string, event)
+              }
             >
               <Image src={CheckIcon} alt="Done button" className="h-4 w-4" />
             </button>

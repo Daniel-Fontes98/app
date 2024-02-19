@@ -103,12 +103,12 @@ model CompanyAppointment {
   complementaryExams    ComplementaryExams[]
   tbExams               TbExam?
   riskFactors           RiskFactors?
-  Hematologia           Hematologia?
-  Bioquimica            Bioquimica?
-  TestesSerologicos     TestesSerologicos?
-  UrinaFisico           UrinaFisico?
-  UrinaBioquimica       UrinaBioquimica?
-  UrinaExameMicroscopio UrinaExameMicroscopio?
+  Hematologia           Hematologia[]
+  Bioquimica            Bioquimica[]
+  TestesSerologicos     TestesSerologicos[]
+  UrinaFisico           UrinaFisico[]
+  UrinaBioquimica       UrinaBioquimica[]
+  UrinaExameMicroscopio UrinaExameMicroscopio[]
 
   @@unique([userId, date])
   @@index([date, areNurseryExamsDone, areLabExamsDone, wasPresent])
@@ -496,11 +496,11 @@ model Hematologia {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   parametro         String
-  resultado         Float
-  intervaloInferior Float
-  intervaloSuperior Float
+  resultado         Float?
+  intervaloInferior Float?
+  intervaloSuperior Float?
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
@@ -513,7 +513,7 @@ model Bioquimica {
   intervaloInferior Float
   intervaloSuperior Float
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
@@ -526,7 +526,7 @@ model TestesSerologicos {
   intervaloInferior Float
   intervaloSuperior Float
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
@@ -539,7 +539,7 @@ model UrinaFisico {
   intervaloInferior Float
   intervaloSuperior Float
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
@@ -552,7 +552,7 @@ model UrinaBioquimica {
   intervaloInferior Float
   intervaloSuperior Float
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }
 
@@ -565,6 +565,6 @@ model UrinaExameMicroscopio {
   intervaloInferior Float
   intervaloSuperior Float
 
-  companyAppointmentId String             @unique
+  companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
 }

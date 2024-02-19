@@ -175,7 +175,9 @@ const ShowWaitingForDoctor = () => {
                       : object.isPendingConsult === true
                   )
                 : data.filter((object) =>
-                    object.user.name.includes(filter) &&
+                    object.user.name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase()) &&
                     tableFilter === "awaiting"
                       ? object.isPendingConsult === false
                       : object.isPendingConsult === true
