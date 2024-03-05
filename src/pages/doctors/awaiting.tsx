@@ -74,7 +74,7 @@ const ShowWaitingForDoctor = () => {
       </div>
       {!isLoading && data ? (
         <div className="container flex flex-col items-center justify-center">
-          <div className="mt-2 flex items-center justify-center gap-12">
+          <div className="mb-2 mt-2 flex items-center justify-center gap-12">
             <div className="flex items-center justify-center gap-2">
               <input
                 name="type"
@@ -96,6 +96,17 @@ const ShowWaitingForDoctor = () => {
                 onChange={(e) => onOptionChange(e)}
               />
               <label htmlFor="pending">Pendente Consulta</label>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <input
+                name="type"
+                id="inapt"
+                checked={tableFilter === "inapt"}
+                value="inapt"
+                type="radio"
+                onChange={(e) => onOptionChange(e)}
+              />
+              <label htmlFor="inapt">Inaptos</label>
             </div>
           </div>
           <Modal
@@ -171,16 +182,25 @@ const ShowWaitingForDoctor = () => {
               filter === ""
                 ? data.filter((object) =>
                     tableFilter === "awaiting"
-                      ? object.isPendingConsult === false
-                      : object.isPendingConsult === true
+                      ? !object.isPendingConsult &&
+                        !object.certificate?.finalState.includes("Unfit")
+                      : tableFilter === "pending"
+                      ? object.isPendingConsult &&
+                        !object.certificate?.finalState.includes("Unfit")
+                      : object.certificate?.finalState.includes("Unfit")
                   )
-                : data.filter((object) =>
-                    object.user.name
-                      .toLowerCase()
-                      .includes(filter.toLowerCase()) &&
-                    tableFilter === "awaiting"
-                      ? object.isPendingConsult === false
-                      : object.isPendingConsult === true
+                : data.filter(
+                    (object) =>
+                      object.user.name
+                        .toLowerCase()
+                        .includes(filter.toLowerCase()) &&
+                      (tableFilter === "awaiting"
+                        ? !object.isPendingConsult &&
+                          !object.certificate?.finalState.includes("Unfit")
+                        : tableFilter === "pending"
+                        ? object.isPendingConsult &&
+                          !object.certificate?.finalState.includes("Unfit")
+                        : object.certificate?.finalState.includes("Unfit"))
                   )
             }
           />

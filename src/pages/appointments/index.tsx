@@ -63,7 +63,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col gap-8 bg-slate-100">
+    <div className="container flex min-h-screen w-full flex-col gap-8 bg-slate-100">
       <div className="flex  items-center justify-center">
         <div className="rounded-b-2xl bg-emerald-600 px-6 py-2 text-white">
           Calendário de Agendamentos
@@ -142,6 +142,32 @@ const Calendar = () => {
           </div>
         </div>
       </section>
+      <div className="flex flex-col items-center justify-center">
+        <p>
+          Total de agendamentos este mês:
+          {totalAppointmentsPerDay.reduce((prev, curr) => prev + curr, 0)}
+        </p>
+        <p>
+          Total de presenças este mês:
+          {companyAppointmentsQuery.data
+            ?.filter(
+              (appointment) =>
+                appointment.date.getMonth() === selectedMonth &&
+                appointment.date.getFullYear() === selectedYear
+            )
+            .reduce((prev, curr) => (curr.wasPresent ? prev + 1 : prev), 0)}
+        </p>
+        <p>
+          Total de faltas este mês:
+          {companyAppointmentsQuery.data
+            ?.filter(
+              (appointment) =>
+                appointment.date.getMonth() === selectedMonth &&
+                appointment.date.getFullYear() === selectedYear
+            )
+            .reduce((prev, curr) => (curr.wasPresent ? prev : prev + 1), 0)}
+        </p>
+      </div>
     </div>
   );
 };

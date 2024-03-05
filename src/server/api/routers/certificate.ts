@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { z } from "zod";
 import { calculateAgeFormatYYYY } from "~/components/ConsultTabs/UserInfo";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { fillPDFForm } from "~/utils/certificate";
+import { fillBackToWorkForm, fillPDFForm } from "~/utils/certificate";
 import { convertDateFormat, parseDate } from "~/utils/dates";
 import { fillHistoryForm } from "~/utils/history";
 
@@ -31,6 +31,7 @@ export const certificateRouter = createTRPCRouter({
         clinicExam: z.string().optional(),
         finalState: z.string(),
         location: z.string(),
+        unfitReason: z.string().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -43,6 +44,7 @@ export const certificateRouter = createTRPCRouter({
           clinicExam: input.clinicExam,
           finalState: input.finalState,
           location: input.location,
+          unfitReason: input.unfitReason,
           companyAppointment: {
             connect: {
               id: input.companyAppointmentId,
@@ -56,6 +58,7 @@ export const certificateRouter = createTRPCRouter({
           clinicExam: input.clinicExam,
           finalState: input.finalState,
           location: input.location,
+          unfitReason: input.unfitReason,
         },
         where: {
           companyAppointmentId: input.companyAppointmentId,
@@ -465,6 +468,56 @@ export const certificateRouter = createTRPCRouter({
             id: input.companyAppointmentId,
           },
         });
+      } catch (err) {
+        console.log(err);
+      }
+    }),
+
+  createBackToWorkCertificate: publicProcedure
+    .input(
+      z.object({
+        username: z.string(),
+        birthDate: z.string(),
+        company: z.string(),
+        role: z.string(),
+        finalState: z.string(),
+        location: z.string(),
+        assistantDoctor: z.string(),
+        oma: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { input } = opts;
+
+      //Add Info From User
+      const fieldsForCertificate: Record<string, string> = {};
+      fieldsForCertificate.pacientName = input.username.toUpperCase();
+      fieldsForCertificate.pacientBirthDate = input.birthDate;
+      fieldsForCertificate.pacientRole = input.role.toUpperCase();
+      fieldsForCertificate.companyName = input.company.toUpperCase();
+      fieldsForCertificate["currentDate"] = new Date().toLocaleDateString(
+        "en-GB"
+      );
+      fieldsForCertificate["assistantDoctorName"] = input.assistantDoctor;
+      fieldsForCertificate["assistantDoctorNumber"] = input.oma;
+
+      //fieldsForCertificate["ref"] = companyAppointment.id;
+
+      const pdfPath = "src/certificateModels/CertificadoBackToWork.pdf";
+      const outputFull = `./uploads/BackToWork/${new Date()
+        .getFullYear()
+        .toString()}/${input.company}/${input.username}.pdf`;
+
+      try {
+        await fillBackToWorkForm(
+          pdfPath,
+          outputFull,
+          fieldsForCertificate,
+          [input.finalState, input.location],
+          fieldsForCertificate["assistantDoctorName"].includes("Faria")
+            ? true
+            : false
+        );
       } catch (err) {
         console.log(err);
       }

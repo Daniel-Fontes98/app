@@ -4,9 +4,9 @@ import usePresentAtTable from "~/components/TableColumns/usePresentAtTable";
 import { api } from "~/utils/api";
 
 const History = () => {
-  const { isFetched, data } = api.companyAppointment.getAllArchived.useQuery();
+  const { isFetched, data } = api.companyAppointment.getAll.useQuery();
   const [filter, setFilter] = useState("");
-  const [numberOfResultsPerPage, setNumberOfResultsPerPage] = useState(10);
+  const [numberOfResultsPerPage, setNumberOfResultsPerPage] = useState(100);
   const { presentAtColumns } = usePresentAtTable();
 
   const handleResultsPerPageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,10 +79,11 @@ const History = () => {
             data={
               filter === ""
                 ? data!
-                : data!.filter((object) =>
-                    object.company.name
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
+                : data!.filter(
+                    (object) =>
+                      object.company.name
+                        .toLowerCase()
+                        .includes(filter.toLowerCase()) && object.wasPresent
                   )
             }
             pageSize={numberOfResultsPerPage}

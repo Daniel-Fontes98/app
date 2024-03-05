@@ -306,6 +306,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         company: true,
         labExams: true,
         nurseryExams: true,
+        certificate: true,
       },
     });
   }),
@@ -412,6 +413,32 @@ export const companyAppointmentrouter = createTRPCRouter({
       return await opts.ctx.prisma.companyAppointment.update({
         data: {
           isPendingConsult: true,
+        },
+        where: {
+          id: input.companyAppointmentId,
+        },
+      });
+    }),
+  markLabExamsIncomplete: publicProcedure
+    .input(z.object({ companyAppointmentId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          areLabExamsDone: false,
+        },
+        where: {
+          id: input.companyAppointmentId,
+        },
+      });
+    }),
+  markNurseryExamsIncomplete: publicProcedure
+    .input(z.object({ companyAppointmentId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      return await opts.ctx.prisma.companyAppointment.update({
+        data: {
+          areNurseryExamsDone: false,
         },
         where: {
           id: input.companyAppointmentId,

@@ -39,4 +39,14 @@ export const nurseryExamRouter = createTRPCRouter({
       },
     });
   }),
+  removeByNurseryExamId: publicProcedure
+    .input(z.object({ nurseryExamId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      await opts.ctx.prisma.nurseryExam.delete({
+        where: {
+          id: input.nurseryExamId,
+        },
+      });
+    }),
 });

@@ -11,69 +11,114 @@ const History = () => {
     return;
   }
 
-  let totalAppointments = data?.filter((field) =>
-    field.company.name.toLowerCase().includes(companyFilter.toLowerCase())
-  );
-  let totalAttendedAppointments = data?.filter(
-    (field) =>
-      field.company.name.toLowerCase().includes(companyFilter.toLowerCase()) &&
-      field.wasPresent
-  );
-  let totalFitForWorkPercentage = data?.filter(
-    (field) =>
-      field.company.name.toLowerCase().includes(companyFilter.toLowerCase()) &&
-      field.certificate?.finalState === "fitCheck"
-  );
+  let totalAppointments =
+    companyFilter === ""
+      ? data
+      : data?.filter((field) =>
+          field.company.name.toLowerCase().includes(companyFilter.toLowerCase())
+        );
+  let totalAttendedAppointments =
+    companyFilter === ""
+      ? data.filter((field) => field.wasPresent)
+      : data?.filter(
+          (field) =>
+            field.company.name
+              .toLowerCase()
+              .includes(companyFilter.toLowerCase()) && field.wasPresent
+        );
+  let totalFitForWorkPercentage =
+    companyFilter === ""
+      ? data.filter((field) => field.certificate?.finalState === "fitCheck")
+      : data?.filter(
+          (field) =>
+            field.company.name
+              .toLowerCase()
+              .includes(companyFilter.toLowerCase()) &&
+            field.certificate?.finalState === "fitCheck"
+        );
 
-  let totalAttendedMenPercentage = totalAttendedAppointments.filter((field) =>
-    field.user.gender?.toLowerCase().includes("masculino")
+  let totalAttendedMenPercentage = totalAttendedAppointments.filter(
+    (field) =>
+      field.user.gender?.toLowerCase().includes("masculino".toLowerCase()) ||
+      field.user.gender?.toLowerCase() === "m"
   );
 
   let totalAttendedFemalePercentage = totalAttendedAppointments.filter(
-    (field) => field.user.gender?.toLowerCase().includes("feminino")
+    (field) =>
+      field.user.gender?.toLowerCase().includes("feminino".toLowerCase())
   );
 
   if (startDateFilter !== undefined && !isNaN(startDateFilter.getTime())) {
     totalAppointments = totalAppointments.filter(
-      (field) => field.date > startDateFilter
+      (field) =>
+        field.date.getMonth() >= startDateFilter.getMonth() &&
+        field.date.getFullYear() >= startDateFilter.getFullYear() &&
+        field.date.getDate() >= startDateFilter.getDate()
     );
 
     totalAttendedAppointments = totalAttendedAppointments.filter(
-      (field) => field.date > startDateFilter
+      (field) =>
+        field.date.getMonth() >= startDateFilter.getMonth() &&
+        field.date.getFullYear() >= startDateFilter.getFullYear() &&
+        field.date.getDate() >= startDateFilter.getDate()
     );
 
     totalFitForWorkPercentage = totalFitForWorkPercentage.filter(
-      (field) => field.date > startDateFilter
+      (field) =>
+        field.date.getMonth() >= startDateFilter.getMonth() &&
+        field.date.getFullYear() >= startDateFilter.getFullYear() &&
+        field.date.getDate() >= startDateFilter.getDate()
     );
 
     totalAttendedMenPercentage = totalAttendedMenPercentage.filter(
-      (field) => field.date > startDateFilter
+      (field) =>
+        field.date.getMonth() >= startDateFilter.getMonth() &&
+        field.date.getFullYear() >= startDateFilter.getFullYear() &&
+        field.date.getDate() >= startDateFilter.getDate()
     );
 
     totalAttendedFemalePercentage = totalAttendedFemalePercentage.filter(
-      (field) => field.date > startDateFilter
+      (field) =>
+        field.date.getMonth() >= startDateFilter.getMonth() &&
+        field.date.getFullYear() >= startDateFilter.getFullYear() &&
+        field.date.getDate() >= startDateFilter.getDate()
     );
   }
 
   if (endDateFilter !== undefined && !isNaN(endDateFilter.getTime())) {
     totalAppointments = totalAppointments.filter(
-      (field) => field.date < endDateFilter
+      (field) =>
+        field.date.getMonth() <= endDateFilter.getMonth() &&
+        field.date.getFullYear() <= endDateFilter.getFullYear() &&
+        field.date.getDate() <= endDateFilter.getDate()
     );
 
     totalAttendedAppointments = totalAttendedAppointments.filter(
-      (field) => field.date < endDateFilter
+      (field) =>
+        field.date.getMonth() <= endDateFilter.getMonth() &&
+        field.date.getFullYear() <= endDateFilter.getFullYear() &&
+        field.date.getDate() <= endDateFilter.getDate()
     );
 
     totalFitForWorkPercentage = totalFitForWorkPercentage.filter(
-      (field) => field.date < endDateFilter
+      (field) =>
+        field.date.getMonth() <= endDateFilter.getMonth() &&
+        field.date.getFullYear() <= endDateFilter.getFullYear() &&
+        field.date.getDate() <= endDateFilter.getDate()
     );
 
     totalAttendedMenPercentage = totalAttendedMenPercentage.filter(
-      (field) => field.date < endDateFilter
+      (field) =>
+        field.date.getMonth() <= endDateFilter.getMonth() &&
+        field.date.getFullYear() <= endDateFilter.getFullYear() &&
+        field.date.getDate() <= endDateFilter.getDate()
     );
 
     totalAttendedFemalePercentage = totalAttendedFemalePercentage.filter(
-      (field) => field.date < endDateFilter
+      (field) =>
+        field.date.getMonth() <= endDateFilter.getMonth() &&
+        field.date.getFullYear() <= endDateFilter.getFullYear() &&
+        field.date.getDate() <= endDateFilter.getDate()
     );
   }
 
@@ -191,47 +236,43 @@ const History = () => {
         </div>
       </div>
       <div>
-        {companyFilter !== "" ? (
-          <>
-            <p className="whitespace-nowrap font-medium text-gray-700">
-              Quantidade total de trabalhadores agendados:{" "}
-              {totalAppointments.length}
-            </p>
-            <p className="whitespace-nowrap font-medium text-gray-700">
-              Quantidade de trabalhadores que vieram aos agendamentos:{" "}
-              {totalAttendedAppointments.length}
-            </p>
-            <p className="whitespace-nowrap font-medium text-gray-700">
-              Percentagem de homens que vieram aos agendamentos:{" "}
-              {(
-                (totalAttendedMenPercentage.length /
-                  totalAttendedAppointments.length) *
-                100
-              ).toFixed(2)}
-              %
-            </p>
-            <p className="whitespace-nowrap font-medium text-gray-700">
-              Percentagem de mulheres que vieram aos agendamentos:{" "}
-              {(
-                (totalAttendedFemalePercentage.length /
-                  totalAttendedAppointments.length) *
-                100
-              ).toFixed(2)}
-              %
-            </p>
-            <p className="whitespace-nowrap font-medium text-gray-700">
-              Percentagem de aptos:
-              {(
-                (totalFitForWorkPercentage.length /
-                  totalAttendedAppointments.length) *
-                100
-              ).toFixed(2)}
-              %
-            </p>
-          </>
-        ) : (
-          <></>
-        )}
+        <>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Quantidade total de trabalhadores agendados:{" "}
+            {totalAppointments.length}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Quantidade de trabalhadores que vieram aos agendamentos:{" "}
+            {totalAttendedAppointments.length}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de homens que vieram aos agendamentos:{" "}
+            {(
+              (totalAttendedMenPercentage.length /
+                totalAttendedAppointments.length) *
+              100
+            ).toFixed(2)}
+            %
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de mulheres que vieram aos agendamentos:{" "}
+            {(
+              (totalAttendedFemalePercentage.length /
+                totalAttendedAppointments.length) *
+              100
+            ).toFixed(2)}
+            %
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de aptos:
+            {(
+              (totalFitForWorkPercentage.length /
+                totalAttendedAppointments.length) *
+              100
+            ).toFixed(2)}
+            %
+          </p>
+        </>
       </div>
     </div>
   );

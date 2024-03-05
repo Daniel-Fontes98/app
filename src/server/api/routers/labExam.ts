@@ -49,4 +49,14 @@ export const labExamsRouter = createTRPCRouter({
         },
       });
     }),
+  removeByLabExamId: publicProcedure
+    .input(z.object({ labExamId: z.string() }))
+    .mutation(async (opts) => {
+      const { input } = opts;
+      await opts.ctx.prisma.labExams.delete({
+        where: {
+          id: input.labExamId,
+        },
+      });
+    }),
 });

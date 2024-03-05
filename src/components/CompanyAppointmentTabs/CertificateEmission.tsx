@@ -16,6 +16,7 @@ const formSchema = z.object({
   finalState: z.string(),
   location: z.string(),
   clinicExam: z.string().optional(),
+  unfitReason: z.string().optional(),
 });
 
 interface CertificateEmissionProps {
@@ -35,6 +36,7 @@ const CertificateEmission = ({
 
   const {
     setValue,
+    watch,
     register,
     handleSubmit,
     formState: { errors },
@@ -50,6 +52,7 @@ const CertificateEmission = ({
     setValue("clinicExam", data.clinicExam ?? "");
     setValue("finalState", data.finalState);
     setValue("location", data.location ?? "");
+    setValue("unfitReason", data.unfitReason ?? "");
   }, [isFetchedAfterMount]);
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
@@ -119,38 +122,53 @@ const CertificateEmission = ({
           className="focus:shadow-outline h-40 w-full appearance-none  whitespace-pre-line rounded border text-sm leading-tight text-gray-700 focus:outline-none"
         />
         <div className="flex w-full">
-          <Radio
-            name="Avaliação:"
-            options={[
-              { label: "Apto", value: "fitCheck" },
-              {
-                label: "Inapto Temporariamente",
-                value: "tempUnfitCheck",
-              },
-              {
-                label: "Inapto Definitivamente",
-                value: "defUnfitCheck",
-              },
-            ]}
-            error={errors.finalState}
-            registerReturn={register("finalState")}
-          />
-          <div className="flex w-full justify-center">
+          <div className="flex w-full flex-col items-start justify-start gap-2">
             <Radio
-              name="Localização:"
+              name="Avaliação:"
               options={[
-                { label: "Onshore", value: "onShoreCheck" },
+                { label: "Apto", value: "fitCheck" },
                 {
-                  label: "Offshore",
-                  value: "offShoreCheck",
+                  label: "Inapto Temporariamente",
+                  value: "tempUnfitCheck",
                 },
-                { label: "N/D", value: "N/D" },
+                {
+                  label: "Inapto Definitivamente",
+                  value: "defUnfitCheck",
+                },
               ]}
-              error={errors.location}
-              registerReturn={register("location")}
+              error={errors.finalState}
+              registerReturn={register("finalState")}
             />
+            <div
+              className="flex items-end"
+              hidden={!watch("finalState")?.includes("Unfit")}
+            >
+              <label htmlFor="unfitReason">Razão de inaptidão:</label>
+              <input
+                id="unfitReason"
+                type="text"
+                className="ml-4 h-6 w-40 border"
+                disabled={!watch("finalState")?.includes("Unfit")}
+                {...register("unfitReason")}
+              />
+            </div>
           </div>
+          <Radio
+            name="Localização:"
+            options={[
+              { label: "Onshore", value: "onShoreCheck" },
+              {
+                label: "Offshore",
+                value: "offShoreCheck",
+              },
+              { label: "N/D", value: "N/D" },
+            ]}
+            error={errors.location}
+            registerReturn={register("location")}
+          />
         </div>
+        <div className="flex w-full justify-center"></div>
+
         <div>
           <button
             disabled={isButtonDisabled}

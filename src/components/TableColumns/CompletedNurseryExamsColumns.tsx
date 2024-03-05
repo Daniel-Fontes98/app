@@ -22,21 +22,25 @@ export const completedNurseryExamsColumns: ColumnDef<nurseryExamsType>[] = [
       <div className="flex  whitespace-nowrap text-emerald-600">Data</div>
     ),
     accessorFn: (props) => {
-      return formatDate(props.createdAt);
+      return props.createdAt.toDateString();
+    },
+    sortingFn: (a, b) => {
+      const dateA = new Date(a.getValue("createdAt") as string);
+      const dateB = new Date(b.getValue("createdAt") as string);
+
+      if (dateA < dateB) {
+        return -1;
+      }
+      if (dateA > dateB) {
+        return 1;
+      }
+      return 0;
     },
   },
   {
     accessorKey: "companyAppointment.user.name",
     header: () => (
       <div className="flex  whitespace-nowrap  text-emerald-600">Nome</div>
-    ),
-  },
-  {
-    accessorKey: "companyAppointment.user.birthDate",
-    header: () => (
-      <div className="flex  whitespace-nowrap  text-emerald-600">
-        Data de Nascimento
-      </div>
     ),
   },
   {

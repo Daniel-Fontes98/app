@@ -4,7 +4,67 @@ import { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+const inputKeys = [
+  "wbcResult",
+  "wbcUpperBound",
+  "wbcLowerBound",
+  "neutResult",
+  "neutUpperBound",
+  "neutLowerBound",
+  "monoResult",
+  "monoUpperBound",
+  "monoLowerBound",
+  "eoResult",
+  "eoUpperBound",
+  "eoLowerBound",
+  "basoResult",
+  "basoUpperBound",
+  "basoLowerBound",
+  "lymphResult",
+  "lymphUpperBound",
+  "lymphLowerBound",
+  "rbcResult",
+  "rbcUpperBound",
+  "rbcLowerBound",
+  "hgbResult",
+  "hgbUpperBound",
+  "hgbLowerBound",
+  "hctResult",
+  "hctUpperBound",
+  "hctLowerBound",
+  "mcvResult",
+  "mcvUpperBound",
+  "mcvLowerBound",
+  "mchResult",
+  "mchUpperBound",
+  "mchLowerBound",
+  "mchcResult",
+  "mchcUpperBound",
+  "mchcLowerBound",
+  "rdw_SdResult",
+  "rdw_SdUpperBound",
+  "rdw_SdLowerBound",
+  "rdw_CvResult",
+  "rdw_CvUpperBound",
+  "rdw_CvLowerBound",
+  "pltResult",
+  "pltUpperBound",
+  "pltLowerBound",
+  "mpvResult",
+  "mpvUpperBound",
+  "mpvLowerBound",
+  "pdwResult",
+  "pdwUpperBound",
+  "pdwLowerBound",
+  "pctResult",
+  "pctUpperBound",
+  "pctLowerBound",
+  "p_LcrResult",
+  "p_LcrUpperBound",
+  "p_LcrLowerBound",
+] as const;
 
 const Index = () => {
   const router = useRouter();
@@ -52,12 +112,12 @@ const Index = () => {
     mchcResult: z.number().nullable(),
     mchcUpperBound: z.number().nullable(),
     mchcLowerBound: z.number().nullable(),
-    rdwSdResult: z.number().nullable(),
-    rdwSdUpperBound: z.number().nullable(),
-    rdwSdLowerBound: z.number().nullable(),
-    rdwCvResult: z.number().nullable(),
-    rdwCvUpperBound: z.number().nullable(),
-    rdwCvLowerBound: z.number().nullable(),
+    rdw_SdResult: z.number().nullable(),
+    rdw_SdUpperBound: z.number().nullable(),
+    rdw_SdLowerBound: z.number().nullable(),
+    rdw_CvResult: z.number().nullable(),
+    rdw_CvUpperBound: z.number().nullable(),
+    rdw_CvLowerBound: z.number().nullable(),
     pltResult: z.number().nullable(),
     pltUpperBound: z.number().nullable(),
     pltLowerBound: z.number().nullable(),
@@ -70,130 +130,10 @@ const Index = () => {
     pctResult: z.number().nullable(),
     pctUpperBound: z.number().nullable(),
     pctLowerBound: z.number().nullable(),
-    pLcrResult: z.number().nullable(),
-    pLcrUpperBound: z.number().nullable(),
-    pLcrLowerBound: z.number().nullable(),
+    p_LcrResult: z.number().nullable(),
+    p_LcrUpperBound: z.number().nullable(),
+    p_LcrLowerBound: z.number().nullable(),
   });
-
-  const parameterMapping: Record<
-    string,
-    { result: string; upperBound: string; lowerBound: string; unit: string }
-  > = {
-    WBC: {
-      result: "wbcResult",
-      upperBound: "wbcUpperBound",
-      lowerBound: "wbcLowerBound",
-      unit: "10*9/L",
-    },
-    NEUT: {
-      result: "neutResult",
-      upperBound: "neutUpperBound",
-      lowerBound: "neutLowerBound",
-      unit: "10*9/L",
-    },
-    MONO: {
-      result: "monoResult",
-      upperBound: "monoUpperBound",
-      lowerBound: "monoLowerBound",
-      unit: "10*9/L",
-    },
-    EO: {
-      result: "eoResult",
-      upperBound: "eoUpperBound",
-      lowerBound: "eoLowerBound",
-      unit: "10*9/L",
-    },
-    BASO: {
-      result: "basoResult",
-      upperBound: "basoUpperBound",
-      lowerBound: "basoLowerBound",
-      unit: "10*9/L",
-    },
-    LYMPH: {
-      result: "lymphResult",
-      upperBound: "lymphUpperBound",
-      lowerBound: "lymphLowerBound",
-      unit: "10*9/L",
-    },
-    RBC: {
-      result: "rbcResult",
-      upperBound: "rbcUpperBound",
-      lowerBound: "rbcLowerBound",
-      unit: "10*12/L",
-    },
-    HGB: {
-      result: "hgbResult",
-      upperBound: "hbgUpperBound",
-      lowerBound: "hbgLowerBound",
-      unit: "g/dL",
-    },
-    HCT: {
-      result: "hctResult",
-      upperBound: "hctUpperBound",
-      lowerBound: "hctLowerBound",
-      unit: "%",
-    },
-    MCV: {
-      result: "mcvResult",
-      upperBound: "mcvUpperBound",
-      lowerBound: "mcvLowerBound",
-      unit: "fL",
-    },
-    MCH: {
-      result: "mchResult",
-      upperBound: "mchUpperBound",
-      lowerBound: "mchLowerBound",
-      unit: "pg",
-    },
-    MCHC: {
-      result: "mchcResult",
-      upperBound: "mchcUpperBound",
-      lowerBound: "mchcLowerBound",
-      unit: "g/dL",
-    },
-    RDWSD: {
-      result: "rdwSdResult",
-      upperBound: "rdwSdUpperBound",
-      lowerBound: "rdwSdLowerBound",
-      unit: "fL",
-    },
-    RDWCV: {
-      result: "rdwSvResult",
-      upperBound: "rdwSvUpperBound",
-      lowerBound: "rdwSvLowerBound",
-      unit: "%",
-    },
-    PLT: {
-      result: "pltResult",
-      upperBound: "pltUpperBound",
-      lowerBound: "pltLowerBound",
-      unit: "10*9/L",
-    },
-    MPV: {
-      result: "mpvResult",
-      upperBound: "mpvUpperBound",
-      lowerBound: "mpvLowerBound",
-      unit: "fL",
-    },
-    PDW: {
-      result: "pdwResult",
-      upperBound: "pdwUpperBound",
-      lowerBound: "pdwLowerBound",
-      unit: "%",
-    },
-    PCT: {
-      result: "pctResult",
-      upperBound: "pctUpperBound",
-      lowerBound: "pctLowerBound",
-      unit: "%",
-    },
-    PLCR: {
-      result: "pLcrResult",
-      upperBound: "pLcrUpperBound",
-      lowerBound: "pLcrLowerBound",
-      unit: "%",
-    },
-  };
 
   const {
     register,
@@ -204,39 +144,18 @@ const Index = () => {
     resolver: zodResolver(formSchema),
   });
 
-  useEffect(() => {
-    Object.entries(parameterMapping).forEach(([parametro, keys]) => {
-      const dataToFill = data?.Hematologia.find(
-        (x) => x.parametro === parametro
-      );
-      if (dataToFill) {
-        setValue(
-          keys.result as keyof z.infer<typeof formSchema>,
-          dataToFill.resultado
-        );
-        setValue(
-          keys.upperBound as keyof z.infer<typeof formSchema>,
-          dataToFill.intervaloSuperior
-        );
-        setValue(
-          keys.lowerBound as keyof z.infer<typeof formSchema>,
-          dataToFill.intervaloInferior
-        );
-      }
-    });
-  }, []);
-
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = () => {
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (input) => {
+    console.log(input);
     setIsButtonDisabled(true);
   };
 
   if (data && !isLoading) {
     return (
       <>
-        <div className=" min-h-screen items-center justify-center bg-slate-100 px-12 ">
+        <div className="  items-center justify-center overflow-y-scroll bg-slate-100 px-12 pb-8">
           <Toaster />
-          <div className="mb-32 flex items-center justify-center">
-            <div className="w-56 rounded-b-2xl bg-emerald-600 py-2 text-center text-white">
+          <div className="mb-12 flex items-center justify-center">
+            <div className="rounded-b-2xl bg-emerald-600 px-4 py-4 text-center text-white">
               {data.user.name}
             </div>
           </div>
@@ -249,45 +168,50 @@ const Index = () => {
                 Hemograma/Hematologia
               </h1>
               <div className="grid grid-cols-4 gap-4">
-                <div>Parâmetro</div>
-                <div>Resultado</div>
-                <div>Unidade</div>
-                <div>Valores de Referência</div>
-                {Object.entries(parameterMapping).map(([key, parameter]) => (
-                  <>
-                    <div>{key}</div>
-                    <input
-                      type="text"
-                      {...register(
-                        parameter.result as keyof z.infer<typeof formSchema>
-                      )}
-                    />
-                    <div>{parameter.unit}</div>
-                    <div className="flex items-center">
+                {/*Headers */}
+                <div className="flex items-center justify-center font-bold text-emerald-600">
+                  Parâmetro
+                </div>
+                <div className="flex items-center justify-center font-bold text-emerald-600">
+                  Resultado
+                </div>
+                <div className="flex items-center justify-center font-bold text-emerald-600">
+                  Unidade
+                </div>
+                <div className="flex items-center justify-center font-bold text-emerald-600">
+                  Valores de Referência
+                </div>
+                {inputKeys.map((key) => {
+                  if (key.includes("Result")) {
+                    return (
+                      <div
+                        key={key}
+                        className="col-span-2 flex w-full items-center justify-center gap-8"
+                      >
+                        <div className="flex w-1/2 items-center justify-center border-b">
+                          {key.replace("Result", "").toUpperCase()}
+                        </div>
+                        <div className="flex w-1/2 items-center justify-center">
+                          <input
+                            className=" border shadow-sm"
+                            {...register(key)}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="flex items-center justify-center">
                       <input
-                        type="text"
-                        className="w-10 border-2"
-                        {...register(
-                          parameter.lowerBound as keyof z.infer<
-                            typeof formSchema
-                          >
-                        )}
-                      />{" "}
-                      -{" "}
-                      <input
-                        type="text"
-                        className="w-10  border-2"
-                        {...register(
-                          parameter.lowerBound as keyof z.infer<
-                            typeof formSchema
-                          >
-                        )}
+                        key={key}
+                        className=" border shadow-sm"
+                        {...register(key)}
                       />
                     </div>
-                  </>
-                ))}
+                  );
+                })}
               </div>
-              <div className="mb-16 mt-8 text-center">
+              <div className="mb-16 mt-16 text-center">
                 <button
                   disabled={isButtonDisabled}
                   className="focus:shadow-outline w-full rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"

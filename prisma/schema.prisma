@@ -41,6 +41,7 @@ model Certificate {
   clinicExam            String?
   finalState            String //apto ou inapto
   location              String? //onShore ou offShore
+  unfitReason           String?
 
   fileLocation String?
 
@@ -222,7 +223,7 @@ model LabExams {
   fileLocation String
 
   companyAppointmentId String
-  companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])
+  companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id], onDelete: Cascade)
 }
 
 model MedicalExams {

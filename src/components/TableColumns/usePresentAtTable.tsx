@@ -20,7 +20,7 @@ const usePresentAtTable = () => {
       },
       sortingFn: (a, b) => customDateSort(a.original.date, b.original.date),
     },
-    {
+    /* {
       accessorKey: "presentAt",
       header: () => (
         <div className="flex whitespace-nowrap text-emerald-600">
@@ -32,7 +32,7 @@ const usePresentAtTable = () => {
       },
       sortingFn: (a, b) =>
         customTimeSort(a.original.presentAt!, b.original.presentAt!),
-    },
+    },*/
     {
       accessorKey: "user.name",
       header: () => (
