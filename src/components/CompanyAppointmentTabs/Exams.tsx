@@ -97,7 +97,7 @@ const Exams = (props: ExamsProps) => {
       );
       setIsRemoveLabButtonDisabled(false);
       setIsRemoveLabModalOpen(false);
-      props.callRefetch();
+      await props.callRefetch();
     } catch (err) {
       console.log(err);
       setIsRemoveLabButtonDisabled(false);
@@ -120,7 +120,7 @@ const Exams = (props: ExamsProps) => {
       );
       setIsRemoveNurseryButtonDisabled(false);
       setIsRemoveNurseryModalOpen(false);
-      props.callRefetch();
+      await props.callRefetch();
     } catch (err) {
       console.log(err);
       setIsRemoveNurseryButtonDisabled(false);

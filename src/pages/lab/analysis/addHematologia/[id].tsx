@@ -201,12 +201,8 @@ const Index = () => {
                     );
                   }
                   return (
-                    <div className="flex items-center justify-center">
-                      <input
-                        key={key}
-                        className=" border shadow-sm"
-                        {...register(key)}
-                      />
+                    <div key={key} className="flex items-center justify-center">
+                      <input className=" border shadow-sm" {...register(key)} />
                     </div>
                   );
                 })}

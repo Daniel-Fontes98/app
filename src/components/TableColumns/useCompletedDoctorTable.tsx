@@ -23,8 +23,8 @@ const useCompletedDoctorTable = () => {
         return props.createdAt.toDateString();
       },
       sortingFn: (a, b) => {
-        const dateA = new Date(a.getValue("createdAt") as string);
-        const dateB = new Date(b.getValue("createdAt") as string);
+        const dateA = new Date(a.getValue("createdAt"));
+        const dateB = new Date(b.getValue("createdAt"));
 
         if (dateA < dateB) {
           return -1;

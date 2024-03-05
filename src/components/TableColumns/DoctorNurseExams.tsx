@@ -50,7 +50,7 @@ const useDoctorNurseColumns = (
             </a>
             <button
               onClick={(event) =>
-                handleRemoveButton(props.row.getValue("id") as string, event)
+                handleRemoveButton(props.row.getValue("id"), event)
               }
             >
               <Image
