@@ -72,10 +72,9 @@ const PhaseTwo = (props: PhaseTwoProps) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const addHistoryField = api.userHistoryFields.insertOrUpdate.useMutation();
   const addHistory = api.userHistory.insertOrUpdate.useMutation();
-  const { data, isFetchedAfterMount, refetch } =
-    api.userHistory.getById.useQuery({
-      companyAppointmentId,
-    });
+  const { data, isFetchedAfterMount } = api.userHistory.getById.useQuery({
+    companyAppointmentId,
+  });
 
   const {
     setValue,

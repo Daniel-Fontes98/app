@@ -49,7 +49,6 @@ export const companyAppointmentrouter = createTRPCRouter({
         consultDate: z.date(),
         phoneNumber: z.string(),
         companyName: z.string(),
-        companyIndustry: z.string(),
         companyLocation: z.string(),
         gender: z.string().optional(),
         nacionality: z.string().optional(),
@@ -71,7 +70,7 @@ export const companyAppointmentrouter = createTRPCRouter({
             user: {
               connectOrCreate: {
                 create: {
-                  name: input.name,
+                  name: input.name.toUpperCase(),
                   gender: input.gender,
                   nacionality: input.nacionality,
                   birthDate: input.birthDate,
@@ -80,21 +79,15 @@ export const companyAppointmentrouter = createTRPCRouter({
                 },
                 where: {
                   name_number: {
-                    name: input.name,
+                    name: input.name.toUpperCase(),
                     number: input.phoneNumber,
                   },
                 },
               },
             },
             company: {
-              connectOrCreate: {
-                create: {
-                  industry: input.companyIndustry,
-                  name: input.companyName,
-                },
-                where: {
-                  name: input.companyName,
-                },
+              connect: {
+                name: input.companyName,
               },
             },
           },
@@ -107,6 +100,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         user: true,
         company: true,
         certificate: true,
+        triage: true,
       },
     });
   }),

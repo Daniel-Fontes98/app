@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -135,12 +135,7 @@ const Index = () => {
     p_LcrLowerBound: z.number().nullable(),
   });
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
+  const { register, handleSubmit } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 

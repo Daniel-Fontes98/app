@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import Input from "~/components/Forms/Input";
@@ -24,7 +23,6 @@ const BackToWork = () => {
   });
 
   const {
-    setValue,
     register,
     handleSubmit,
     formState: { errors },

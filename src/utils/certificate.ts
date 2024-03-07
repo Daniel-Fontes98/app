@@ -218,7 +218,6 @@ export async function fillBackToWorkForm(
     await fs.mkdir(outputPathDir, { recursive: true });
 
     const pdfBytesWithFields = await pdfDoc.save();
-    const pdfBytesFirstPage = await firstPageDoc.save();
 
     await fs.writeFile(outputPath, pdfBytesWithFields);
   } catch (error) {

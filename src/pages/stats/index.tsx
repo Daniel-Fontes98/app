@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { calculateAgeFormatYYYY } from "~/components/ConsultTabs/UserInfo";
 import { api } from "~/utils/api";
 
 const History = () => {
@@ -235,44 +236,228 @@ const History = () => {
           </div>
         </div>
       </div>
-      <div>
-        <>
+      <div className="grid grid-cols-2">
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Quantidade total de trabalhadores agendados:{" "}
+          {totalAppointments.length}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Quantidade de trabalhadores que vieram aos agendamentos:{" "}
+          {totalAttendedAppointments.length}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Percentagem de homens que vieram aos agendamentos:{" "}
+          {(
+            (totalAttendedMenPercentage.length /
+              totalAttendedAppointments.length) *
+            100
+          ).toFixed(2)}
+          %
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Percentagem de mulheres que vieram aos agendamentos:{" "}
+          {(
+            (totalAttendedFemalePercentage.length /
+              totalAttendedAppointments.length) *
+            100
+          ).toFixed(2)}
+          %
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de mulheres : {totalAttendedFemalePercentage.length}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de homens : {totalAttendedMenPercentage.length}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Percentagem de aptos:
+          {(
+            (totalFitForWorkPercentage.length /
+              totalAttendedAppointments.length) *
+            100
+          ).toFixed(2)}
+          %
+        </p>
+
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de planos Basicos:{" "}
+          {totalAttendedAppointments.reduce((prev, curr) => {
+            return curr.planType?.toLowerCase() === "basico" ? prev + 1 : prev;
+          }, 0)}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de planos Medios:{" "}
+          {totalAttendedAppointments.reduce((prev, curr) => {
+            return curr.planType?.toLowerCase() === "medio" ? prev + 1 : prev;
+          }, 0)}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de planos Avançados:{" "}
+          {totalAttendedAppointments.reduce((prev, curr) => {
+            return curr.planType?.toLowerCase() === "avançado"
+              ? prev + 1
+              : prev;
+          }, 0)}
+        </p>
+        <p className="whitespace-nowrap font-medium text-gray-700">
+          Total de planos Premium:{" "}
+          {totalAttendedAppointments.reduce((prev, curr) => {
+            return curr.planType?.toLowerCase() === "premium" ? prev + 1 : prev;
+          }, 0)}
+        </p>
+      </div>
+      <div className="grid grid-cols-2">
+        <div>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Quantidade total de trabalhadores agendados:{" "}
-            {totalAppointments.length}
+            Idades [18,25[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                18 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 25
+                ? prev + 1
+                : prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Quantidade de trabalhadores que vieram aos agendamentos:{" "}
-            {totalAttendedAppointments.length}
+            Idades [25,30[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                25 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 30
+                ? prev + 1
+                : prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de homens que vieram aos agendamentos:{" "}
+            Idades [30,35[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                30 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 35
+                ? prev + 1
+                : prev;
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idades [35,40[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                35 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 40
+                ? prev + 1
+                : prev;
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idades [40,45[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                40 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 45
+                ? prev + 1
+                : prev;
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idades [45,50[ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >=
+                45 && Number(calculateAgeFormatYYYY(curr.user.birthDate!)) < 50
+                ? prev + 1
+                : prev;
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idades 50+ ={" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              return Number(calculateAgeFormatYYYY(curr.user.birthDate!)) >= 50
+                ? prev + 1
+                : prev;
+            }, 0)}
+          </p>
+        </div>
+        <div>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de hipertensos (+120 || +80):{" "}
             {(
-              (totalAttendedMenPercentage.length /
+              (totalAttendedAppointments.reduce((prev, curr) => {
+                const values = curr.triage?.arterialTension.split("/");
+                if (!values) return prev;
+                if (!values[0]) return prev;
+                if (Number(values[0]) > 120) return prev + 1;
+                if (!values[1]) return prev;
+                if (Number(values[1]) > 80) return prev + 1;
+                return prev;
+              }, 0) /
                 totalAttendedAppointments.length) *
               100
             ).toFixed(2)}
             %
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de mulheres que vieram aos agendamentos:{" "}
+            Percentagem de hipertensos (+130 || +90):{" "}
             {(
-              (totalAttendedFemalePercentage.length /
+              (totalAttendedAppointments.reduce((prev, curr) => {
+                const values = curr.triage?.arterialTension.split("/");
+                if (!values) return prev;
+                if (!values[0]) return prev;
+                if (Number(values[0]) > 130) return prev + 1;
+                if (!values[1]) return prev;
+                if (Number(values[1]) > 90) return prev + 1;
+                return prev;
+              }, 0) /
                 totalAttendedAppointments.length) *
               100
             ).toFixed(2)}
             %
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de aptos:
+            Percentagem de hipertensos (+140 || +100):{" "}
             {(
-              (totalFitForWorkPercentage.length /
+              (totalAttendedAppointments.reduce((prev, curr) => {
+                const values = curr.triage?.arterialTension.split("/");
+                if (!values) return prev;
+                if (!values[0]) return prev;
+                if (Number(values[0]) > 140) return prev + 1;
+                if (!values[1]) return prev;
+                if (Number(values[1]) > 100) return prev + 1;
+                return prev;
+              }, 0) /
                 totalAttendedAppointments.length) *
               100
             ).toFixed(2)}
             %
           </p>
-        </>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de hipertensos (+150 || +110):{" "}
+            {(
+              (totalAttendedAppointments.reduce((prev, curr) => {
+                const values = curr.triage?.arterialTension.split("/");
+                if (!values) return prev;
+                if (!values[0]) return prev;
+                if (Number(values[0]) > 150) return prev + 1;
+                if (!values[1]) return prev;
+                if (Number(values[1]) > 110) return prev + 1;
+                return prev;
+              }, 0) /
+                totalAttendedAppointments.length) *
+              100
+            ).toFixed(2)}
+            %
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Percentagem de hipertensos (+160 || +120):{" "}
+            {(
+              (totalAttendedAppointments.reduce((prev, curr) => {
+                const values = curr.triage?.arterialTension.split("/");
+                if (!values) return prev;
+                if (!values[0]) return prev;
+                if (Number(values[0]) > 160) return prev + 1;
+                if (!values[1]) return prev;
+                if (Number(values[1]) > 120) return prev + 1;
+                return prev;
+              }, 0) /
+                totalAttendedAppointments.length) *
+              100
+            ).toFixed(2)}
+            %
+          </p>
+        </div>
       </div>
     </div>
   );

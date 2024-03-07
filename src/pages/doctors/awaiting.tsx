@@ -2,7 +2,7 @@ import { DataTable } from "~/components/DataTable";
 import useDoctorColumns from "~/components/TableColumns/useDoctorColumns";
 import Modal from "react-modal";
 import { api } from "~/utils/api";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const ShowWaitingForDoctor = () => {

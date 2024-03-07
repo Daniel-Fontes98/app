@@ -1,10 +1,8 @@
 import type { Company, CompanyAppointment, User } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import EyeIcon from "../../../public/eye.png";
-import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
-import { customDateSort } from "~/utils/dates";
+import Link from "next/link";
 
 export type completedDoctorType = CompanyAppointment & {
   user: User;
@@ -12,7 +10,6 @@ export type completedDoctorType = CompanyAppointment & {
 };
 
 const useCompletedDoctorTable = () => {
-  const router = useRouter();
   const completedDoctorColumns: ColumnDef<completedDoctorType>[] = [
     {
       accessorKey: "createdAt",
@@ -52,14 +49,14 @@ const useCompletedDoctorTable = () => {
       header: () => <div></div>,
       cell: ({ cell }) => (
         <div className="flex gap-4">
-          <button
-            className="flex items-center justify-center"
-            onClick={() =>
-              router.push(`/doctors/awaiting/${cell.renderValue() as string}`)
-            }
+          <Link
+            href={`/doctors/awaiting/${cell.renderValue() as string}`}
+            target="_blank"
           >
-            <Image src={EyeIcon} className="h-5 w-5" alt="Eye icon" />
-          </button>
+            <button className="flex items-center justify-center">
+              <Image src={EyeIcon} className="h-5 w-5" alt="Eye icon" />
+            </button>
+          </Link>
         </div>
       ),
     },

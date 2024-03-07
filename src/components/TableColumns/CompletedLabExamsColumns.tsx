@@ -6,7 +6,6 @@ import type {
 } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { processString } from "../ConsultTabs/UrgencyConsumables";
-import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
 
 export type labExamsType = LabExams & {
   companyAppointment: CompanyAppointment & {

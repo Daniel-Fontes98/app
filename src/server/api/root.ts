@@ -28,6 +28,7 @@ import { allergiesRouter } from "./routers/allergies";
 import { tbExamsRouter } from "./routers/tbExam";
 import { tbCertificateRouter } from "./routers/tbCertificate";
 import { hematologiaRouter } from "./routers/hematologia";
+import { companyRouter } from "./routers/company";
 
 /**
  * This is the primary router for your server.
@@ -64,6 +65,7 @@ export const appRouter = createTRPCRouter({
   tbExams: tbExamsRouter,
   tbCertificate: tbCertificateRouter,
   hematologia: hematologiaRouter,
+  company: companyRouter,
 });
 
 // export type definition of API

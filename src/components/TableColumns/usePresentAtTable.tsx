@@ -1,7 +1,7 @@
 import type { Company, CompanyAppointment, User } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "../Forms/CreateCompanyAppointmentExcel";
-import { customDateSort, customTimeSort, formatarHora } from "~/utils/dates";
+import { customDateSort } from "~/utils/dates";
 
 export type completedDoctorType = CompanyAppointment & {
   user: User;
@@ -20,19 +20,6 @@ const usePresentAtTable = () => {
       },
       sortingFn: (a, b) => customDateSort(a.original.date, b.original.date),
     },
-    /* {
-      accessorKey: "presentAt",
-      header: () => (
-        <div className="flex whitespace-nowrap text-emerald-600">
-          Hora de Chegada
-        </div>
-      ),
-      accessorFn: (props) => {
-        return formatarHora(props.presentAt!);
-      },
-      sortingFn: (a, b) =>
-        customTimeSort(a.original.presentAt!, b.original.presentAt!),
-    },*/
     {
       accessorKey: "user.name",
       header: () => (

@@ -30,9 +30,6 @@ export const createCompanyAppointmentSchema = z.object({
   companyName: z.string({
     required_error: "É necessário indicar o nome da empresa",
   }),
-  companyIndustry: z.string({
-    required_error: "É necessário indicar a industria",
-  }),
   companyLocation: z.string({
     required_error: "É necessário indicar uma localização",
   }),
@@ -45,6 +42,7 @@ const CreatePersonalAppointment = () => {
   const createAppointmentMutation =
     api.companyAppointment.insertOne.useMutation();
   const router = useRouter();
+  const { data, isLoading } = api.company.getAll.useQuery();
 
   const onSubmit: SubmitHandler<
     z.infer<typeof createCompanyAppointmentSchema>
@@ -72,6 +70,10 @@ const CreatePersonalAppointment = () => {
   } = useForm<z.infer<typeof createCompanyAppointmentSchema>>({
     resolver: zodResolver(createCompanyAppointmentSchema),
   });
+
+  if (isLoading || !data) {
+    return <div>A carregar pagina...</div>;
+  }
 
   return (
     <form className=" flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
@@ -126,17 +128,15 @@ const CreatePersonalAppointment = () => {
           type="text"
           name="Função"
         />
-        <Input
+        <Select
           error={errors.companyName}
           registerReturn={register("companyName")}
-          type="text"
-          name="Nome da Empresa"
-        />
-        <Input
-          error={errors.companyIndustry}
-          registerReturn={register("companyIndustry")}
-          type="text"
-          name="Indústria"
+          name="Nome da empresa"
+          options={data
+            .map((company) => {
+              return { label: company.name, value: company.name };
+            })
+            .sort((a, b) => a.label.localeCompare(b.label))}
         />
       </div>
       <div className="flex w-full gap-4">

@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import CreateCompany from "~/components/Forms/CreateCompany";
 import CreateCompanyAppointment from "~/components/Forms/CreateCompanyAppointment";
 import CreateCompanyAppointmentExcel from "~/components/Forms/CreateCompanyAppointmentExcel";
 import CreatePersonalAppointment from "~/components/Forms/CreatePersonalAppointment";
@@ -38,6 +39,7 @@ const CreateAppointment = () => {
                 <option value="Particular">Particular</option>
                 <option value="EmpresaP">Empresa Planilha</option>
                 <option value="EmpresaS">Empresa Único</option>
+                <option value="CriarEmpresa">Criar Nova Empresa</option>
               </select>
             </div>
           </div>
@@ -45,6 +47,8 @@ const CreateAppointment = () => {
             <CreatePersonalAppointment />
           ) : appointmentType === "EmpresaP" ? (
             <CreateCompanyAppointmentExcel />
+          ) : appointmentType === "CriarEmpresa" ? (
+            <CreateCompany />
           ) : (
             <CreateCompanyAppointment />
           )}
