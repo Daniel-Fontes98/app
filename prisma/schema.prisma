@@ -497,9 +497,11 @@ model Hematologia {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   parametro         String
-  resultado         Float?
-  intervaloInferior Float?
-  intervaloSuperior Float?
+  resultado         Float
+  intervaloInferior Float
+  intervaloSuperior Float
+  unidade           String
+  alert             String?
 
   companyAppointmentId String
   companyAppointment   CompanyAppointment @relation(fields: [companyAppointmentId], references: [id])

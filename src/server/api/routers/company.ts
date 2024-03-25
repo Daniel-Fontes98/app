@@ -11,7 +11,7 @@ export const companyRouter = createTRPCRouter({
       const { input } = opts;
       return await opts.ctx.prisma.company.create({
         data: {
-          name: input.name,
+          name: input.name.toUpperCase(),
           industry: input.industry,
         },
       });

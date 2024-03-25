@@ -6,16 +6,26 @@ export const hematologiaRouter = createTRPCRouter({
     .input(z.object({ companyAppointmentId: z.string() }))
     .query(async (opts) => {
       const { input } = opts;
-      const hematologiaAnalysis = await opts.ctx.prisma.hematologia.findFirst({
+      const hematologiaAnalysis = await opts.ctx.prisma.hematologia.findMany({
+        select: {
+          parametro: true,
+          resultado: true,
+          intervaloInferior: true,
+          intervaloSuperior: true,
+          unidade: true,
+        },
         where: {
           companyAppointmentId: input.companyAppointmentId,
         },
       });
 
-      if (!hematologiaAnalysis) {
-        throw new Error("exame de hematologia não encontrado");
-      }
-
-      return hematologiaAnalysis;
+      return hematologiaAnalysis.map((record) => {
+        return {
+          ...record,
+          resultado: String(record.resultado),
+          intervaloInferior: String(record.intervaloInferior),
+          intervaloSuperior: String(record.intervaloSuperior),
+        };
+      });
     }),
 });

@@ -1,17 +1,99 @@
-import { useState } from "react";
+import { CompanyAppointment } from "@prisma/client";
+import { useEffect, useState } from "react";
 import { calculateAgeFormatYYYY } from "~/components/ConsultTabs/UserInfo";
 import { api } from "~/utils/api";
+
+function getCompanyRoleCounts(
+  appointments: CompanyAppointment[]
+): Map<string, number> {
+  const companyRoleCounts = new Map<string, number>();
+
+  appointments.forEach((appointment) => {
+    console.log(appointment.companyRole);
+    if (!appointment.companyRole) return;
+    if (companyRoleCounts.has(appointment.companyRole)) {
+      companyRoleCounts.set(
+        appointment.companyRole,
+        companyRoleCounts.get(appointment.companyRole)! + 1
+      );
+    } else {
+      companyRoleCounts.set(appointment.companyRole, 1);
+    }
+  });
+  return companyRoleCounts;
+}
 
 const History = () => {
   const { data } = api.companyAppointment.getAll.useQuery();
   const [companyFilter, setCompanyFilter] = useState("");
   const [startDateFilter, setStartDateFilter] = useState<Date>();
   const [endDateFilter, setEndDateFilter] = useState<Date>();
+  const [totalRoles, setTotalRoles] = useState<Map<string, number>>(new Map());
 
-  if (!data) {
-    return;
-  }
+  useEffect(() => {
+    if (data) {
+      const filteredAppointments = data.filter(
+        (appointment) =>
+          appointment.company.name
+            .toLowerCase()
+            .includes(companyFilter.toLowerCase()) && appointment.wasPresent
+      );
+      const rolesCount = getCompanyRoleCounts(filteredAppointments);
+      setTotalRoles(rolesCount);
+    }
+  }, [data, companyFilter]);
 
+  if (!data) return;
+
+  let drinkers = data
+    .filter(
+      (appointment) =>
+        appointment.wasPresent &&
+        appointment.company.name
+          .toLowerCase()
+          .includes(companyFilter.toLowerCase())
+    )
+    .reduce((prev, curr) => {
+      return curr.medicalFile?.etilicHabits?.toLowerCase().includes("nega")
+        ? prev + 1
+        : prev;
+    }, 0);
+
+  let smokers = data
+    .filter(
+      (appointment) =>
+        appointment.wasPresent &&
+        appointment.company.name
+          .toLowerCase()
+          .includes(companyFilter.toLowerCase())
+    )
+    .reduce((prev, curr) => {
+      return curr.medicalFile?.tobaccoHabits?.toLowerCase().includes("nega")
+        ? prev + 1
+        : prev;
+    }, 0);
+
+  let imcValues = data
+    .filter(
+      (appointment) =>
+        appointment.wasPresent &&
+        appointment.company.name
+          .toLowerCase()
+          .includes(companyFilter.toLowerCase())
+    )
+    .map((appointment) => {
+      const weight = appointment.triage?.weight;
+      const height = appointment.triage?.height;
+      if (!weight || !height || Number(height) === 0) return; // Added check for height not being zero
+      return Number(
+        (
+          Number(weight) /
+          ((Number(height) / 100) * (Number(height) / 100))
+        ).toFixed(1)
+      );
+    })
+    .filter((value) => typeof value === "number");
+  console.log(imcValues);
   let totalAppointments =
     companyFilter === ""
       ? data
@@ -370,92 +452,175 @@ const History = () => {
                 : prev;
             }, 0)}
           </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idade Máxima ={" "}
+            {Math.max(
+              ...totalAttendedAppointments.map((curr) => {
+                return Number(calculateAgeFormatYYYY(curr.user.birthDate!));
+              })
+            )}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idade Minima ={" "}
+            {Math.min(
+              ...totalAttendedAppointments.map((curr) => {
+                return Number(calculateAgeFormatYYYY(curr.user.birthDate!));
+              })
+            )}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Idade Média ={" "}
+            {totalAttendedAppointments
+              .map((curr) => {
+                return Number(calculateAgeFormatYYYY(curr.user.birthDate!));
+              })
+              .reduce((acc, age) => age + acc, 0) / 126}
+          </p>
         </div>
         <div>
           <p className="whitespace-nowrap font-medium text-gray-700">
             Percentagem de hipertensos (+120 || +80):{" "}
-            {(
-              (totalAttendedAppointments.reduce((prev, curr) => {
-                const values = curr.triage?.arterialTension.split("/");
-                if (!values) return prev;
-                if (!values[0]) return prev;
-                if (Number(values[0]) > 120) return prev + 1;
-                if (!values[1]) return prev;
-                if (Number(values[1]) > 80) return prev + 1;
-                return prev;
-              }, 0) /
-                totalAttendedAppointments.length) *
-              100
-            ).toFixed(2)}
-            %
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              const values = curr.triage?.arterialTension.split("/");
+              if (!values) return prev;
+              if (!values[0]) return prev;
+              if (Number(values[0]) >= 120 && Number(values[0]) < 130)
+                return prev + 1;
+              if (!values[1]) return prev;
+              if (Number(values[1]) >= 80 && Number(values[1]) < 90)
+                return prev + 1;
+              return prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
             Percentagem de hipertensos (+130 || +90):{" "}
-            {(
-              (totalAttendedAppointments.reduce((prev, curr) => {
-                const values = curr.triage?.arterialTension.split("/");
-                if (!values) return prev;
-                if (!values[0]) return prev;
-                if (Number(values[0]) > 130) return prev + 1;
-                if (!values[1]) return prev;
-                if (Number(values[1]) > 90) return prev + 1;
-                return prev;
-              }, 0) /
-                totalAttendedAppointments.length) *
-              100
-            ).toFixed(2)}
-            %
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              const values = curr.triage?.arterialTension.split("/");
+              if (!values) return prev;
+              if (!values[0]) return prev;
+              if (Number(values[0]) >= 130 && Number(values[0]) < 140)
+                return prev + 1;
+              if (!values[1]) return prev;
+              if (Number(values[1]) >= 90 && Number(values[1]) < 100)
+                return prev + 1;
+              return prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de hipertensos (+140 || +100):{" "}
-            {(
-              (totalAttendedAppointments.reduce((prev, curr) => {
-                const values = curr.triage?.arterialTension.split("/");
-                if (!values) return prev;
-                if (!values[0]) return prev;
-                if (Number(values[0]) > 140) return prev + 1;
-                if (!values[1]) return prev;
-                if (Number(values[1]) > 100) return prev + 1;
-                return prev;
-              }, 0) /
-                totalAttendedAppointments.length) *
-              100
-            ).toFixed(2)}
-            %
+            Percentagem de hipertensos (+140 || +90):{" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              const values = curr.triage?.arterialTension.split("/");
+              if (!values) return prev;
+              if (!values[0]) return prev;
+              if (Number(values[0]) >= 140 && Number(values[0]) < 150)
+                return prev + 1;
+              if (!values[1]) return prev;
+              if (Number(values[1]) >= 90 && Number(values[1]) < 100)
+                return prev + 1;
+              return prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de hipertensos (+150 || +110):{" "}
-            {(
-              (totalAttendedAppointments.reduce((prev, curr) => {
-                const values = curr.triage?.arterialTension.split("/");
-                if (!values) return prev;
-                if (!values[0]) return prev;
-                if (Number(values[0]) > 150) return prev + 1;
-                if (!values[1]) return prev;
-                if (Number(values[1]) > 110) return prev + 1;
-                return prev;
-              }, 0) /
-                totalAttendedAppointments.length) *
-              100
-            ).toFixed(2)}
-            %
+            Percentagem de hipertensos (+150 || +100):{" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              const values = curr.triage?.arterialTension.split("/");
+              if (!values) return prev;
+              if (!values[0]) return prev;
+              if (Number(values[0]) >= 150 && Number(values[0]) < 160)
+                return prev + 1;
+              if (!values[1]) return prev;
+              if (Number(values[1]) >= 100 && Number(values[1]) < 110)
+                return prev + 1;
+              return prev;
+            }, 0)}
           </p>
           <p className="whitespace-nowrap font-medium text-gray-700">
-            Percentagem de hipertensos (+160 || +120):{" "}
-            {(
-              (totalAttendedAppointments.reduce((prev, curr) => {
-                const values = curr.triage?.arterialTension.split("/");
-                if (!values) return prev;
-                if (!values[0]) return prev;
-                if (Number(values[0]) > 160) return prev + 1;
-                if (!values[1]) return prev;
-                if (Number(values[1]) > 120) return prev + 1;
-                return prev;
-              }, 0) /
-                totalAttendedAppointments.length) *
-              100
-            ).toFixed(2)}
-            %
+            Percentagem de hipertensos (+160 || +110):{" "}
+            {totalAttendedAppointments.reduce((prev, curr) => {
+              const values = curr.triage?.arterialTension.split("/");
+              if (!values) return prev;
+              if (!values[0]) return prev;
+              if (Number(values[0]) >= 160) return prev + 1;
+              if (!values[1]) return prev;
+              if (Number(values[1]) >= 110) return prev + 1;
+              return prev;
+            }, 0)}
+          </p>
+          {/*<p className="flex flex-col whitespace-nowrap font-medium text-gray-700">
+            Funções:
+            {Array.from(totalRoles)
+              .sort(([roleA], [roleB]) => roleA.localeCompare(roleB)) // Sort roles alphabetically
+              .map(([role, count]) => (
+                <span key={role}>
+                  {role}: {count}{" "}
+                </span>
+              ))}
+              </p>*/}
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Baixo Peso:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value <= 18.4) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Peso Normal:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value >= 18.5 && value <= 24.9) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Sobrepeso:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value >= 25 && value <= 29.9) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Obesidade Grau I:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value >= 30 && value <= 34.9) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Obesidade Grau II:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value >= 35 && value <= 39.9) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Obesidade Grau III:{" "}
+            {imcValues.reduce((count, value) => {
+              if (typeof value === "number" && value >= 40) {
+                return (count || 0) + 1;
+              } else {
+                return count || 0;
+              }
+            }, 0)}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Hábitos Tabágicos: {126 - smokers}
+          </p>
+          <p className="whitespace-nowrap font-medium text-gray-700">
+            Hábitos Etilicos: {126 - drinkers}
           </p>
         </div>
       </div>

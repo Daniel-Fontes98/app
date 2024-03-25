@@ -87,7 +87,7 @@ export const companyAppointmentrouter = createTRPCRouter({
             },
             company: {
               connect: {
-                name: input.companyName,
+                name: input.companyName.toUpperCase(),
               },
             },
           },
@@ -101,6 +101,7 @@ export const companyAppointmentrouter = createTRPCRouter({
         company: true,
         certificate: true,
         triage: true,
+        medicalFile: true,
       },
     });
   }),
@@ -433,6 +434,57 @@ export const companyAppointmentrouter = createTRPCRouter({
       return await opts.ctx.prisma.companyAppointment.update({
         data: {
           areNurseryExamsDone: false,
+        },
+        where: {
+          id: input.companyAppointmentId,
+        },
+      });
+    }),
+  createHematologia: publicProcedure
+    .input(
+      z.object({
+        companyAppointmentId: z.string(),
+        hematologia: z.array(
+          z.object({
+            parametro: z.string(),
+            resultado: z.number(),
+            intervaloInferior: z.number(),
+            intervaloSuperior: z.number(),
+            unidade: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const definedAlerts = input.hematologia.map((result) => {
+        if (result.resultado < result.intervaloInferior)
+          return { ...result, alert: "L" };
+        if (result.resultado > result.intervaloSuperior)
+          return { ...result, alert: "H" };
+        return result;
+      });
+
+      return await ctx.prisma.companyAppointment.update({
+        data: {
+          Hematologia: {
+            create: definedAlerts,
+          },
+        },
+        where: {
+          id: input.companyAppointmentId,
+        },
+      });
+    }),
+  getUserName: publicProcedure
+    .input(z.object({ companyAppointmentId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.companyAppointment.findFirst({
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
         },
         where: {
           id: input.companyAppointmentId,

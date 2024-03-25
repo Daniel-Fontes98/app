@@ -52,6 +52,7 @@ const useCompletedDoctorTable = () => {
           <Link
             href={`/doctors/awaiting/${cell.renderValue() as string}`}
             target="_blank"
+            rel="noopener noreferrer"
           >
             <button className="flex items-center justify-center">
               <Image src={EyeIcon} className="h-5 w-5" alt="Eye icon" />
