@@ -63,7 +63,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="container flex min-h-screen w-full flex-col gap-8 bg-slate-100">
+    <div className=" flex min-h-screen  flex-col gap-8 bg-slate-100">
       <div className="flex  items-center justify-center">
         <div className="rounded-b-2xl bg-emerald-600 px-6 py-2 text-white">
           Calendário de Agendamentos
